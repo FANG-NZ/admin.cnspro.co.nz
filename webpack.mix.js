@@ -1,4 +1,17 @@
 const mix = require('laravel-mix');
+const path = require('path');
+
+
+//Import jquery lib locally
+mix.webpackConfig({
+
+    resolve:{
+        alias:{
+            'jquery': path.resolve(__dirname, 'resources/libs/jquery/jquery.min.js')
+        }
+    }
+
+});
 
 /*
  |--------------------------------------------------------------------------
@@ -12,6 +25,7 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
+    .sass('resources/sass/cnspro.scss', 'public/css')
     .postCss('resources/css/app.css', 'public/css', [
         //
     ]);

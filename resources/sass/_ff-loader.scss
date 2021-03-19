@@ -1,0 +1,36 @@
+.ff-loader-container{
+    background-color: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    z-index: 5400;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625em;
+    overflow: hidden auto;
+
+    .ff-loader{
+        border: 10px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 10px solid #999;
+        width: 60px;
+        height: 60px;
+        -webkit-animation: ff-loading-spin 1s linear infinite; /* Safari */
+        animation: ff-loading-spin 1s linear infinite;
+    }
+}
+
+/* Safari */
+@-webkit-keyframes ff-loading-spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes ff-loading-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
