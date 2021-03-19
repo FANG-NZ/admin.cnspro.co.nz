@@ -1,6 +1,6 @@
 @extends('layouts.master')
-@section('pagetitle', 'Dashboard')
-@section('pagename', 'page-dashboard')
+@section('pagetitle', 'New project')
+@section('pagename', 'page-new-project')
 
 @section('content')
     <!-- Page title box -->
@@ -8,11 +8,11 @@
         <ol class="breadcrumb float-right">
             <li class="breadcrumb-item">CMS.CNSPRO</li>
         </ol>
-        <h4 class="page-title">Dashboard</h4>
+        <h4 class="page-title">New project</h4>
     </div>
     <!-- End page title box -->
 
     <p>
-        This view is loaded from module
+        New project page
     </p>
 @endsection

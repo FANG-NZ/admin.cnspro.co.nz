@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NewProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,8 @@ use App\Http\Controllers\DashboardController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect("/dashboard");
 });
 
 Route::get('/dashboard', [DashboardController::class, "index"])->name("dashboard");
+Route::get('/new-project', [NewProjectController::class, "index"])->name("newproject");

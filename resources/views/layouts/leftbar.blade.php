@@ -16,9 +16,9 @@
                     </a>
                 </li>
 
-                <li class="{{ Request::is('dashboard') ? 'active' : '' }}">
-                    <a href="{{ route('dashboard') }}">
-                        <i class="mdi mdi-atom"></i> <span> Menus </span>
+                <li class="{{ Request::is('newproject') ? 'active' : '' }}">
+                    <a href="{{ route('newproject') }}">
+                        <i class="mdi mdi-atom"></i> <span> New Project(s) </span>
                     </a>
 
                     {{-- Create Menu Catalog --}}
