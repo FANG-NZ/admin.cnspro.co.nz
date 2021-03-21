@@ -106,10 +106,10 @@
                     </a>
                     --}}
                     <!-- item-->
-                    <form action="{{ url('cms/logout') }}" method="POST">
+                    <form action="{{ route('dologout') }}" method="POST">
                         @csrf
                         
-                        <button type="submit" class="dropdown-item notify-item">
+                        <button type="submit" class="dropdown-item notify-item" style="cursor:pointer;">
                             <i class="dripicons-power"></i> <span>Logout</span>
                         </button>
                     </form>

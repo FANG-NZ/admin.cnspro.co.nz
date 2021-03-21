@@ -19,10 +19,9 @@ use App\Http\Controllers\LoginController;
 
 Route::get('/login', [LoginController::class, "index"])->name("login");
 Route::post('/login', [LoginController::class, "doLogin"])->name("dologin");
+Route::post('/logout', [LoginController::class, "doLogout"])->name("dologout");
 
-
-
-Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth:admin'])->group(function(){
 
     Route::get("/", function(){
         return redirect('/dashboard');

@@ -46,6 +46,12 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        //Add admin guard
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admin'
+        ]
     ],
 
     /*
@@ -70,6 +76,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+
+        'admin' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\AdminUser::class,
+        ]
 
         // 'users' => [
         //     'driver' => 'database',

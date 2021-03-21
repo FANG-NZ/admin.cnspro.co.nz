@@ -33,11 +33,11 @@
                                     
                                     <div class="account-content">
 
-                                        {{-- @if(Session::has('fs-message'))
-                                            <div class="alert alert-{{Session::get('fs-message')['status']}}">
-                                                {{ Session::get('fs-message')['content'] }}            
+                                        @if(Session::has('ff-message'))
+                                            <div class="alert alert-{{Session::get('ff-message')['status']}}">
+                                                {{ Session::get('ff-message')['content'] }}            
                                             </div>
-                                        @endif --}}
+                                        @endif
 
                                         <form action="{{ route('dologin') }}" method="POST">
                                             
@@ -72,7 +72,7 @@
                                                 </a> --}}
                                                 <label for="password" class="font-weight-medium">Password</label>
                                                 <input class="form-control" type="password" name="Password" required="" id="password" placeholder="Enter your password"
-                                                    value="Test123456"
+                                                    value="Admin_2021"
                                                 >
                                                 
                                                 @if ($errors->has('Password'))
