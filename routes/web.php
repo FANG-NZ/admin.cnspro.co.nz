@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NewProjectController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +17,19 @@ use App\Http\Controllers\NewProjectController;
 |
 */
 
-Route::get('/', function () {
-    return redirect("/dashboard");
+Route::get('/login', [LoginController::class, "index"])->name("login");
+Route::post('/login', [LoginController::class, "doLogin"])->name("dologin");
+
+
+
+Route::middleware(['auth'])->group(function(){
+
+    Route::get("/", function(){
+        return redirect('/dashboard');
+    });
+
+    Route::get('/dashboard', [DashboardController::class, "index"])->name("dashboard");
+    Route::get('/new-project', [NewProjectController::class, "index"])->name("newproject");
+
 });
 
-Route::get('/dashboard', [DashboardController::class, "index"])->name("dashboard");
-Route::get('/new-project', [NewProjectController::class, "index"])->name("newproject");

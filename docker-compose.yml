@@ -68,6 +68,21 @@ services:
             - '/dev/shm:/dev/shm'
        networks:
            - sail
+
+    # Add phpmyadmin
+    phpmyadmin:
+        image: 'phpmyadmin'
+#        container_name: pma
+        environment:
+            PMA_HOST: mysql
+            PMA_PASSWORD: 123456
+#            PMA_ARBITRARY: 1
+#        restart: always
+        networks:
+            - sail
+        ports:
+            - 8081:80
+
 networks:
     sail:
         driver: bridge
