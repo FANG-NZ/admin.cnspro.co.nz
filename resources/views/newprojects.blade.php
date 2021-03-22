@@ -19,5 +19,5 @@
 
 
 @section('pagejs')
-    <script src="{{ mix('js/new-project-page.js') }}"></script>
+    <script src="{{ mix('js/new-projects-page.js') }}"></script>
 @endsection

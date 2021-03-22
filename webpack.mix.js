@@ -39,7 +39,7 @@ mix.babelConfig({
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .js('resources/react/pages/new-project-page.js', 'public/js')
+    .js('resources/react/pages/new-projects-page.js', 'public/js')
     .sass('resources/sass/cnspro.scss', 'public/css')
     .postCss('resources/css/app.css', 'public/css', [
         //

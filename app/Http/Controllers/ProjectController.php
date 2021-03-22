@@ -17,7 +17,7 @@ class ProjectController extends Controller
         $projects = Project::where('is_new', false)->get();
         //$projects = Project::all();
 
-        return view("newproject")->with(['projects' => $projects->toJson()]);
+        return view("newprojects")->with(['projects' => $projects->toJson()]);
     }
 
 
