@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta content="CMS for CNSPRO" name="description" />
         <meta content="FANG FROM FSTUDIO" name="author" />
-
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('pagetitle') - CNSPROP CMS</title>
 
        {{-- Laravel Mix - CSS File --}}

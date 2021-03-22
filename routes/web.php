@@ -30,7 +30,8 @@ Route::middleware(['auth:admin'])->group(function(){
     Route::get('/dashboard', [DashboardController::class, "index"])->name("dashboard");
     Route::get('/projects', [ProjectController::class, "index"])->name("projects");
 
-    Route::post('/projects/add', [ProjectController::class, "addProject"]);
-
+    Route::post('/projects/add', [ProjectController::class, "doAdd"]);
+    Route::put('/projects/update/{id}', [ProjectController::class, "doUpdate"]);
+    Route::delete('/projects/delete/{id}', [ProjectController::class, "doDelete"]);
 });
 
