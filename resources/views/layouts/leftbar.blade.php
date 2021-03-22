@@ -16,8 +16,8 @@
                     </a>
                 </li>
 
-                <li class="{{ Request::is('newproject') ? 'active' : '' }}">
-                    <a href="{{ route('newproject') }}">
+                <li class="{{ Request::is('projects') ? 'active' : '' }}">
+                    <a href="{{ route('projects') }}">
                         <i class="mdi mdi-atom"></i> <span> New Project(s) </span>
                     </a>
 

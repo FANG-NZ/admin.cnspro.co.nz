@@ -13,7 +13,7 @@
     <!-- End page title box -->
 
     {{-- START root for REACT --}}
-    <div id="root-new-projects" class="card-box"></div>
+    <div id="root-new-projects" class="card-box" projects-data="{{ $projects }}"></div>
 
 @endsection
 

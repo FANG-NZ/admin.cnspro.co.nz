@@ -12,7 +12,5 @@ class AdminUser extends Authenticatable
     //define the admin table name
     protected $table = "admin_users";
 
-    //protected $guard = "admins";
-
 
 }
