@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta content="FEMENU CMS" name="description" />
+        <meta content="CMS for CNSPRO" name="description" />
         <meta content="FANG FROM FSTUDIO" name="author" />
 
         <title>@yield('pagetitle') - CNSPROP CMS</title>

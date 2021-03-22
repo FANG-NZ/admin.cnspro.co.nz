@@ -12,7 +12,12 @@
     </div>
     <!-- End page title box -->
 
-    <p>
-        New project page
-    </p>
+    {{-- START root for REACT --}}
+    <div id="root-new-projects" class="card-box"></div>
+
+@endsection
+
+
+@section('pagejs')
+    <script src="{{ mix('js/new-project-page.js') }}"></script>
 @endsection
