@@ -1,0 +1,25 @@
+//START projects table
+.projects-table{
+    table-layout: fixed;
+
+    .th-btns{
+        width: 40px;
+    }
+
+    th{
+        width: auto;
+    }
+
+    td{
+        font-size: 13px;
+    }
+    
+    //properties style
+    .td-properties{
+        .properties-item-label{
+            span{display: none;}
+        }
+    }
+
+    
+}

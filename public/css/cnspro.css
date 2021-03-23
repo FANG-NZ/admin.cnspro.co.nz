@@ -13328,3 +13328,19 @@ input[type=range]::-moz-range-thumb {
 .navbar-custom .logo-sm h3 {
   font-size: 16px;
 }
+
+.projects-table {
+  table-layout: fixed;
+}
+.projects-table .th-btns {
+  width: 40px;
+}
+.projects-table th {
+  width: auto;
+}
+.projects-table td {
+  font-size: 13px;
+}
+.projects-table .td-properties .properties-item-label span {
+  display: none;
+}
