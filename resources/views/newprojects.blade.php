@@ -1,6 +1,6 @@
 @extends('layouts.master')
-@section('pagetitle', 'New project')
-@section('pagename', 'page-new-project')
+@section('pagetitle', 'New projects')
+@section('pagename', 'page-new_projects')
 
 @section('content')
     <!-- Page title box -->
@@ -13,7 +13,7 @@
     <!-- End page title box -->
 
     {{-- START root for REACT --}}
-    <div id="root-new-projects" class="card-box" projects-data="{{ $projects }}"></div>
+    <div id="root-new-projects" class="card m-b-30" projects-data="{{ $projects }}"></div>
 
 @endsection
 

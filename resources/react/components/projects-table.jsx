@@ -1,7 +1,10 @@
 import React from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import Moment from 'react-moment'
+
+import store from '../stores/new-projects-page-store'
 import {allNewProjects} from '../stores/new-projects-slice'
+import {openAlert} from '../tools/confirm-alert/confirm-alert-slice'
 
 
 /**
@@ -11,8 +14,15 @@ import {allNewProjects} from '../stores/new-projects-slice'
  */
 const ProjectItem = (props) => {
     const _project = props.project
-
+    const _dispatch = useDispatch()
     const date = new Date(_project.completed_on)
+
+    /**
+     * Function is to handle delete
+     */
+    function _handleDelete(_id){
+        alert("YES DELETED " + _id);
+    }
 
     return(
         <tr>
@@ -90,7 +100,20 @@ const ProjectItem = (props) => {
                 </Moment>
             </td>
             <td className="td-btns">
-                <button className="btn btn-icon btn-danger btn-sm">
+                <button className="btn btn-icon btn-danger btn-sm"
+                    onClick={() => 
+                        _dispatch(openAlert(
+                            store, 
+                            {
+                                'title': "Are you sure to delete this?",
+                                'message': `You will NOT recover [${_project.street}, ${_project.city}]!`,
+                            }
+                        ))
+                        .then(
+                            () => _handleDelete(_project.id)
+                        )
+                    }
+                >
                     <i className="mdi mdi-close"></i>
                 </button>
             </td>
@@ -134,7 +157,7 @@ const ProjectsTable = () => {
                         <th>Address</th>
                         <th>Title</th>
                         <th>Properties</th>
-                        <th>Completed On</th>
+                        <th className="th-completed-on">Completed</th>
                         <th className="th-btns"></th>
                     </tr>
                 </thead>
