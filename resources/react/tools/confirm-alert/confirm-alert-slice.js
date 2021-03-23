@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-//import store from '../../store'
+//import store from '../../stores/new-projects-page-store'
 
 const initialState = {
     'shown' : false,
@@ -19,7 +19,7 @@ export const openAlert = (store, content = {}) => {
         dispatch(show(content))
 
         //To define the Promise as return 
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject = () => {}) => {
 
             function onStateChange(){
                 const _confirmed = getState().ConfirmAlert.confirmed
@@ -29,11 +29,6 @@ export const openAlert = (store, content = {}) => {
                     if(resolve || {}.toString.call(resolve) === '[object Function]')
                         resolve()
                 }
-                // else{
-
-                //     if(reject || {}.toString.call(reject) === '[object Function]')
-                //         reject()
-                // }
                     
                 dispatch(hide())
             }

@@ -1,6 +1,9 @@
 import React from 'react'
+import {useDispatch} from 'react-redux'
+import {show} from '../tools/modals/project-modal-slice'
 
 const ProjectsPageHeader = () => {
+    const _dispatch = useDispatch()
 
     return(
         <React.Fragment>
@@ -12,10 +15,16 @@ const ProjectsPageHeader = () => {
             </div>
             
             <div className="card-header-tools">
-                <button className="btn btn-success">
+
+                <button className="btn btn-success" 
+                    onClick={() => {
+                        _dispatch(show())
+                    }}
+                >
                     <i className="mdi mdi-plus-circle"></i>
                     <span>New project</span>
                 </button>   
+
             </div>
         </React.Fragment>
     )

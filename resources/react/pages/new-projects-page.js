@@ -6,6 +6,7 @@ import store from '../stores/new-projects-page-store'
 import ProjectsTable from '../components/projects-table'
 import ProjectsPageHeader from '../components/projects-page-header'
 import ConfirmAlert from '../tools/confirm-alert/confirm-alert'
+import ProjectModal from '../tools/modals/project-modal'
 
 import {setNewProjects} from '../stores/new-projects-slice'
 
@@ -36,6 +37,8 @@ ReactDom.render(
 
         {/* Confirm Alert */}
         <ConfirmAlert />
+        {/* Project Modal */}
+        <ProjectModal />
     </Provider>
     , 
     document.getElementById("root-new-projects")
