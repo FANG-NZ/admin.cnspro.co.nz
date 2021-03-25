@@ -3,4 +3,18 @@
 #project-modal{
     width: 90%;
     max-width:none;
+
+    .checkbox-holder{
+        padding-top: 30px;
+    }
+    .header-title{
+        margin: 20px 0;
+    }
+
+    .properties-holder{
+        label{
+            i{margin-right: 5px;}
+        }
+    }
 }
+

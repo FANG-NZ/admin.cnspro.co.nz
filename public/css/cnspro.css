@@ -13374,3 +13374,12 @@ input[type=range]::-moz-range-thumb {
   width: 90%;
   max-width: none;
 }
+#project-modal .checkbox-holder {
+  padding-top: 30px;
+}
+#project-modal .header-title {
+  margin: 20px 0;
+}
+#project-modal .properties-holder label i {
+  margin-right: 5px;
+}

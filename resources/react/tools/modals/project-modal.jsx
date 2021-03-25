@@ -33,9 +33,7 @@ const ProjectInfoFields = ({project, register}) => {
 
             </div>
 
-            <div className="col-5">
-                <label></label>
-
+            <div className="col-5 checkbox-holder">
                 <div className="checkbox checkbox-primary">
                     <input id="is_new" type="checkbox" name="is_new" defaultValue="true" />
                     <label htmlFor="is_new">is NEW project?</label>
@@ -43,6 +41,7 @@ const ProjectInfoFields = ({project, register}) => {
             </div>
         </div>
 
+        {/* START address fields */}
         <div className="row mb-2">
             <div className="col-7">
                 <label>Street</label>
@@ -75,6 +74,131 @@ const ProjectInfoFields = ({project, register}) => {
                 }
             </div>
         </div>
+        
+        <h5 className="header-title">Properties</h5>
+
+        <div className="row properties-holder">
+            <div className="col-6 mb-2">
+                <label>
+                    <i className="mdi mdi-bed-empty"></i>
+                    Bedrooms
+                </label>
+
+                <input 
+                    type="text"
+                    name="bedrooms" 
+                    placeholder="Enter number of bedrooms" 
+                    className="form-control" 
+                    ref={register}
+                />   
+                
+            </div>
+            <div className="col-6 mb-2">
+                <label>
+                    <i className="mdi mdi-hot-tub"></i>
+                    Bathrooms
+                </label>
+
+                <input 
+                    type="text"
+                    name="bathrooms" 
+                    placeholder="Enter number of bathroom" 
+                    className="form-control" 
+                    ref={register}
+                />   
+            </div>
+            <div className="col-6 mb-2">
+                <label>
+                    <i className="mdi mdi-car"></i>
+                    Carpark
+                </label>
+
+                <input 
+                    type="text"
+                    name="carpark" 
+                    placeholder="Enter number of carpark" 
+                    className="form-control" 
+                    ref={register}
+                />   
+            </div>
+            <div className="col-6 mb-2">
+                <label>
+                    <i className="mdi mdi-youtube-tv"></i>
+                    Living rooms
+                </label>
+
+                <input 
+                    type="text"
+                    name="livingrooms" 
+                    placeholder="Enter number of livingroom" 
+                    className="form-control" 
+                    ref={register}
+                />   
+            </div>
+            <div className="col-6 mb-2">
+                <label>
+                    <i className="mdi mdi-grid"></i>
+                    Land area
+                </label>
+
+                <input 
+                    type="text"
+                    name="land_area" 
+                    placeholder="Enter land area" 
+                    className="form-control" 
+                    ref={register}
+                />   
+            </div>
+            <div className="col-6 mb-2">
+                <label>
+                    <i className="mdi mdi-home"></i>
+                    Floor area
+                </label>
+
+                <input 
+                    type="text"
+                    name="floor_area" 
+                    placeholder="Enter floor area" 
+                    className="form-control" 
+                    ref={register}
+                />   
+            </div>
+        </div>
+
+        <div className="row mb-2">
+            <div className="col-12">
+                <label>Short description</label>
+
+                <textarea 
+                    className="form-control" 
+                    ref={register}
+                    name="short_description" 
+                    rows="3"
+                    placeholder="Enter short description"    
+                >
+                </textarea>
+                <span className="help-block">
+                    <small>Please keep less than 50 words.</small>
+                </span>
+            </div>
+        </div>
+
+        <div className="row mb-2">
+            <div className="col-12">
+                <label>Full description</label>
+
+                <textarea 
+                    className="form-control" 
+                    ref={register}
+                    name="description" 
+                    rows="6"
+                    placeholder="Enter full description"    
+                >
+                </textarea>
+                
+            </div>
+        </div>
+        
         </React.Fragment>
     )
 }
@@ -166,7 +290,6 @@ const ProjectModal = () => {
                     <span>{_modalData.isNew ? "Add new project" : "Edit"}</span>
                 </button>
             </Modal.Footer>
-
 
             </form>
             </FormProvider>

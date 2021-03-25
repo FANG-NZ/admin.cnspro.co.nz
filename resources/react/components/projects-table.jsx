@@ -70,7 +70,7 @@ const ProjectItem = (props) => {
                             <span>Living rooms</span>
                         </span>
                         <span className="properties-item-value">
-                            {_project.bathrooms}
+                            {_project.livingrooms}
                         </span>
                     </div>
 
