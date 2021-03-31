@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Modal from 'react-bootstrap/Modal'
 import {useSelector, useDispatch} from 'react-redux'
 import {useForm, useFormContext, FormProvider} from 'react-hook-form'
 
 import {hide} from './project-modal-slice'
+import {addNewProject} from '../../stores/new-projects-slice'
 
 
 /**
@@ -204,6 +205,18 @@ const ProjectInfoFields = ({project, register}) => {
 }
 
 
+/**
+ * TODO
+ * define the image fields block
+ * @returns 
+ */
+const ImageFields = () => {
+
+    return(
+        <h1>Image Fields Here</h1>
+    )
+}
+
 
 /**
  * TODO
@@ -217,6 +230,9 @@ const ProjectModal = () => {
     const _form = useForm()
     const {register, handleSubmit, errors, reset, formState} = _form
     const { isDirty } = formState
+    //define the class name
+    const _modalCalssname = _modalData.isNew? 'modal-new_project' : 'modal-update_project'
+
 
     /**
      * Function is to handle close modal
@@ -240,12 +256,29 @@ const ProjectModal = () => {
         console.log("Form submitted");
     }
 
+
+    function onTestClicked(){
+
+        const _data = {
+            title : "TEST LINE"
+        }
+
+        _dispatch(addNewProject(_data)).then(
+            (result) => {
+                console.log("RIGHT HERE")
+            },
+            (err) => {
+                console.log(err)
+            }
+        )
+    }
+
     return(
         <Modal id="project-modal"  
-            //show={_modalData.shown} 
-            show={true} 
+            show={_modalData.shown} 
             onHide={onHandleClose} 
             onEnter={onHandleEnter}
+            className={_modalCalssname}
         >
             <FormProvider {..._form}>
             <form onSubmit={handleSubmit(onHandleSubmit)}>
@@ -255,25 +288,34 @@ const ProjectModal = () => {
                     <i className="mdi mdi-clover"></i>
                     <span>TEST HEADER</span>
                 </Modal.Title>
+
+                <button onClick={onTestClicked}>
+                    TEST BTN
+                </button>
+
                 <button type="button" className="close" onClick={onHandleClose}>
                     <i className="mdi mdi-close"></i>
                 </button>
             </Modal.Header>
+            
 
             {/* START body */}
             <Modal.Body>
                 <div className="row">
                     {/* START project info fields */}
-                    <div className="col-6">
+                    <div className="col-info_fields">
                         <ProjectInfoFields 
                             project={_project}
                             register={register}
                         />
                     </div>
                     {/* START project images fields */}
-                    <div className="col-6">
-                        
-                    </div>
+                    {!_modalData.isNew &&
+                        <div className="col-image_fields">
+                            <ImageFields />
+                        </div>
+                    }
+                    
                 </div>
                 
             </Modal.Body>

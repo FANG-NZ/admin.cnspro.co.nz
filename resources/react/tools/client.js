@@ -19,6 +19,7 @@ export async function Client(endpoint, { body, ...customConfig } = {}) {
     if (body) {
         config.body = JSON.stringify(body)
     }
+
   
     //To check if we need to show loading
     // if(config.showloading){

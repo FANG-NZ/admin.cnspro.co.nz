@@ -1,8 +1,42 @@
 // define the project modal style
 // -------------------------------
+
+//START define the layout of modal
+//according to request
+.modal-new_project{
+    
+    // #project-modal{
+    //     width: 500px;
+    // }
+
+}
+
+
 #project-modal{
-    width: 90%;
-    max-width:none;
+    //width: 90%;
+    //max-width:none;
+    margin: 0 auto;
+
+    //override modeal content style
+    .modal-content{
+        border: none;
+        border-radius: 0;
+    }
+
+
+    //To setup sticky header
+    .modal-header{
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: #fff;
+    }
+
+    .col-info_fields{
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
 
     .checkbox-holder{
         padding-top: 30px;

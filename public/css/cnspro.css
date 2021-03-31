@@ -13371,8 +13371,21 @@ input[type=range]::-moz-range-thumb {
 }
 
 #project-modal {
-  width: 90%;
-  max-width: none;
+  margin: 0 auto;
+}
+#project-modal .modal-content {
+  border: none;
+  border-radius: 0;
+}
+#project-modal .modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #fff;
+}
+#project-modal .col-info_fields {
+  padding-left: 15px;
+  padding-right: 15px;
 }
 #project-modal .checkbox-holder {
   padding-top: 30px;
