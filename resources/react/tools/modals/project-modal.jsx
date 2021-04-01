@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react'
 import Modal from 'react-bootstrap/Modal'
 import {useSelector, useDispatch} from 'react-redux'
+import {unwrapResult} from '@reduxjs/toolkit'
 import {useForm, useFormContext, FormProvider} from 'react-hook-form'
 
-import {hide} from './project-modal-slice'
+import {hide, setProject} from './project-modal-slice'
 import {addNewProject} from '../../stores/new-projects-slice'
 
 
@@ -26,6 +27,7 @@ const ProjectInfoFields = ({project, register}) => {
                     name="title" 
                     placeholder="Enter title" 
                     className="form-control" 
+                    defaultValue={project.title}
                     ref={register({required: true})}
                 />    
                 {errors.title && 
@@ -36,7 +38,7 @@ const ProjectInfoFields = ({project, register}) => {
 
             <div className="col-5 checkbox-holder">
                 <div className="checkbox checkbox-primary">
-                    <input id="is_new" type="checkbox" name="is_new" defaultValue="true" />
+                    <input id="is_new" type="checkbox" name="is_new" defaultValue={project.is_new} />
                     <label htmlFor="is_new">is NEW project?</label>
                 </div>
             </div>
@@ -52,6 +54,7 @@ const ProjectInfoFields = ({project, register}) => {
                     name="street" 
                     placeholder="Enter project's street" 
                     className="form-control" 
+                    defaultValue={project.street}
                     ref={register({required: true})}
                 />    
                 {errors.street && 
@@ -68,6 +71,7 @@ const ProjectInfoFields = ({project, register}) => {
                     name="city" 
                     placeholder="Enter project's city" 
                     className="form-control" 
+                    defaultValue={project.city}
                     ref={register({required: true})}
                 />    
                 {errors.city && 
@@ -90,6 +94,7 @@ const ProjectInfoFields = ({project, register}) => {
                     name="bedrooms" 
                     placeholder="Enter number of bedrooms" 
                     className="form-control" 
+                    defaultValue={project.bedrooms}
                     ref={register}
                 />   
                 
@@ -105,6 +110,7 @@ const ProjectInfoFields = ({project, register}) => {
                     name="bathrooms" 
                     placeholder="Enter number of bathroom" 
                     className="form-control" 
+                    defaultValue={project.bathrooms}
                     ref={register}
                 />   
             </div>
@@ -119,6 +125,7 @@ const ProjectInfoFields = ({project, register}) => {
                     name="carpark" 
                     placeholder="Enter number of carpark" 
                     className="form-control" 
+                    defaultValue={project.carpark}
                     ref={register}
                 />   
             </div>
@@ -133,6 +140,7 @@ const ProjectInfoFields = ({project, register}) => {
                     name="livingrooms" 
                     placeholder="Enter number of livingroom" 
                     className="form-control" 
+                    defaultValue={project.livingrooms}
                     ref={register}
                 />   
             </div>
@@ -147,6 +155,7 @@ const ProjectInfoFields = ({project, register}) => {
                     name="land_area" 
                     placeholder="Enter land area" 
                     className="form-control" 
+                    defaultValue={project.land_area}
                     ref={register}
                 />   
             </div>
@@ -161,6 +170,7 @@ const ProjectInfoFields = ({project, register}) => {
                     name="floor_area" 
                     placeholder="Enter floor area" 
                     className="form-control" 
+                    defaultValue={project.floor_area}
                     ref={register}
                 />   
             </div>
@@ -176,6 +186,7 @@ const ProjectInfoFields = ({project, register}) => {
                     name="short_description" 
                     rows="3"
                     placeholder="Enter short description"    
+                    defaultValue={project.short_description}
                 >
                 </textarea>
                 <span className="help-block">
@@ -194,6 +205,7 @@ const ProjectInfoFields = ({project, register}) => {
                     name="description" 
                     rows="6"
                     placeholder="Enter full description"    
+                    defaultValue={project.description}
                 >
                 </textarea>
                 
@@ -230,9 +242,12 @@ const ProjectModal = () => {
     const _form = useForm()
     const {register, handleSubmit, errors, reset, formState} = _form
     const { isDirty } = formState
-    //define the class name
-    const _modalCalssname = _modalData.isNew? 'modal-new_project' : 'modal-update_project'
 
+    //setup modal vars
+    //FOR classname
+    const _modalCalssname = _modalData.isNew? 'modal-new_project' : 'modal-update_project'
+    //FOR title
+    const _title = _modalData.isNew? "Add new project" : `Update [${_project.title}]`
 
     /**
      * Function is to handle close modal
@@ -260,17 +275,17 @@ const ProjectModal = () => {
     function onTestClicked(){
 
         const _data = {
-            title : "TEST LINE"
+            street: "street name",
+            city : "TEST LINE"
         }
 
-        _dispatch(addNewProject(_data)).then(
-            (result) => {
-                console.log("RIGHT HERE")
-            },
-            (err) => {
-                console.log(err)
-            }
-        )
+        _dispatch(addNewProject(_data))
+            .then(unwrapResult)
+            .then(result => {
+                _dispatch(setProject(result))
+            })
+            .catch(err => console.err(err))
+            
     }
 
     return(
@@ -286,10 +301,14 @@ const ProjectModal = () => {
             <Modal.Header className={"modal-header-lg"}>
                 <Modal.Title style={{marginBottom: 0}}>
                     <i className="mdi mdi-clover"></i>
-                    <span>TEST HEADER</span>
+                    <span>{_title}</span>
                 </Modal.Title>
 
-                <button onClick={onTestClicked}>
+                <button 
+                    onClick={(e) => {
+                        e.preventDefault()
+                        onTestClicked()
+                    }}>
                     TEST BTN
                 </button>
 

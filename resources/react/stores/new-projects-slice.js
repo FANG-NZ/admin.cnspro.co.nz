@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import {Client} from '../tools/client'
+import store from './new-projects-page-store'
 
 const initialState = []
 
@@ -11,8 +12,12 @@ export const allNewProjects = state => state.NewProjects
  */
 export const addNewProject = createAsyncThunk(
     'NewProjects/addNewProject',
-    (data)=>{
-        const response = Client.post("/projects/add", data)
+    async (data) => {
+        const response = await Client.post(
+                                            "/projects/add", 
+                                            data, 
+                                            //{store: store}
+                                        )
         return response
     }
 )

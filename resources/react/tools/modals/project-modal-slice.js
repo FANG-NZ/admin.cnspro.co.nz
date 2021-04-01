@@ -46,10 +46,20 @@ const ProjectModalSlice = createSlice({
             state.shown = false
             state._isNew = true
             state.project = initialState.project
+        },
+
+        /**
+         * Function is to setup Project object
+         * @param {*} state 
+         * @param {*} action 
+         */
+        setProject(state, action){
+            state.project = action.payload
+            state.isNew = false
         }
 
     }
 })
 
-export const { show, hide } = ProjectModalSlice.actions
+export const { show, hide, setProject } = ProjectModalSlice.actions
 export default ProjectModalSlice.reducer

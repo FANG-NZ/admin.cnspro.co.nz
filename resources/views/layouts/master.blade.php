@@ -36,10 +36,8 @@
 
         </div>
 
-        <!-- START fcms loader box -->
-        <div id="main-loader" class="ff-loader-container">
-            <div class="ff-loader"></div>
-        </div>
+        <!-- START react PORTAL BOX -->
+        <div id="portal-box"></div>
 
         {{-- Laravel Mix - JS File --}}
         <script src="{{ mix('js/app.js') }}"></script>

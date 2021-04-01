@@ -2586,19 +2586,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 /* harmony import */ var _new_projects_slice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./new-projects-slice */ "./resources/react/stores/new-projects-slice.js");
 /* harmony import */ var _tools_confirm_alert_confirm_alert_slice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../tools/confirm-alert/confirm-alert-slice */ "./resources/react/tools/confirm-alert/confirm-alert-slice.js");
 /* harmony import */ var _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../tools/modals/project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
+/* harmony import */ var _tools_loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../tools/loading-spinner/loading-spinner-slice */ "./resources/react/tools/loading-spinner/loading-spinner-slice.js");
 
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.configureStore)({
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_4__.configureStore)({
   reducer: {
     'NewProjects': _new_projects_slice__WEBPACK_IMPORTED_MODULE_0__.default,
     'ConfirmAlert': _tools_confirm_alert_confirm_alert_slice__WEBPACK_IMPORTED_MODULE_1__.default,
-    'ProjectModal': _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_2__.default
+    'ProjectModal': _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_2__.default,
+    'LoadingSpinner': _tools_loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_3__.default
   }
 }));
 
@@ -2618,8 +2621,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "setNewProjects": () => (/* binding */ setNewProjects),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-/* harmony import */ var _tools_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../tools/client */ "./resources/react/tools/client.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var _tools_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../tools/client */ "./resources/react/tools/client.js");
+/* harmony import */ var _new_projects_page_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./new-projects-page-store */ "./resources/react/stores/new-projects-page-store.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
 
 
 var initialState = [];
@@ -2631,15 +2644,38 @@ var allNewProjects = function allNewProjects(state) {
  * define the async function to add new project
  */
 
-var addNewProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('NewProjects/addNewProject', function (data) {
-  var response = _tools_client__WEBPACK_IMPORTED_MODULE_0__.Client.post("/projects/add", data);
-  return response;
-});
+var addNewProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.createAsyncThunk)('NewProjects/addNewProject', /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(data) {
+    var response;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return _tools_client__WEBPACK_IMPORTED_MODULE_1__.Client.post("/projects/add", data //{store: store}
+            );
+
+          case 2:
+            response = _context.sent;
+            return _context.abrupt("return", response);
+
+          case 4:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function (_x) {
+    return _ref.apply(this, arguments);
+  };
+}());
 /**
  * create New Projects Slice
  */
 
-var NewProjectsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice)({
+var NewProjectsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.createSlice)({
   name: "NewProjects",
   initialState: initialState,
   reducers: {
@@ -2673,6 +2709,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./loading-spinner/loading-spinner-slice */ "./resources/react/tools/loading-spinner/loading-spinner-slice.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -2691,8 +2728,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 // A tiny wrapper around fetch(), borrowed from
 // https://kentcdodds.com/blog/replace-axios-with-a-simple-custom-fetch-wrapper
-//import store from '../store'
-//import {show as showLoadingSpinner , hide as hideLoadingSpinner} from '../parts/spinner/loading-spinner-slice'
+
 function Client(_x) {
   return _Client.apply(this, arguments);
 }
@@ -2702,7 +2738,9 @@ function _Client() {
     var _ref,
         body,
         customConfig,
-        headers,
+        _headers,
+        _showloading,
+        _store,
         config,
         data,
         response,
@@ -2714,67 +2752,76 @@ function _Client() {
           case 0:
             _ref = _args.length > 1 && _args[1] !== undefined ? _args[1] : {};
             body = _ref.body, customConfig = _objectWithoutProperties(_ref, ["body"]);
-            headers = {
+            _headers = {
               'Content-Type': 'application/json'
             };
-            config = _objectSpread(_objectSpread({
-              showloading: true,
-              method: body ? 'POST' : 'GET'
-            }, customConfig), {}, {
-              headers: _objectSpread(_objectSpread({}, headers), customConfig.headers)
+            _showloading = false;
+
+            if ('store' in customConfig) {
+              _showloading = true;
+              _store = customConfig.store;
+              delete customConfig.store;
+            } //To setup config
+
+
+            config = _objectSpread(_objectSpread({}, customConfig), {}, {
+              headers: _objectSpread(_objectSpread({}, _headers), customConfig.headers)
             });
 
             if (body) {
               config.body = JSON.stringify(body);
             } //To check if we need to show loading
-            // if(config.showloading){
-            //   store.dispatch(showLoadingSpinner())
-            // }
 
 
-            _context.prev = 5;
-            _context.next = 8;
+            if (_showloading) {
+              _store.dispatch((0,_loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_1__.show)());
+            }
+
+            _context.prev = 8;
+            _context.next = 11;
             return window.fetch(endpoint, config);
 
-          case 8:
+          case 11:
             response = _context.sent;
-            _context.next = 11;
+            _context.next = 14;
             return response.json();
 
-          case 11:
+          case 14:
             data = _context.sent;
 
             if (!response.ok) {
-              _context.next = 14;
+              _context.next = 17;
               break;
             }
 
-            return _context.abrupt("return", {
-              status: true,
-              data: data
-            });
-
-          case 14:
-            throw new Error(response.statusText);
+            return _context.abrupt("return", data);
 
           case 17:
-            _context.prev = 17;
-            _context.t0 = _context["catch"](5);
-            return _context.abrupt("return", Promise.reject({
-              status: false,
-              message: data.message
-            }));
+            throw new Error(response.statusText);
 
           case 20:
             _context.prev = 20;
-            return _context.finish(20);
+            _context.t0 = _context["catch"](8);
+            return _context.abrupt("return", Promise.reject({
+              message: data.message
+            }));
 
-          case 22:
+          case 23:
+            _context.prev = 23;
+
+            //To check if we need to show loading
+            if (_showloading) {
+              _store.dispatch((0,_loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_1__.hide)());
+            }
+
+            return _context.finish(23);
+
+          case 26:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[5, 17, 20, 22]]);
+    }, _callee, null, [[8, 20, 23, 26]]);
   }));
   return _Client.apply(this, arguments);
 }
@@ -2789,6 +2836,7 @@ Client.get = function (endpoint) {
 Client.post = function (endpoint, body) {
   var customConfig = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   return Client(endpoint, _objectSpread(_objectSpread({}, customConfig), {}, {
+    method: 'POST',
     body: body
   }));
 };
@@ -2969,6 +3017,81 @@ var ConfirmAlert = function ConfirmAlert() {
 
 /***/ }),
 
+/***/ "./resources/react/tools/loading-spinner/loading-spinner-slice.js":
+/*!************************************************************************!*\
+  !*** ./resources/react/tools/loading-spinner/loading-spinner-slice.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "show": () => (/* binding */ show),
+/* harmony export */   "hide": () => (/* binding */ hide),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+
+var initialState = {
+  shown: false
+};
+var LoadingSpinnerSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+  name: "LoadingSpinner",
+  initialState: initialState,
+  reducers: {
+    show: function show(state, action) {
+      state.shown = true;
+    },
+    hide: function hide(state, action) {
+      state.shown = false;
+    }
+  }
+});
+var _LoadingSpinnerSlice$ = LoadingSpinnerSlice.actions,
+    show = _LoadingSpinnerSlice$.show,
+    hide = _LoadingSpinnerSlice$.hide;
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LoadingSpinnerSlice.reducer);
+
+/***/ }),
+
+/***/ "./resources/react/tools/loading-spinner/loading-spinner.jsx":
+/*!*******************************************************************!*\
+  !*** ./resources/react/tools/loading-spinner/loading-spinner.jsx ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+
+
+ //define the loading spinner
+
+var LoadingSpinner = function LoadingSpinner(props) {
+  var _portalBox = document.getElementById("portal-box");
+
+  var _loadingState = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(function (state) {
+    return state.LoadingSpinner;
+  });
+
+  return /*#__PURE__*/(0,react_dom__WEBPACK_IMPORTED_MODULE_2__.createPortal)(_loadingState.shown && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    id: "main-loader",
+    className: "ff-loader-container"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "ff-loader"
+  })), _portalBox);
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LoadingSpinner);
+
+/***/ }),
+
 /***/ "./resources/react/tools/modals/project-modal-slice.js":
 /*!*************************************************************!*\
   !*** ./resources/react/tools/modals/project-modal-slice.js ***!
@@ -2980,6 +3103,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "show": () => (/* binding */ show),
 /* harmony export */   "hide": () => (/* binding */ hide),
+/* harmony export */   "setProject": () => (/* binding */ setProject),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
@@ -3029,12 +3153,23 @@ var ProjectModalSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createS
       state.shown = false;
       state._isNew = true;
       state.project = initialState.project;
+    },
+
+    /**
+     * Function is to setup Project object
+     * @param {*} state 
+     * @param {*} action 
+     */
+    setProject: function setProject(state, action) {
+      state.project = action.payload;
+      state.isNew = false;
     }
   }
 });
 var _ProjectModalSlice$ac = ProjectModalSlice.actions,
     show = _ProjectModalSlice$ac.show,
-    hide = _ProjectModalSlice$ac.hide;
+    hide = _ProjectModalSlice$ac.hide,
+    setProject = _ProjectModalSlice$ac.setProject;
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ProjectModalSlice.reducer);
 
@@ -3052,11 +3187,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js");
+/* harmony import */ var react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 /* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.js");
 /* harmony import */ var _project_modal_slice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
 /* harmony import */ var _stores_new_projects_slice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../stores/new-projects-slice */ "./resources/react/stores/new-projects-slice.js");
+
 
 
 
@@ -3085,6 +3222,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     name: "title",
     placeholder: "Enter title",
     className: "form-control",
+    defaultValue: project.title,
     ref: register({
       required: true
     })
@@ -3098,7 +3236,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     id: "is_new",
     type: "checkbox",
     name: "is_new",
-    defaultValue: "true"
+    defaultValue: project.is_new
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", {
     htmlFor: "is_new"
   }, "is NEW project?")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -3110,6 +3248,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     name: "street",
     placeholder: "Enter project's street",
     className: "form-control",
+    defaultValue: project.street,
     ref: register({
       required: true
     })
@@ -3122,6 +3261,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     name: "city",
     placeholder: "Enter project's city",
     className: "form-control",
+    defaultValue: project.city,
     ref: register({
       required: true
     })
@@ -3140,6 +3280,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     name: "bedrooms",
     placeholder: "Enter number of bedrooms",
     className: "form-control",
+    defaultValue: project.bedrooms,
     ref: register
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-6 mb-2"
@@ -3150,6 +3291,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     name: "bathrooms",
     placeholder: "Enter number of bathroom",
     className: "form-control",
+    defaultValue: project.bathrooms,
     ref: register
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-6 mb-2"
@@ -3160,6 +3302,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     name: "carpark",
     placeholder: "Enter number of carpark",
     className: "form-control",
+    defaultValue: project.carpark,
     ref: register
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-6 mb-2"
@@ -3170,6 +3313,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     name: "livingrooms",
     placeholder: "Enter number of livingroom",
     className: "form-control",
+    defaultValue: project.livingrooms,
     ref: register
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-6 mb-2"
@@ -3180,6 +3324,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     name: "land_area",
     placeholder: "Enter land area",
     className: "form-control",
+    defaultValue: project.land_area,
     ref: register
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-6 mb-2"
@@ -3190,6 +3335,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     name: "floor_area",
     placeholder: "Enter floor area",
     className: "form-control",
+    defaultValue: project.floor_area,
     ref: register
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "row mb-2"
@@ -3200,7 +3346,8 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     ref: register,
     name: "short_description",
     rows: "3",
-    placeholder: "Enter short description"
+    placeholder: "Enter short description",
+    defaultValue: project.short_description
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
     className: "help-block"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("small", null, "Please keep less than 50 words.")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -3212,7 +3359,8 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     ref: register,
     name: "description",
     rows: "6",
-    placeholder: "Enter full description"
+    placeholder: "Enter full description",
+    defaultValue: project.description
   }))));
 };
 /**
@@ -3248,9 +3396,13 @@ var ProjectModal = function ProjectModal() {
       errors = _form.errors,
       reset = _form.reset,
       formState = _form.formState;
-  var isDirty = formState.isDirty; //define the class name
+  var isDirty = formState.isDirty; //setup modal vars
+  //FOR classname
 
-  var _modalCalssname = _modalData.isNew ? 'modal-new_project' : 'modal-update_project';
+  var _modalCalssname = _modalData.isNew ? 'modal-new_project' : 'modal-update_project'; //FOR title
+
+
+  var _title = _modalData.isNew ? "Add new project" : "Update [".concat(_project.title, "]");
   /**
    * Function is to handle close modal
    */
@@ -3277,17 +3429,18 @@ var ProjectModal = function ProjectModal() {
 
   function onTestClicked() {
     var _data = {
-      title: "TEST LINE"
+      street: "street name",
+      city: "TEST LINE"
     };
 
-    _dispatch((0,_stores_new_projects_slice__WEBPACK_IMPORTED_MODULE_4__.addNewProject)(_data)).then(function (result) {
-      console.log("RIGHT HERE");
-    }, function (err) {
-      console.log(err);
+    _dispatch((0,_stores_new_projects_slice__WEBPACK_IMPORTED_MODULE_4__.addNewProject)(_data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_5__.unwrapResult).then(function (result) {
+      _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_3__.setProject)(result));
+    })["catch"](function (err) {
+      return console.err(err);
     });
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_5__.default, {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_6__.default, {
     id: "project-modal",
     show: _modalData.shown,
     onHide: onHandleClose,
@@ -3295,23 +3448,26 @@ var ProjectModal = function ProjectModal() {
     className: _modalCalssname
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_2__.FormProvider, _form, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
     onSubmit: handleSubmit(onHandleSubmit)
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_5__.default.Header, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_6__.default.Header, {
     className: "modal-header-lg"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_5__.default.Title, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_6__.default.Title, {
     style: {
       marginBottom: 0
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("i", {
     className: "mdi mdi-clover"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "TEST HEADER")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    onClick: onTestClicked
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, _title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+    onClick: function onClick(e) {
+      e.preventDefault();
+      onTestClicked();
+    }
   }, "TEST BTN"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     type: "button",
     className: "close",
     onClick: onHandleClose
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("i", {
     className: "mdi mdi-close"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_5__.default.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_6__.default.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-info_fields"
@@ -3320,7 +3476,7 @@ var ProjectModal = function ProjectModal() {
     register: register
   })), !_modalData.isNew && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-image_fields"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(ImageFields, null)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_5__.default.Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(ImageFields, null)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_6__.default.Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     type: "button",
     className: "btn btn-light",
     onClick: onHandleClose
@@ -66170,7 +66326,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_projects_page_header__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/projects-page-header */ "./resources/react/components/projects-page-header.jsx");
 /* harmony import */ var _tools_confirm_alert_confirm_alert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../tools/confirm-alert/confirm-alert */ "./resources/react/tools/confirm-alert/confirm-alert.jsx");
 /* harmony import */ var _tools_modals_project_modal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tools/modals/project-modal */ "./resources/react/tools/modals/project-modal.jsx");
-/* harmony import */ var _stores_new_projects_slice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../stores/new-projects-slice */ "./resources/react/stores/new-projects-slice.js");
+/* harmony import */ var _tools_loading_spinner_loading_spinner__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../tools/loading-spinner/loading-spinner */ "./resources/react/tools/loading-spinner/loading-spinner.jsx");
+/* harmony import */ var _stores_new_projects_slice__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../stores/new-projects-slice */ "./resources/react/stores/new-projects-slice.js");
+
 
 
 
@@ -66192,7 +66350,7 @@ try {
 
   var _data = JSON.parse(json_string);
 
-  _stores_new_projects_page_store__WEBPACK_IMPORTED_MODULE_3__.default.dispatch((0,_stores_new_projects_slice__WEBPACK_IMPORTED_MODULE_8__.setNewProjects)(_data));
+  _stores_new_projects_page_store__WEBPACK_IMPORTED_MODULE_3__.default.dispatch((0,_stores_new_projects_slice__WEBPACK_IMPORTED_MODULE_9__.setNewProjects)(_data));
 } catch (err) {
   console.error("Init default projects data ERROR");
 }
@@ -66203,7 +66361,7 @@ react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/react__WEBPACK_IMPOR
   className: "card-header ff-card-header"
 }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_projects_page_header__WEBPACK_IMPORTED_MODULE_5__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
   className: "card-body"
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_projects_table__WEBPACK_IMPORTED_MODULE_4__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_confirm_alert_confirm_alert__WEBPACK_IMPORTED_MODULE_6__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_modals_project_modal__WEBPACK_IMPORTED_MODULE_7__.default, null)), document.getElementById("root-new-projects"));
+}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_projects_table__WEBPACK_IMPORTED_MODULE_4__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_confirm_alert_confirm_alert__WEBPACK_IMPORTED_MODULE_6__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_modals_project_modal__WEBPACK_IMPORTED_MODULE_7__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_loading_spinner_loading_spinner__WEBPACK_IMPORTED_MODULE_8__.default, null)), document.getElementById("root-new-projects"));
 })();
 
 /******/ })()

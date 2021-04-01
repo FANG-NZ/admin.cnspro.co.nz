@@ -11,6 +11,20 @@
 
 }
 
+//define the update project modal
+.modal-update_project{
+    #project-modal{
+        width: 90%;
+        max-width: 90%;
+    }
+
+    .col-info_fields, 
+    .col-image_fields{
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
 
 #project-modal{
     //width: 90%;
@@ -32,7 +46,9 @@
         background-color: #fff;
     }
 
-    .col-info_fields{
+    //START fields layout
+    .col-info_fields, 
+    .col-image_fields{
         padding-left: 15px;
         padding-right: 15px;
     }

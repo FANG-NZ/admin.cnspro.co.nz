@@ -7,6 +7,7 @@ import ProjectsTable from '../components/projects-table'
 import ProjectsPageHeader from '../components/projects-page-header'
 import ConfirmAlert from '../tools/confirm-alert/confirm-alert'
 import ProjectModal from '../tools/modals/project-modal'
+import LoadingSpinner from '../tools/loading-spinner/loading-spinner'
 
 import {setNewProjects} from '../stores/new-projects-slice'
 
@@ -39,6 +40,9 @@ ReactDom.render(
         <ConfirmAlert />
         {/* Project Modal */}
         <ProjectModal />
+
+        {/* Loading Spinner */}
+        <LoadingSpinner />
     </Provider>
     , 
     document.getElementById("root-new-projects")
