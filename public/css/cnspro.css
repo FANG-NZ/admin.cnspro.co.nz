@@ -13316,6 +13316,19 @@ input[type=range]::-moz-range-thumb {
     transform: rotate(360deg);
   }
 }
+.ff-card-header {
+  display: flex;
+}
+
+.ff-card-header .card-header-content {
+  flex-grow: 1;
+}
+
+.ff-card-header .card-header-tools {
+  text-align: right;
+  flex: 0 0 200px;
+}
+
 .navbar-custom .logo h1, .navbar-custom .logo h3 {
   margin: 0;
   line-height: 70px;
@@ -13367,6 +13380,7 @@ input[type=range]::-moz-range-thumb {
 
 #project-modal {
   margin: 0 auto;
+  transition: all 0.3s ease-in-out;
 }
 #project-modal .modal-content {
   border: none;

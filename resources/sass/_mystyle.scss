@@ -1,6 +1,22 @@
 // START general style
 // ----------------------- 
 
+//TODO
+//add style for FF page card header
+.ff-card-header {
+    display: flex;
+}
+.ff-card-header .card-header-content {
+    flex-grow: 1;
+}
+.ff-card-header .card-header-tools {
+    text-align: right;
+    flex: 0 0 200px;
+}
+
+
+
+
 //START header
 //-----------------------
 .navbar-custom{
