@@ -1,8 +1,9 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import Modal from 'react-bootstrap/Modal'
 import {useSelector, useDispatch} from 'react-redux'
 import {unwrapResult} from '@reduxjs/toolkit'
 import {useForm, useFormContext, FormProvider} from 'react-hook-form'
+import ImageUploading from 'react-images-uploading'
 
 import {hide, setProject} from './project-modal-slice'
 import {addNewProject} from '../../stores/new-projects-slice'
@@ -80,6 +81,23 @@ const ProjectInfoFields = ({project, register}) => {
             </div>
         </div>
         
+
+        <div className="row mb-2">
+            <div className="col-6">
+                <label>Completed On</label>
+
+                <input 
+                    type="text"
+                    name="completed_on" 
+                    placeholder="The project will be completed on" 
+                    className="form-control" 
+                    defaultValue={project.completed_on}
+                    ref={register}
+                />   
+            </div>
+        </div>
+
+
         <h5 className="header-title">Properties</h5>
 
         <div className="row properties-holder">
@@ -222,10 +240,99 @@ const ProjectInfoFields = ({project, register}) => {
  * define the image fields block
  * @returns 
  */
-const ImageFields = () => {
+const ImageFields = (props) => {
+    //const [images, setImages] = React.useState([]);
+    
+    const onChange = (image, addUpdateIndex) => {
+        // data for submit
+        console.log(image)
+        console.log(addUpdateIndex)
+        //setImages(imageList);
+    };
+
+    function onRemove(_id){
+        alert("Image removed call");
+    }
 
     return(
-        <h1>Image Fields Here</h1>
+        <>
+        <div className="image-upload">
+            <ImageUploading
+                onChange={onChange}
+                dataURLKey="data_url"
+            >     
+            {({  
+                onImageUpload,
+                isDragging,
+                dragProps,
+            }) => (
+
+                // START drop button
+                <button
+                    className="dropzone"
+                    onClick={onImageUpload}
+                    {...dragProps}
+                >
+                    <div className="dz-message">
+                        <i className="mdi mdi-cloud-upload text-muted"></i>
+                        <h3>Drop files or click to upload</h3>
+                    </div>
+                </button>
+            )}
+            </ImageUploading>
+        </div>
+
+        {/* START images list */}
+        <div className="images-list">
+            <div className="row">
+
+                <div className="col-4">
+                    <div className="image-box uploading">
+                        <img src="https://freebw.com/templates/tatee/images/post-05.jpg" />
+
+                        <div className="ff-loader-container">
+                            <div className="ff-loader"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-4">
+                    <div className="image-box">
+                        <img src="https://freebw.com/templates/tatee/images/post-05.jpg" />
+
+                        <button className="btn btn-icon btn-danger"
+                            onClick={() => onRemove()}
+                        >
+                            <i className="mdi mdi-delete-forever"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div className="col-4">
+                    <div className="image-box">
+                        <img src="https://freebw.com/templates/tatee/images/post-06.jpg" />
+
+                        <button className="btn btn-icon btn-danger">
+                            <i className="mdi mdi-delete-forever"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div className="col-4">
+                    <div className="image-box">
+                        <img src="https://freebw.com/templates/tatee/images/post-07.jpg" />
+                    </div>
+                </div>
+
+                <div className="col-4">
+                    <div className="image-box">
+                        <img src="https://freebw.com/templates/tatee/images/post-08.jpg" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </>
     )
 }
 
@@ -247,7 +354,7 @@ const ProjectModal = () => {
     //FOR classname
     const _modalCalssname = _modalData.isNew? 'modal-new_project' : 'modal-update_project'
     //FOR title
-    const _title = _modalData.isNew? "Add new project" : `Update [${_project.title}]`
+    const _title = _modalData.isNew? "Add new project" : `[${_project.title}]`
 
     /**
      * Function is to handle close modal
@@ -269,6 +376,8 @@ const ProjectModal = () => {
      */
     function onHandleSubmit(data){
         console.log("Form submitted");
+
+        console.log(data)
     }
 
 
@@ -295,12 +404,11 @@ const ProjectModal = () => {
             onEnter={onHandleEnter}
             className={_modalCalssname}
         >
-            <FormProvider {..._form}>
-            <form onSubmit={handleSubmit(onHandleSubmit)}>
+            
             {/** START header */}
             <Modal.Header className={"modal-header-lg"}>
                 <Modal.Title style={{marginBottom: 0}}>
-                    <i className="mdi mdi-clover"></i>
+                    <i className="mdi mdi-home-variant"></i>
                     <span>{_title}</span>
                 </Modal.Title>
 
@@ -322,21 +430,25 @@ const ProjectModal = () => {
             <Modal.Body>
                 <div className="row">
                     {/* START project info fields */}
+                    
                     <div className="col-info_fields">
-                        <ProjectInfoFields 
-                            project={_project}
-                            register={register}
-                        />
+                        <FormProvider {..._form}>
+                        <form onSubmit={handleSubmit(onHandleSubmit)}>
+                            <ProjectInfoFields 
+                                project={_project}
+                                register={register}
+                            />
+                        </form>
+                        </FormProvider>
                     </div>
+                    
                     {/* START project images fields */}
                     {!_modalData.isNew &&
                         <div className="col-image_fields">
-                            <ImageFields />
+                            <ImageFields project={_project} />
                         </div>
-                    }
-                    
-                </div>
-                
+                    }                   
+                </div>         
             </Modal.Body>
 
             {/* START footer */}
@@ -346,14 +458,14 @@ const ProjectModal = () => {
                     <span>Close</span>
                 </button>
 
-                <button type="submit" className="btn btn-success" disabled={!isDirty}>
+                <button type="button" className="btn btn-success" disabled={!isDirty}
+                    onClick={handleSubmit(onHandleSubmit)}
+                >
                     <i className="mdi mdi-database-plus"></i>
                     <span>{_modalData.isNew ? "Add new project" : "Edit"}</span>
                 </button>
             </Modal.Footer>
 
-            </form>
-            </FormProvider>
         </Modal>
     )
 }

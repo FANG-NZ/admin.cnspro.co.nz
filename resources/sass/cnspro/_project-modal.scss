@@ -1,15 +1,36 @@
 // define the project modal style
 // -------------------------------
 
+//START drop zone style
+.dropzone{
+    width: 100%;
+    border: 2px dashed rgba(59, 62, 71, 0.3);
+    background: #fff;
+    border-radius: 6px;
+    padding: 20px;
+    cursor: pointer;
+
+    .dz-message{
+        text-align: center;
+        //margin: 2em 0;
+
+        i{
+            font-size: 36px;
+        }
+
+        h3{
+            color: #6c757d;
+            font-size: 1.5rem;
+        }
+    }
+    
+}
+
+
+
 //START define the layout of modal
 //according to request
-.modal-new_project{
-    
-    // #project-modal{
-    //     width: 500px;
-    // }
-
-}
+.modal-new_project{}
 
 //define the update project modal
 .modal-update_project{
@@ -22,6 +43,10 @@
     .col-image_fields{
         flex: 0 0 50%;
         max-width: 50%;
+    }
+
+    .modal-footer{
+        justify-content: flex-start;
     }
 }
 
@@ -69,4 +94,64 @@
         }
     }
 }
+
+//START col-images_fields style
+.col-image_fields{
+    .image-upload{
+        margin-bottom: .75rem;
+    }
+
+    .images-list{
+
+        .row{
+            margin-left: -5px;
+            margin-right: -5px;
+        }
+
+        .col-4{
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-bottom: 10px;
+        }
+
+        //START image box style
+        .image-box{
+            background-color: #efefef;
+            position: relative;
+            cursor: pointer;
+
+            img{
+                width: 100%;
+                height: 200px;
+                object-fit: contain;
+            }
+
+            button{
+                display: none;
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                padding: 0;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+            }
+        }
+
+        .image-box:hover{
+            button{
+                display: block;
+            }
+        }
+
+        //START uploading
+        .uploading{
+            .ff-loader-container{
+                position: absolute;
+            }
+        }
+
+    }
+}
+
 

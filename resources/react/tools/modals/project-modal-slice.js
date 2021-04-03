@@ -3,7 +3,8 @@ import {createSlice} from '@reduxjs/toolkit'
 const initialState = {
     //'shown': false,
     'shown' : true,
-    'isNew': true, //to check if it is for ADDING NEW request
+    'isNew' : false,
+    //'isNew': true, //to check if it is for ADDING NEW request
     'project': {}
 }
 

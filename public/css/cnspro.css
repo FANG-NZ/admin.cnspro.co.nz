@@ -13368,6 +13368,25 @@ input[type=range]::-moz-range-thumb {
   text-align: right;
 }
 
+.dropzone {
+  width: 100%;
+  border: 2px dashed rgba(59, 62, 71, 0.3);
+  background: #fff;
+  border-radius: 6px;
+  padding: 20px;
+  cursor: pointer;
+}
+.dropzone .dz-message {
+  text-align: center;
+}
+.dropzone .dz-message i {
+  font-size: 36px;
+}
+.dropzone .dz-message h3 {
+  color: #6c757d;
+  font-size: 1.5rem;
+}
+
 .modal-update_project #project-modal {
   width: 90%;
   max-width: 90%;
@@ -13376,6 +13395,9 @@ input[type=range]::-moz-range-thumb {
 .modal-update_project .col-image_fields {
   flex: 0 0 50%;
   max-width: 50%;
+}
+.modal-update_project .modal-footer {
+  justify-content: flex-start;
 }
 
 #project-modal {
@@ -13405,4 +13427,44 @@ input[type=range]::-moz-range-thumb {
 }
 #project-modal .properties-holder label i {
   margin-right: 5px;
+}
+
+.col-image_fields .image-upload {
+  margin-bottom: 0.75rem;
+}
+.col-image_fields .images-list .row {
+  margin-left: -5px;
+  margin-right: -5px;
+}
+.col-image_fields .images-list .col-4 {
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-bottom: 10px;
+}
+.col-image_fields .images-list .image-box {
+  background-color: #efefef;
+  position: relative;
+  cursor: pointer;
+}
+.col-image_fields .images-list .image-box img {
+  width: 100%;
+  height: 200px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.col-image_fields .images-list .image-box button {
+  display: none;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.col-image_fields .images-list .image-box:hover button {
+  display: block;
+}
+.col-image_fields .images-list .uploading .ff-loader-container {
+  position: absolute;
 }
