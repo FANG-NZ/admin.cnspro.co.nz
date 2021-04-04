@@ -19,6 +19,7 @@ const ProjectInfoFields = ({project, register}) => {
 
     return(
         <React.Fragment>
+
         <div className="row mb-2">
             <div className="col-7">
                 <label>Title</label>
@@ -39,7 +40,13 @@ const ProjectInfoFields = ({project, register}) => {
 
             <div className="col-5 checkbox-holder">
                 <div className="checkbox checkbox-primary">
-                    <input id="is_new" type="checkbox" name="is_new" defaultValue={project.is_new} />
+                    <input 
+                        id="is_new"
+                        type="checkbox" 
+                        name="is_new" 
+                        defaultChecked={project.is_new} 
+                        ref={register}
+                    />
                     <label htmlFor="is_new">is NEW project?</label>
                 </div>
             </div>
@@ -78,6 +85,7 @@ const ProjectInfoFields = ({project, register}) => {
                 {errors.city && 
                     <span className="error text-danger">Please enter project's city</span>
                 }
+
             </div>
         </div>
         
@@ -414,6 +422,7 @@ const ProjectModal = () => {
     const _modalData = useSelector(state => state.ProjectModal)
     const _project = _modalData.project
     const _dispatch = useDispatch()
+
     const _form = useForm()
     const {register, handleSubmit, errors, reset, formState} = _form
     const { isDirty } = formState
@@ -422,7 +431,7 @@ const ProjectModal = () => {
     //FOR classname
     const _modalCalssname = _modalData.isNew? 'modal-new_project' : 'modal-update_project'
     //FOR title
-    const _title = _modalData.isNew? "Add new project" : `[${_project.title}]`
+    const _title = _modalData.isNew? "Add new project" : `${_project.title}`
 
     /**
      * Function is to handle close modal
@@ -436,6 +445,24 @@ const ProjectModal = () => {
      */
     function onHandleEnter(){
 
+        //reset default values with PROJECT
+        reset({
+            'title': _project.title,
+            //we need to convert into boolean type for checkbox
+            'is_new': _project.is_new === 1?true:false,
+            'street': _project.street,
+            'city': _project.city,
+            'completed_on': _project.completed_on,
+            'bedrooms': _project.bedrooms,
+            'bathrooms': _project.bathrooms,
+            'carpark': _project.carpark,
+            'livingrooms': _project.livingrooms,
+            'land_area': _project.land_area,
+            'floor_area': _project.floor_area,
+            'short_description': _project.short_description,
+            'description': _project.description
+        })
+        
     }
 
     /**
@@ -448,22 +475,6 @@ const ProjectModal = () => {
         console.log(data)
     }
 
-
-    function onTestClicked(){
-
-        const _data = {
-            street: "street name",
-            city : "TEST LINE"
-        }
-
-        _dispatch(addNewProject(_data))
-            .then(unwrapResult)
-            .then(result => {
-                _dispatch(setProject(result))
-            })
-            .catch(err => console.err(err))
-            
-    }
 
     return(
         <Modal id="project-modal"  
@@ -479,14 +490,6 @@ const ProjectModal = () => {
                     <i className="mdi mdi-home-variant"></i>
                     <span>{_title}</span>
                 </Modal.Title>
-
-                <button 
-                    onClick={(e) => {
-                        e.preventDefault()
-                        onTestClicked()
-                    }}>
-                    TEST BTN
-                </button>
 
                 <button type="button" className="close" onClick={onHandleClose}>
                     <i className="mdi mdi-close"></i>

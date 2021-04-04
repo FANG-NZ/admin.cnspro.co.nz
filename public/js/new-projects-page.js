@@ -2423,6 +2423,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _stores_new_projects_page_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../stores/new-projects-page-store */ "./resources/react/stores/new-projects-page-store.js");
 /* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
 /* harmony import */ var _tools_confirm_alert_confirm_alert_slice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../tools/confirm-alert/confirm-alert-slice */ "./resources/react/tools/confirm-alert/confirm-alert-slice.js");
+/* harmony import */ var _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../tools/modals/project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
+
 
 
 
@@ -2439,11 +2441,10 @@ var ProjectItem = function ProjectItem(props) {
   var _project = props.project;
 
   var _dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
-
-  var date = new Date(_project.completed_on);
   /**
    * Function is to handle delete
    */
+
 
   function _handleDelete(_id) {
     alert("YES DELETED " + _id);
@@ -2453,8 +2454,10 @@ var ProjectItem = function ProjectItem(props) {
     className: "td-address"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("a", {
     href: "#view",
-    onClick: function onClick() {
-      return alert("clicked");
+    onClick: function onClick(e) {
+      e.preventDefault();
+
+      _dispatch((0,_tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_6__.show)(_project));
     }
   }, _project.street, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null), _project.city)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", {
     className: "td-title"
@@ -3178,8 +3181,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 
 var initialState = {
-  //'shown': false,
-  'shown': true,
+  'shown': false,
+  //'shown' : true,
   'isNew': false,
   //'isNew': true, //to check if it is for ADDING NEW request
   'project': {
@@ -3322,7 +3325,8 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     id: "is_new",
     type: "checkbox",
     name: "is_new",
-    defaultValue: project.is_new
+    defaultChecked: project.is_new,
+    ref: register
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", {
     htmlFor: "is_new"
   }, "is NEW project?")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -3602,7 +3606,7 @@ var ProjectModal = function ProjectModal() {
   var _modalCalssname = _modalData.isNew ? 'modal-new_project' : 'modal-update_project'; //FOR title
 
 
-  var _title = _modalData.isNew ? "Add new project" : "[".concat(_project.title, "]");
+  var _title = _modalData.isNew ? "Add new project" : "".concat(_project.title);
   /**
    * Function is to handle close modal
    */
@@ -3616,7 +3620,25 @@ var ProjectModal = function ProjectModal() {
    */
 
 
-  function onHandleEnter() {}
+  function onHandleEnter() {
+    //reset default values with PROJECT
+    reset({
+      'title': _project.title,
+      //we need to convert into boolean type for checkbox
+      'is_new': _project.is_new === 1 ? true : false,
+      'street': _project.street,
+      'city': _project.city,
+      'completed_on': _project.completed_on,
+      'bedrooms': _project.bedrooms,
+      'bathrooms': _project.bathrooms,
+      'carpark': _project.carpark,
+      'livingrooms': _project.livingrooms,
+      'land_area': _project.land_area,
+      'floor_area': _project.floor_area,
+      'short_description': _project.short_description,
+      'description': _project.description
+    });
+  }
   /**
    * Function is to handle form submit
    * request
@@ -3626,19 +3648,6 @@ var ProjectModal = function ProjectModal() {
   function onHandleSubmit(data) {
     console.log("Form submitted");
     console.log(data);
-  }
-
-  function onTestClicked() {
-    var _data = {
-      street: "street name",
-      city: "TEST LINE"
-    };
-
-    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_5__.addNewProject)(_data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_6__.unwrapResult).then(function (result) {
-      _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_4__.setProject)(result));
-    })["catch"](function (err) {
-      return console.err(err);
-    });
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_7__.default, {
@@ -3656,11 +3665,6 @@ var ProjectModal = function ProjectModal() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("i", {
     className: "mdi mdi-home-variant"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, _title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    onClick: function onClick(e) {
-      e.preventDefault();
-      onTestClicked();
-    }
-  }, "TEST BTN"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     type: "button",
     className: "close",
     onClick: onHandleClose

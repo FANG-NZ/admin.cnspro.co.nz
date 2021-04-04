@@ -14,8 +14,8 @@ class ProjectController extends Controller
     public function index(){
 
         //To load all NEW project
-        $projects = Project::where('is_new', false)->get();
-        //$projects = Project::all();
+        //$projects = Project::where('is_new', false)->get();
+        $projects = Project::all();
 
         return view("newprojects")->with(['projects' => $projects->toJson()]);
     }

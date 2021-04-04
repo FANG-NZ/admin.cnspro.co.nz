@@ -5,6 +5,7 @@ import Moment from 'react-moment'
 import store from '../stores/new-projects-page-store'
 import {allNewProjects} from '../stores/projects-slice'
 import {openAlert} from '../tools/confirm-alert/confirm-alert-slice'
+import {show as showModal} from '../tools/modals/project-modal-slice'
 
 
 /**
@@ -15,7 +16,6 @@ import {openAlert} from '../tools/confirm-alert/confirm-alert-slice'
 const ProjectItem = (props) => {
     const _project = props.project
     const _dispatch = useDispatch()
-    const date = new Date(_project.completed_on)
 
     /**
      * Function is to handle delete
@@ -28,7 +28,10 @@ const ProjectItem = (props) => {
         <tr>
             <td className="td-address">
                 <a href="#view" 
-                    onClick={()=>alert("clicked")}
+                    onClick={(e) => {
+                        e.preventDefault()
+                        _dispatch(showModal(_project))
+                    }}
                 >
                     {_project.street}<br/>{_project.city}
                 </a>
