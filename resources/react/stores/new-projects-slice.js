@@ -1,6 +1,7 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import {createSlice, createAsyncThunk, nanoid} from '@reduxjs/toolkit'
 import {Client} from '../tools/client'
 import store from './new-projects-page-store'
+import {updateProject} from '../tools/modals/project-modal-slice'
 
 const initialState = []
 
@@ -24,6 +25,24 @@ export const addNewProject = createAsyncThunk(
 
 
 /**
+ * TODO
+ * Function is to handle upload image into project
+ */
+export const uploadProjectImage = createAsyncThunk(
+    'NewProjects/uploadProjectImage',
+    async (data) => {
+        const _id = data.id
+        console.log(data)
+        const response = await Client.post(
+            `/projects/upload/${data.id}`, 
+            data.image
+        )
+        return response
+    }
+)
+
+
+/**
  * create New Projects Slice
  */
 const NewProjectsSlice = createSlice({
@@ -41,6 +60,26 @@ const NewProjectsSlice = createSlice({
             return action.payload
         }
 
+    },
+
+    //START extra reducers
+    extraReducers: {
+
+        // [uploadProjectImage.pending]: (state, action) => {
+
+        //     const _data = action.meta.arg
+        //     const _pid = _data.id
+        //     //To find the item index
+        //     const _index = state.findIndex((item) => item.id == _pid)
+
+        //     //To add new image into begining
+        //     state[_index].images.unshift({
+        //         id: nanoid(),
+        //         is_uploading: true,
+        //         url: _data.data_url
+        //     })
+
+        // },
     }
 })
 

@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import {useSelector, useDispatch} from 'react-redux'
-import {unwrapResult} from '@reduxjs/toolkit'
+import {unwrapResult, nanoid} from '@reduxjs/toolkit'
 import {useForm, useFormContext, FormProvider} from 'react-hook-form'
 import ImageUploading from 'react-images-uploading'
 
 import {hide, setProject} from './project-modal-slice'
-import {addNewProject} from '../../stores/new-projects-slice'
+import {addNewProject, uploadProjectImage} from '../../stores/new-projects-slice'
 
 
 /**
@@ -237,17 +237,76 @@ const ProjectInfoFields = ({project, register}) => {
 
 /**
  * TODO
+ * define the image block element
+ * @param {*} param0 
+ * @returns 
+ */
+const ImageBlock = ({image, onRemoveCallback}) => {
+
+    return(
+        <div className="col-4">
+            <div className={`image-box ${image.is_uploading?'uploading': null}`}>
+                <img src={image.url} />
+
+                <button className="btn btn-icon btn-danger"
+                    onClick={() => onRemoveCallback(image)}
+                >
+                    <i className="mdi mdi-delete-forever"></i>
+                </button>
+
+                {image.is_uploading && 
+                    <div className="ff-loader-container">
+                        <div className="ff-loader"></div>
+                    </div>
+                }
+            </div>
+        </div>
+    )
+}
+
+
+/**
+ * TODO
  * define the image fields block
  * @returns 
  */
 const ImageFields = (props) => {
-    //const [images, setImages] = React.useState([]);
+    const _project = props.project
+    const _dispatch = useDispatch()
+
+    // const [images, setImages] = useState([])
+    // useEffect(() => {
+    //     setImages(_project.images)
+    // }, [images])
     
+    
+    /**
+     * Function is to handle image upload
+     * @param {*} image 
+     * @param {*} addUpdateIndex 
+     */
     const onChange = (image, addUpdateIndex) => {
-        // data for submit
-        console.log(image)
-        console.log(addUpdateIndex)
-        //setImages(imageList);
+        
+        //init form data
+        let _formData = new FormData()
+        _formData.append('image', image[0]['file'])
+
+        const _data = {
+            id: _project.id,
+            data_url: image[0]['data_url'],
+            image: _formData
+        }
+
+        //call upload image
+        _dispatch(uploadProjectImage(_data))
+
+        //To update images
+        // const _temp = images.unshift({
+        //     id: nanoid(),
+        //     is_uploading: true,
+        //     url: image[0]['data_url']
+        // })
+        // setImages(_temp)
     };
 
     function onRemove(_id){
@@ -255,7 +314,7 @@ const ImageFields = (props) => {
     }
 
     return(
-        <>
+        <React.Fragment>
         <div className="image-upload">
             <ImageUploading
                 onChange={onChange}
@@ -286,7 +345,17 @@ const ImageFields = (props) => {
         <div className="images-list">
             <div className="row">
 
-                <div className="col-4">
+                {/* {images.length === 0  */}
+                {_project.images.length === 0 
+                    ? <div className="alert alert-warning col-12">
+                        There is <strong>NO IMAGE</strong> found!
+                      </div>
+                    : _project.images.map((image) => {
+                        return <ImageBlock key={image.id} image={image} onRemoveCallback={onRemove} />
+                    })
+                }
+
+                {/* <div className="col-4">
                     <div className="image-box uploading">
                         <img src="https://freebw.com/templates/tatee/images/post-05.jpg" />
 
@@ -294,9 +363,9 @@ const ImageFields = (props) => {
                             <div className="ff-loader"></div>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
-                <div className="col-4">
+                {/*<div className="col-4">
                     <div className="image-box">
                         <img src="https://freebw.com/templates/tatee/images/post-05.jpg" />
 
@@ -328,11 +397,11 @@ const ImageFields = (props) => {
                     <div className="image-box">
                         <img src="https://freebw.com/templates/tatee/images/post-08.jpg" />
                     </div>
-                </div>
+                </div> */}
 
             </div>
         </div>
-        </>
+        </React.Fragment>
     )
 }
 

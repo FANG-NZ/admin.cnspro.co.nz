@@ -30,8 +30,15 @@ Route::middleware(['auth:admin'])->group(function(){
     Route::get('/dashboard', [DashboardController::class, "index"])->name("dashboard");
     Route::get('/projects', [ProjectController::class, "index"])->name("projects");
 
-    Route::post('/projects/add', [ProjectController::class, "doAdd"]);
-    Route::put('/projects/update/{id}', [ProjectController::class, "doUpdate"]);
-    Route::delete('/projects/delete/{id}', [ProjectController::class, "doDelete"]);
+    //To setup json response middleware
+    Route::middleware(['json.response'])->group(function(){
+
+        Route::post('/projects/add', [ProjectController::class, "doAdd"]);
+        Route::delete('/projects/delete/{id}', [ProjectController::class, "doDelete"]);
+        Route::put('/projects/update/{id}', [ProjectController::class, "doUpdate"]);
+        Route::post('/projects/upload/{id}', [ProjectController::class, "doUploadImage"]);
+
+    });
 });
+
 

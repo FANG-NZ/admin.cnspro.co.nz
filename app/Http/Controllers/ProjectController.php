@@ -25,8 +25,6 @@ class ProjectController extends Controller
      * Function is to handle add project request
      */
     public function doAdd(Request $request){
-        $request->headers->set('Accept', 'application/json');
-
         $request->validate([
             'street' => "required | max:255",
             'city' => "required | max:255"
@@ -47,8 +45,6 @@ class ProjectController extends Controller
      * Function is to handle do update request
      */
     public function doUpdate(Request $request, $id){
-        $request->headers->set('Accept', 'application/json');
-
         $project = Project::findOrFail($id);
 
         $request->validate([
@@ -68,10 +64,24 @@ class ProjectController extends Controller
      * Function is to handle do delete
      */
     public function doDelete(Request $request, $id){
-        $request->headers->set('Accept', 'application/json');
-
         $project = Project::findOrFail($id);
 
-        return response(json_encode(['id' => $project->id]), 200);
+        return response(['id' => $project->id], 200);
+    }
+
+
+    /**
+     * Function is to handle uplaod image for PROJECT
+     */
+    public function doUploadImage(Request $request, $id){
+
+        $request->validate([
+            'image'     =>  'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        return response([
+            'name' => 'Test name',
+            'url' => "https://freebw.com/templates/tatee/images/post-10.jpg"
+        ], 200);
     }
 }
