@@ -6,7 +6,7 @@ import {useForm, useFormContext, FormProvider} from 'react-hook-form'
 import ImageUploading from 'react-images-uploading'
 
 import {hide, setProject, addImage} from './project-modal-slice'
-import {addNewProject, uploadProjectImage} from '../../stores/projects-slice'
+import {addNewProject, uploadProjectImage, updateProject} from '../../stores/projects-slice'
 
 
 /**
@@ -449,7 +449,7 @@ const ProjectModal = () => {
         reset({
             'title': _project.title,
             //we need to convert into boolean type for checkbox
-            'is_new': _project.is_new === 1?true:false,
+            'is_new': _project.is_new === 1 ? true : false,
             'street': _project.street,
             'city': _project.city,
             'completed_on': _project.completed_on,
@@ -470,9 +470,23 @@ const ProjectModal = () => {
      * request
      */
     function onHandleSubmit(data){
-        console.log("Form submitted");
+        //append project ID
+        data.id = _project.id
 
-        console.log(data)
+        if(_modalData.isNew){
+
+        }else{
+
+            _dispatch(updateProject(data))
+                .then(unwrapResult)
+                .then(result => {
+
+                    _dispatch(setProject(result))
+                    onHandleEnter()
+
+                })
+
+        }
     }
 
 

@@ -47,6 +47,10 @@ class ProjectController extends Controller
     public function doUpdate(Request $request, $id){
         $project = Project::findOrFail($id);
 
+        if(!$project){
+            return response(['message' => "Project not found"], 404);
+        }
+
         $request->validate([
             'street' => "required | max:255",
             'city' => "required | max:255"
@@ -54,7 +58,7 @@ class ProjectController extends Controller
 
         $data = $request->all();
 
-        $project->street = $data['street'];
+
         $project->title = "TESTING for update project request [{$id}]";
 
         return response($project->toJson(), 200);

@@ -29,6 +29,24 @@ export const addNewProject = createAsyncThunk(
 
 /**
  * TODO
+ * define the function to update project
+ */
+export const updateProject = createAsyncThunk(
+    'Projects/addNewProject',
+    (data) => {
+        const _id = data.id
+
+        const response = Client.put(
+            '/projects/update/' + _id,
+            data
+        )
+        return response
+    }
+)
+
+
+/**
+ * TODO
  * Function is to handle upload image into project
  */
 export const uploadProjectImage = createAsyncThunk(

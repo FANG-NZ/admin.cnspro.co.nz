@@ -2589,22 +2589,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-/* harmony import */ var _projects_slice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./projects-slice */ "./resources/react/stores/projects-slice.js");
-/* harmony import */ var _tools_confirm_alert_confirm_alert_slice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../tools/confirm-alert/confirm-alert-slice */ "./resources/react/tools/confirm-alert/confirm-alert-slice.js");
-/* harmony import */ var _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../tools/modals/project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
-/* harmony import */ var _tools_loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../tools/loading-spinner/loading-spinner-slice */ "./resources/react/tools/loading-spinner/loading-spinner-slice.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var _projects_slice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./projects-slice */ "./resources/react/stores/projects-slice.js");
+/* harmony import */ var _tools_confirm_alert_confirm_alert_slice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../tools/confirm-alert/confirm-alert-slice */ "./resources/react/tools/confirm-alert/confirm-alert-slice.js");
+/* harmony import */ var _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../tools/modals/project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
+/* harmony import */ var _tools_loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../tools/loading-spinner/loading-spinner-slice */ "./resources/react/tools/loading-spinner/loading-spinner-slice.js");
 
 
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_4__.configureStore)({
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.configureStore)({
   reducer: {
-    'Projects': _projects_slice__WEBPACK_IMPORTED_MODULE_0__.default,
-    'ConfirmAlert': _tools_confirm_alert_confirm_alert_slice__WEBPACK_IMPORTED_MODULE_1__.default,
-    'ProjectModal': _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_2__.default,
-    'LoadingSpinner': _tools_loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_3__.default
+    'Projects': _projects_slice__WEBPACK_IMPORTED_MODULE_1__.default,
+    'ConfirmAlert': _tools_confirm_alert_confirm_alert_slice__WEBPACK_IMPORTED_MODULE_2__.default,
+    'ProjectModal': _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_3__.default,
+    'LoadingSpinner': _tools_loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_4__.default
   }
 }));
 
@@ -2621,15 +2621,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "allNewProjects": () => (/* binding */ allNewProjects),
 /* harmony export */   "addNewProject": () => (/* binding */ addNewProject),
+/* harmony export */   "updateProject": () => (/* binding */ updateProject),
 /* harmony export */   "uploadProjectImage": () => (/* binding */ uploadProjectImage),
 /* harmony export */   "setNewProjects": () => (/* binding */ setNewProjects),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-/* harmony import */ var _tools_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../tools/client */ "./resources/react/tools/client.js");
-/* harmony import */ var _new_projects_page_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./new-projects-page-store */ "./resources/react/stores/new-projects-page-store.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var _tools_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../tools/client */ "./resources/react/tools/client.js");
+/* harmony import */ var _new_projects_page_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./new-projects-page-store */ "./resources/react/stores/new-projects-page-store.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2652,7 +2653,7 @@ var allNewProjects = function allNewProjects(state) {
  * define the async function to add new project
  */
 
-var addNewProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.createAsyncThunk)('Projects/addNewProject', /*#__PURE__*/function () {
+var addNewProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('Projects/addNewProject', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(data) {
     var response;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -2660,7 +2661,7 @@ var addNewProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.createAsync
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return _tools_client__WEBPACK_IMPORTED_MODULE_1__.Client.post("/projects/add", data //{store: store}
+            return _tools_client__WEBPACK_IMPORTED_MODULE_2__.Client.post("/projects/add", data //{store: store}
             );
 
           case 2:
@@ -2681,10 +2682,20 @@ var addNewProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.createAsync
 }());
 /**
  * TODO
+ * define the function to update project
+ */
+
+var updateProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('Projects/addNewProject', function (data) {
+  var _id = data.id;
+  var response = _tools_client__WEBPACK_IMPORTED_MODULE_2__.Client.put('/projects/update/' + _id, data);
+  return response;
+});
+/**
+ * TODO
  * Function is to handle upload image into project
  */
 
-var uploadProjectImage = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.createAsyncThunk)('Projects/uploadProjectImage', /*#__PURE__*/function () {
+var uploadProjectImage = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('Projects/uploadProjectImage', /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(data) {
     var _id, response;
 
@@ -2694,7 +2705,7 @@ var uploadProjectImage = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.create
           case 0:
             _id = data.id;
             _context2.next = 3;
-            return _tools_client__WEBPACK_IMPORTED_MODULE_1__.Client.post("/projects/upload/".concat(data.id), data.image, {
+            return _tools_client__WEBPACK_IMPORTED_MODULE_2__.Client.post("/projects/upload/".concat(data.id), data.image, {
               is_upload_file: true
             });
 
@@ -2718,7 +2729,7 @@ var uploadProjectImage = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.create
  * create Projects Slice
  */
 
-var ProjectsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.createSlice)({
+var ProjectsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice)({
   name: "Projects",
   initialState: initialState,
   reducers: {
@@ -3273,12 +3284,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.js");
-/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-images-uploading */ "./node_modules/react-images-uploading/dist/index.js");
-/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_images_uploading__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _project_modal_slice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
-/* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.js");
+/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-images-uploading */ "./node_modules/react-images-uploading/dist/index.js");
+/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_images_uploading__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _project_modal_slice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
+/* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 
@@ -3299,7 +3310,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
   var project = _ref.project,
       register = _ref.register;
 
-  var _useFormContext = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
+  var _useFormContext = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_3__.useFormContext)(),
       errors = _useFormContext.errors;
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -3528,14 +3539,14 @@ var ImageFields = function ImageFields(props) {
       image: _formData
     }; //Update changes into Modal project
 
-    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_4__.addImage)({
-      id: (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_6__.nanoid)(),
+    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_5__.addImage)({
+      id: (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.nanoid)(),
       is_uploading: true,
       url: image[0]['data_url']
     })); //call upload image
 
 
-    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_5__.uploadProjectImage)(_data));
+    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_6__.uploadProjectImage)(_data));
   };
 
   function onRemove(_id) {
@@ -3544,7 +3555,7 @@ var ImageFields = function ImageFields(props) {
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "image-upload"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_images_uploading__WEBPACK_IMPORTED_MODULE_3___default()), {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_images_uploading__WEBPACK_IMPORTED_MODULE_4___default()), {
     onChange: onChange,
     dataURLKey: "data_url"
   }, function (_ref3) {
@@ -3593,7 +3604,7 @@ var ProjectModal = function ProjectModal() {
 
   var _dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
 
-  var _form = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_2__.useForm)();
+  var _form = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_3__.useForm)();
 
   var register = _form.register,
       handleSubmit = _form.handleSubmit,
@@ -3613,7 +3624,7 @@ var ProjectModal = function ProjectModal() {
 
 
   function onHandleClose() {
-    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_4__.hide)());
+    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_5__.hide)());
   }
   /**
    * Function is to handle modal enter
@@ -3646,8 +3657,16 @@ var ProjectModal = function ProjectModal() {
 
 
   function onHandleSubmit(data) {
-    console.log("Form submitted");
-    console.log(data);
+    //append project ID
+    data.id = _project.id;
+
+    if (_modalData.isNew) {} else {
+      _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_6__.updateProject)(data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.unwrapResult).then(function (result) {
+        _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_5__.setProject)(result));
+
+        onHandleEnter();
+      });
+    }
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_7__.default, {
@@ -3674,7 +3693,7 @@ var ProjectModal = function ProjectModal() {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-info_fields"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_2__.FormProvider, _form, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_3__.FormProvider, _form, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
     onSubmit: handleSubmit(onHandleSubmit)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(ProjectInfoFields, {
     project: _project,
