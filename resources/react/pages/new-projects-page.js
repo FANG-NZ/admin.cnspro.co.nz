@@ -9,7 +9,7 @@ import ConfirmAlert from '../tools/confirm-alert/confirm-alert'
 import ProjectModal from '../tools/modals/project-modal'
 import LoadingSpinner from '../tools/loading-spinner/loading-spinner'
 
-import {setNewProjects} from '../stores/new-projects-slice'
+import {setNewProjects} from '../stores/projects-slice'
 
 //To get json string from DOM
 try{

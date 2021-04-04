@@ -5,8 +5,8 @@ import {unwrapResult, nanoid} from '@reduxjs/toolkit'
 import {useForm, useFormContext, FormProvider} from 'react-hook-form'
 import ImageUploading from 'react-images-uploading'
 
-import {hide, setProject} from './project-modal-slice'
-import {addNewProject, uploadProjectImage} from '../../stores/new-projects-slice'
+import {hide, setProject, addImage} from './project-modal-slice'
+import {addNewProject, uploadProjectImage} from '../../stores/projects-slice'
 
 
 /**
@@ -297,16 +297,15 @@ const ImageFields = (props) => {
             image: _formData
         }
 
+        //Update changes into Modal project
+        _dispatch(addImage({
+            id: nanoid(),
+            is_uploading: true,
+            url: image[0]['data_url']
+        }))
+
         //call upload image
         _dispatch(uploadProjectImage(_data))
-
-        //To update images
-        // const _temp = images.unshift({
-        //     id: nanoid(),
-        //     is_uploading: true,
-        //     url: image[0]['data_url']
-        // })
-        // setImages(_temp)
     };
 
     function onRemove(_id){

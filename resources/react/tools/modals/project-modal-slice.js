@@ -6,8 +6,6 @@ const initialState = {
     'isNew' : false,
     //'isNew': true, //to check if it is for ADDING NEW request
     'project': {
-        id: '1',
-        title: "NONE",
         images: []
     }
 }
@@ -64,16 +62,16 @@ const ProjectModalSlice = createSlice({
         },
 
         /**
-         * Function is to update project
+         * Function is to upload image
          * @param {*} state 
          * @param {*} action 
          */
-        updateProject(state, action){
-            state.project = action.payload
+        addImage(state, action){
+            state.project.images.unshift(action.payload)
         }
 
     }
 })
 
-export const { show, hide, setProject, updateProject} = ProjectModalSlice.actions
+export const { show, hide, setProject, addImage} = ProjectModalSlice.actions
 export default ProjectModalSlice.reducer

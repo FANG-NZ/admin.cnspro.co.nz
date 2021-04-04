@@ -1,18 +1,21 @@
 import {createSlice, createAsyncThunk, nanoid} from '@reduxjs/toolkit'
 import {Client} from '../tools/client'
 import store from './new-projects-page-store'
-import {updateProject} from '../tools/modals/project-modal-slice'
 
-const initialState = []
+const initialState = {
+    'newProjects':[],
+    'allProjects':[]
+}
 
-export const allNewProjects = state => state.NewProjects
+//To get all new projects
+export const allNewProjects = state => state.Projects.newProjects
 
 /**
  * TODO
  * define the async function to add new project
  */
 export const addNewProject = createAsyncThunk(
-    'NewProjects/addNewProject',
+    'Projects/addNewProject',
     async (data) => {
         const response = await Client.post(
                                             "/projects/add", 
@@ -29,13 +32,14 @@ export const addNewProject = createAsyncThunk(
  * Function is to handle upload image into project
  */
 export const uploadProjectImage = createAsyncThunk(
-    'NewProjects/uploadProjectImage',
+    'Projects/uploadProjectImage',
     async (data) => {
         const _id = data.id
-        console.log(data)
+        
         const response = await Client.post(
             `/projects/upload/${data.id}`, 
-            data.image
+            data.image,
+            {is_upload_file : true}
         )
         return response
     }
@@ -43,10 +47,10 @@ export const uploadProjectImage = createAsyncThunk(
 
 
 /**
- * create New Projects Slice
+ * create Projects Slice
  */
-const NewProjectsSlice = createSlice({
-    name: "NewProjects",
+const ProjectsSlice = createSlice({
+    name: "Projects",
     initialState,
     reducers:{
 
@@ -57,7 +61,7 @@ const NewProjectsSlice = createSlice({
          * @returns 
          */
         setNewProjects(state, action){
-            return action.payload
+            state.newProjects = action.payload
         }
 
     },
@@ -84,5 +88,5 @@ const NewProjectsSlice = createSlice({
 })
 
 
-export const {setNewProjects} = NewProjectsSlice.actions
-export default NewProjectsSlice.reducer
+export const {setNewProjects} = ProjectsSlice.actions
+export default ProjectsSlice.reducer

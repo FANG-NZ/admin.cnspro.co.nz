@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import Moment from 'react-moment'
 
 import store from '../stores/new-projects-page-store'
-import {allNewProjects} from '../stores/new-projects-slice'
+import {allNewProjects} from '../stores/projects-slice'
 import {openAlert} from '../tools/confirm-alert/confirm-alert-slice'
 
 

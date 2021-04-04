@@ -4,14 +4,24 @@ import {show as showLoading , hide as hideLoading} from './loading-spinner/loadi
 
 export async function Client(endpoint, { body, ...customConfig } = {}) {
 
-  const _headers = { 'Content-Type': 'application/json' }
-
+  //define the default header
+  let _headers = { 'Content-Type': 'application/json' }
   let _showloading = false
   let _store
+  let _is_upload_file = false
+
   if('store' in customConfig){
     _showloading = true
     _store = customConfig.store
     delete customConfig.store
+  }
+
+  //To reset header to upload file
+  if('is_upload_file' in customConfig && customConfig.is_upload_file){
+    //_headers = {"Content-Type": "multipart/form-data"}
+    _headers = {}
+    _is_upload_file = true
+    delete customConfig.upload_file
   }
 
   //To setup config
@@ -23,8 +33,13 @@ export async function Client(endpoint, { body, ...customConfig } = {}) {
     },
   }
 
-  if(body) {
+  if(body && !_is_upload_file) {
       config.body = JSON.stringify(body)
+  }else{
+
+    console.log(body)
+
+    config.body = body
   }
 
   //To check if we need to show loading
