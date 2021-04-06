@@ -2299,6 +2299,97 @@ function usePrevious(value) {
 
 /***/ }),
 
+/***/ "./node_modules/@restart/hooks/esm/useTimeout.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/@restart/hooks/esm/useTimeout.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ useTimeout)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _useMounted__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./useMounted */ "./node_modules/@restart/hooks/esm/useMounted.js");
+/* harmony import */ var _useWillUnmount__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./useWillUnmount */ "./node_modules/@restart/hooks/esm/useWillUnmount.js");
+
+
+
+/*
+ * Browsers including Internet Explorer, Chrome, Safari, and Firefox store the
+ * delay as a 32-bit signed integer internally. This causes an integer overflow
+ * when using delays larger than 2,147,483,647 ms (about 24.8 days),
+ * resulting in the timeout being executed immediately.
+ *
+ * via: https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout
+ */
+
+var MAX_DELAY_MS = Math.pow(2, 31) - 1;
+
+function setChainedTimeout(handleRef, fn, timeoutAtMs) {
+  var delayMs = timeoutAtMs - Date.now();
+  handleRef.current = delayMs <= MAX_DELAY_MS ? setTimeout(fn, delayMs) : setTimeout(function () {
+    return setChainedTimeout(handleRef, fn, timeoutAtMs);
+  }, MAX_DELAY_MS);
+}
+/**
+ * Returns a controller object for setting a timeout that is properly cleaned up
+ * once the component unmounts. New timeouts cancel and replace existing ones.
+ *
+ *
+ *
+ * ```tsx
+ * const { set, clear } = useTimeout();
+ * const [hello, showHello] = useState(false);
+ * //Display hello after 5 seconds
+ * set(() => showHello(true), 5000);
+ * return (
+ *   <div className="App">
+ *     {hello ? <h3>Hello</h3> : null}
+ *   </div>
+ * );
+ * ```
+ */
+
+
+function useTimeout() {
+  var isMounted = (0,_useMounted__WEBPACK_IMPORTED_MODULE_1__.default)(); // types are confused between node and web here IDK
+
+  var handleRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+  (0,_useWillUnmount__WEBPACK_IMPORTED_MODULE_2__.default)(function () {
+    return clearTimeout(handleRef.current);
+  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(function () {
+    var clear = function clear() {
+      return clearTimeout(handleRef.current);
+    };
+
+    function set(fn, delayMs) {
+      if (delayMs === void 0) {
+        delayMs = 0;
+      }
+
+      if (!isMounted()) return;
+      clear();
+
+      if (delayMs <= MAX_DELAY_MS) {
+        // For simplicity, if the timeout is short, just set a normal timeout.
+        handleRef.current = setTimeout(fn, delayMs);
+      } else {
+        setChainedTimeout(handleRef, fn, Date.now() + delayMs);
+      }
+    }
+
+    return {
+      set: set,
+      clear: clear
+    };
+  }, []);
+}
+
+/***/ }),
+
 /***/ "./node_modules/@restart/hooks/esm/useUpdatedRef.js":
 /*!**********************************************************!*\
   !*** ./node_modules/@restart/hooks/esm/useUpdatedRef.js ***!
@@ -2589,22 +2680,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-/* harmony import */ var _projects_slice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./projects-slice */ "./resources/react/stores/projects-slice.js");
-/* harmony import */ var _tools_confirm_alert_confirm_alert_slice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../tools/confirm-alert/confirm-alert-slice */ "./resources/react/tools/confirm-alert/confirm-alert-slice.js");
-/* harmony import */ var _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../tools/modals/project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
-/* harmony import */ var _tools_loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../tools/loading-spinner/loading-spinner-slice */ "./resources/react/tools/loading-spinner/loading-spinner-slice.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var _projects_slice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./projects-slice */ "./resources/react/stores/projects-slice.js");
+/* harmony import */ var _tools_confirm_alert_confirm_alert_slice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../tools/confirm-alert/confirm-alert-slice */ "./resources/react/tools/confirm-alert/confirm-alert-slice.js");
+/* harmony import */ var _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../tools/modals/project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
+/* harmony import */ var _tools_loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../tools/loading-spinner/loading-spinner-slice */ "./resources/react/tools/loading-spinner/loading-spinner-slice.js");
 
 
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.configureStore)({
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_4__.configureStore)({
   reducer: {
-    'Projects': _projects_slice__WEBPACK_IMPORTED_MODULE_1__.default,
-    'ConfirmAlert': _tools_confirm_alert_confirm_alert_slice__WEBPACK_IMPORTED_MODULE_2__.default,
-    'ProjectModal': _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_3__.default,
-    'LoadingSpinner': _tools_loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_4__.default
+    'Projects': _projects_slice__WEBPACK_IMPORTED_MODULE_0__.default,
+    'ConfirmAlert': _tools_confirm_alert_confirm_alert_slice__WEBPACK_IMPORTED_MODULE_1__.default,
+    'ProjectModal': _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_2__.default,
+    'LoadingSpinner': _tools_loading_spinner_loading_spinner_slice__WEBPACK_IMPORTED_MODULE_3__.default
   }
 }));
 
@@ -2628,9 +2719,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-/* harmony import */ var _tools_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../tools/client */ "./resources/react/tools/client.js");
-/* harmony import */ var _new_projects_page_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./new-projects-page-store */ "./resources/react/stores/new-projects-page-store.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var _tools_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../tools/client */ "./resources/react/tools/client.js");
+/* harmony import */ var _new_projects_page_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./new-projects-page-store */ "./resources/react/stores/new-projects-page-store.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2653,7 +2744,7 @@ var allNewProjects = function allNewProjects(state) {
  * define the async function to add new project
  */
 
-var addNewProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('Projects/addNewProject', /*#__PURE__*/function () {
+var addNewProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.createAsyncThunk)('Projects/addNewProject', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(data) {
     var response;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -2661,7 +2752,7 @@ var addNewProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsync
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return _tools_client__WEBPACK_IMPORTED_MODULE_2__.Client.post("/projects/add", data //{store: store}
+            return _tools_client__WEBPACK_IMPORTED_MODULE_1__.Client.post("/projects/add", data //{store: store}
             );
 
           case 2:
@@ -2685,9 +2776,11 @@ var addNewProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsync
  * define the function to update project
  */
 
-var updateProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('Projects/addNewProject', function (data) {
+var updateProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.createAsyncThunk)('Projects/addNewProject', function (data) {
   var _id = data.id;
-  var response = _tools_client__WEBPACK_IMPORTED_MODULE_2__.Client.put('/projects/update/' + _id, data);
+  var response = _tools_client__WEBPACK_IMPORTED_MODULE_1__.Client.put('/projects/update/' + _id, data, {
+    store: _new_projects_page_store__WEBPACK_IMPORTED_MODULE_2__.default
+  });
   return response;
 });
 /**
@@ -2695,7 +2788,7 @@ var updateProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsync
  * Function is to handle upload image into project
  */
 
-var uploadProjectImage = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('Projects/uploadProjectImage', /*#__PURE__*/function () {
+var uploadProjectImage = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.createAsyncThunk)('Projects/uploadProjectImage', /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(data) {
     var _id, response;
 
@@ -2705,7 +2798,7 @@ var uploadProjectImage = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.create
           case 0:
             _id = data.id;
             _context2.next = 3;
-            return _tools_client__WEBPACK_IMPORTED_MODULE_2__.Client.post("/projects/upload/".concat(data.id), data.image, {
+            return _tools_client__WEBPACK_IMPORTED_MODULE_1__.Client.post("/projects/upload/".concat(data.id), data.image, {
               is_upload_file: true
             });
 
@@ -2729,7 +2822,7 @@ var uploadProjectImage = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.create
  * create Projects Slice
  */
 
-var ProjectsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice)({
+var ProjectsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.createSlice)({
   name: "Projects",
   initialState: initialState,
   reducers: {
@@ -3282,15 +3375,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js");
+/* harmony import */ var react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.js");
-/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-images-uploading */ "./node_modules/react-images-uploading/dist/index.js");
-/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_images_uploading__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.js");
+/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-images-uploading */ "./node_modules/react-images-uploading/dist/index.js");
+/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_images_uploading__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js");
+/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _project_modal_slice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
 /* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 
 
 
@@ -3310,7 +3406,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
   var project = _ref.project,
       register = _ref.register;
 
-  var _useFormContext = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_3__.useFormContext)(),
+  var _useFormContext = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
       errors = _useFormContext.errors;
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -3540,7 +3636,7 @@ var ImageFields = function ImageFields(props) {
     }; //Update changes into Modal project
 
     _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_5__.addImage)({
-      id: (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.nanoid)(),
+      id: (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_7__.nanoid)(),
       is_uploading: true,
       url: image[0]['data_url']
     })); //call upload image
@@ -3555,7 +3651,7 @@ var ImageFields = function ImageFields(props) {
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "image-upload"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_images_uploading__WEBPACK_IMPORTED_MODULE_4___default()), {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_images_uploading__WEBPACK_IMPORTED_MODULE_3___default()), {
     onChange: onChange,
     dataURLKey: "data_url"
   }, function (_ref3) {
@@ -3604,7 +3700,7 @@ var ProjectModal = function ProjectModal() {
 
   var _dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
 
-  var _form = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_3__.useForm)();
+  var _form = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_2__.useForm)();
 
   var register = _form.register,
       handleSubmit = _form.handleSubmit,
@@ -3659,25 +3755,30 @@ var ProjectModal = function ProjectModal() {
   function onHandleSubmit(data) {
     //append project ID
     data.id = _project.id;
-
-    if (_modalData.isNew) {} else {
-      _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_6__.updateProject)(data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.unwrapResult).then(function (result) {
-        _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_5__.setProject)(result));
-
-        onHandleEnter();
-      });
-    }
+    pubsub_js__WEBPACK_IMPORTED_MODULE_4___default().publish('TOAST_BOX', {
+      'title': "TEST TITLE",
+      'message': 'Project has been updated successfully',
+      'state': "success"
+    }); // if(_modalData.isNew){
+    // }else{
+    //     _dispatch(updateProject(data))
+    //         .then(unwrapResult)
+    //         .then(result => {
+    //             _dispatch(setProject(result))
+    //             onHandleEnter()
+    //         })
+    // }
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_7__.default, {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__.default, {
     id: "project-modal",
     show: _modalData.shown,
     onHide: onHandleClose,
     onEnter: onHandleEnter,
     className: _modalCalssname
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_7__.default.Header, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__.default.Header, {
     className: "modal-header-lg"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_7__.default.Title, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__.default.Title, {
     style: {
       marginBottom: 0
     }
@@ -3689,11 +3790,11 @@ var ProjectModal = function ProjectModal() {
     onClick: onHandleClose
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("i", {
     className: "mdi mdi-close"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_7__.default.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__.default.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-info_fields"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_3__.FormProvider, _form, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_2__.FormProvider, _form, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
     onSubmit: handleSubmit(onHandleSubmit)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(ProjectInfoFields, {
     project: _project,
@@ -3702,7 +3803,7 @@ var ProjectModal = function ProjectModal() {
     className: "col-image_fields"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(ImageFields, {
     project: _project
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_7__.default.Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__.default.Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     type: "button",
     className: "btn btn-light",
     onClick: onHandleClose
@@ -3719,6 +3820,85 @@ var ProjectModal = function ProjectModal() {
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ProjectModal);
+
+/***/ }),
+
+/***/ "./resources/react/tools/toast-box/toast-box.jsx":
+/*!*******************************************************!*\
+  !*** ./resources/react/tools/toast-box/toast-box.jsx ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react_bootstrap_Toast__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap/Toast */ "./node_modules/react-bootstrap/esm/Toast.js");
+/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js");
+/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_1__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+var defaultStatus = {
+  show: false,
+  message: '---',
+  state: 'success',
+  title: 'Request done'
+};
+
+var ToastBox = function ToastBox() {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(defaultStatus),
+      _useState2 = _slicedToArray(_useState, 2),
+      status = _useState2[0],
+      setStatus = _useState2[1];
+  /**
+   * Function is to handle on subpub
+   * @param {*} msg 
+   * @param {*} data 
+   */
+
+
+  function onHandleSubscriber(msg, data) {
+    data.show = true;
+    setStatus(data);
+  } //define the effect
+
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var _token = pubsub_js__WEBPACK_IMPORTED_MODULE_1___default().subscribe("TOAST_BOX", onHandleSubscriber);
+
+    return function () {
+      pubsub_js__WEBPACK_IMPORTED_MODULE_1___default().unsubscribe(_token);
+    };
+  }, []);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Toast__WEBPACK_IMPORTED_MODULE_2__.default, {
+    show: status.show,
+    delay: 3000,
+    autohide: true,
+    className: "success",
+    onClose: function onClose() {
+      return setStatus(defaultStatus);
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Toast__WEBPACK_IMPORTED_MODULE_2__.default.Header, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("strong", {
+    className: "mr-auto"
+  }, status.title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Toast__WEBPACK_IMPORTED_MODULE_2__.default.Body, null, status.message));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ToastBox);
 
 /***/ }),
 
@@ -26829,6 +27009,367 @@ module.exports = ReactPropTypesSecret;
 
 /***/ }),
 
+/***/ "./node_modules/pubsub-js/src/pubsub.js":
+/*!**********************************************!*\
+  !*** ./node_modules/pubsub-js/src/pubsub.js ***!
+  \**********************************************/
+/***/ (function(module, exports, __webpack_require__) {
+
+/* module decorator */ module = __webpack_require__.nmd(module);
+/**
+ * Copyright (c) 2010,2011,2012,2013,2014 Morgan Roderick http://roderick.dk
+ * License: MIT - http://mrgnrdrck.mit-license.org
+ *
+ * https://github.com/mroderick/PubSubJS
+ */
+
+(function (root, factory){
+    'use strict';
+
+    var PubSub = {};
+    root.PubSub = PubSub;
+    factory(PubSub);
+    // CommonJS and Node.js module support
+    if (true){
+        if (module !== undefined && module.exports) {
+            exports = module.exports = PubSub; // Node.js specific `module.exports`
+        }
+        exports.PubSub = PubSub; // CommonJS module 1.1.1 spec
+        module.exports = exports = PubSub; // CommonJS
+    }
+    // AMD support
+    /* eslint-disable no-undef */
+    else {}
+
+}(( typeof window === 'object' && window ) || this, function (PubSub){
+    'use strict';
+
+    var messages = {},
+        lastUid = -1,
+        ALL_SUBSCRIBING_MSG = '*';
+
+    function hasKeys(obj){
+        var key;
+
+        for (key in obj){
+            if ( Object.prototype.hasOwnProperty.call(obj, key) ){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns a function that throws the passed exception, for use as argument for setTimeout
+     * @alias throwException
+     * @function
+     * @param { Object } ex An Error object
+     */
+    function throwException( ex ){
+        return function reThrowException(){
+            throw ex;
+        };
+    }
+
+    function callSubscriberWithDelayedExceptions( subscriber, message, data ){
+        try {
+            subscriber( message, data );
+        } catch( ex ){
+            setTimeout( throwException( ex ), 0);
+        }
+    }
+
+    function callSubscriberWithImmediateExceptions( subscriber, message, data ){
+        subscriber( message, data );
+    }
+
+    function deliverMessage( originalMessage, matchedMessage, data, immediateExceptions ){
+        var subscribers = messages[matchedMessage],
+            callSubscriber = immediateExceptions ? callSubscriberWithImmediateExceptions : callSubscriberWithDelayedExceptions,
+            s;
+
+        if ( !Object.prototype.hasOwnProperty.call( messages, matchedMessage ) ) {
+            return;
+        }
+
+        for (s in subscribers){
+            if ( Object.prototype.hasOwnProperty.call(subscribers, s)){
+                callSubscriber( subscribers[s], originalMessage, data );
+            }
+        }
+    }
+
+    function createDeliveryFunction( message, data, immediateExceptions ){
+        return function deliverNamespaced(){
+            var topic = String( message ),
+                position = topic.lastIndexOf( '.' );
+
+            // deliver the message as it is now
+            deliverMessage(message, message, data, immediateExceptions);
+
+            // trim the hierarchy and deliver message to each level
+            while( position !== -1 ){
+                topic = topic.substr( 0, position );
+                position = topic.lastIndexOf('.');
+                deliverMessage( message, topic, data, immediateExceptions );
+            }
+
+            deliverMessage(message, ALL_SUBSCRIBING_MSG, data, immediateExceptions);
+        };
+    }
+
+    function hasDirectSubscribersFor( message ) {
+        var topic = String( message ),
+            found = Boolean(Object.prototype.hasOwnProperty.call( messages, topic ) && hasKeys(messages[topic]));
+
+        return found;
+    }
+
+    function messageHasSubscribers( message ){
+        var topic = String( message ),
+            found = hasDirectSubscribersFor(topic) || hasDirectSubscribersFor(ALL_SUBSCRIBING_MSG),
+            position = topic.lastIndexOf( '.' );
+
+        while ( !found && position !== -1 ){
+            topic = topic.substr( 0, position );
+            position = topic.lastIndexOf( '.' );
+            found = hasDirectSubscribersFor(topic);
+        }
+
+        return found;
+    }
+
+    function publish( message, data, sync, immediateExceptions ){
+        message = (typeof message === 'symbol') ? message.toString() : message;
+
+        var deliver = createDeliveryFunction( message, data, immediateExceptions ),
+            hasSubscribers = messageHasSubscribers( message );
+
+        if ( !hasSubscribers ){
+            return false;
+        }
+
+        if ( sync === true ){
+            deliver();
+        } else {
+            setTimeout( deliver, 0 );
+        }
+        return true;
+    }
+
+    /**
+     * Publishes the message, passing the data to it's subscribers
+     * @function
+     * @alias publish
+     * @param { String } message The message to publish
+     * @param {} data The data to pass to subscribers
+     * @return { Boolean }
+     */
+    PubSub.publish = function( message, data ){
+        return publish( message, data, false, PubSub.immediateExceptions );
+    };
+
+    /**
+     * Publishes the message synchronously, passing the data to it's subscribers
+     * @function
+     * @alias publishSync
+     * @param { String } message The message to publish
+     * @param {} data The data to pass to subscribers
+     * @return { Boolean }
+     */
+    PubSub.publishSync = function( message, data ){
+        return publish( message, data, true, PubSub.immediateExceptions );
+    };
+
+    /**
+     * Subscribes the passed function to the passed message. Every returned token is unique and should be stored if you need to unsubscribe
+     * @function
+     * @alias subscribe
+     * @param { String } message The message to subscribe to
+     * @param { Function } func The function to call when a new message is published
+     * @return { String }
+     */
+    PubSub.subscribe = function( message, func ){
+        if ( typeof func !== 'function'){
+            return false;
+        }
+
+        message = (typeof message === 'symbol') ? message.toString() : message;
+
+        // message is not registered yet
+        if ( !Object.prototype.hasOwnProperty.call( messages, message ) ){
+            messages[message] = {};
+        }
+
+        // forcing token as String, to allow for future expansions without breaking usage
+        // and allow for easy use as key names for the 'messages' object
+        var token = 'uid_' + String(++lastUid);
+        messages[message][token] = func;
+
+        // return token for unsubscribing
+        return token;
+    };
+
+    PubSub.subscribeAll = function( func ){
+        return PubSub.subscribe(ALL_SUBSCRIBING_MSG, func);
+    };
+
+    /**
+     * Subscribes the passed function to the passed message once
+     * @function
+     * @alias subscribeOnce
+     * @param { String } message The message to subscribe to
+     * @param { Function } func The function to call when a new message is published
+     * @return { PubSub }
+     */
+    PubSub.subscribeOnce = function( message, func ){
+        var token = PubSub.subscribe( message, function(){
+            // before func apply, unsubscribe message
+            PubSub.unsubscribe( token );
+            func.apply( this, arguments );
+        });
+        return PubSub;
+    };
+
+    /**
+     * Clears all subscriptions
+     * @function
+     * @public
+     * @alias clearAllSubscriptions
+     */
+    PubSub.clearAllSubscriptions = function clearAllSubscriptions(){
+        messages = {};
+    };
+
+    /**
+     * Clear subscriptions by the topic
+     * @function
+     * @public
+     * @alias clearAllSubscriptions
+     * @return { int }
+     */
+    PubSub.clearSubscriptions = function clearSubscriptions(topic){
+        var m;
+        for (m in messages){
+            if (Object.prototype.hasOwnProperty.call(messages, m) && m.indexOf(topic) === 0){
+                delete messages[m];
+            }
+        }
+    };
+
+    /**
+       Count subscriptions by the topic
+     * @function
+     * @public
+     * @alias countSubscriptions
+     * @return { Array }
+    */
+    PubSub.countSubscriptions = function countSubscriptions(topic){
+        var m;
+        // eslint-disable-next-line no-unused-vars
+        var token;
+        var count = 0;
+        for (m in messages) {
+            if (Object.prototype.hasOwnProperty.call(messages, m) && m.indexOf(topic) === 0) {
+                for (token in messages[m]) {
+                    count++;
+                }
+                break;
+            }
+        }
+        return count;
+    };
+
+
+    /**
+       Gets subscriptions by the topic
+     * @function
+     * @public
+     * @alias getSubscriptions
+    */
+    PubSub.getSubscriptions = function getSubscriptions(topic){
+        var m;
+        var list = [];
+        for (m in messages){
+            if (Object.prototype.hasOwnProperty.call(messages, m) && m.indexOf(topic) === 0){
+                list.push(m);
+            }
+        }
+        return list;
+    };
+
+    /**
+     * Removes subscriptions
+     *
+     * - When passed a token, removes a specific subscription.
+     *
+	 * - When passed a function, removes all subscriptions for that function
+     *
+	 * - When passed a topic, removes all subscriptions for that topic (hierarchy)
+     * @function
+     * @public
+     * @alias subscribeOnce
+     * @param { String | Function } value A token, function or topic to unsubscribe from
+     * @example // Unsubscribing with a token
+     * var token = PubSub.subscribe('mytopic', myFunc);
+     * PubSub.unsubscribe(token);
+     * @example // Unsubscribing with a function
+     * PubSub.unsubscribe(myFunc);
+     * @example // Unsubscribing from a topic
+     * PubSub.unsubscribe('mytopic');
+     */
+    PubSub.unsubscribe = function(value){
+        var descendantTopicExists = function(topic) {
+                var m;
+                for ( m in messages ){
+                    if ( Object.prototype.hasOwnProperty.call(messages, m) && m.indexOf(topic) === 0 ){
+                        // a descendant of the topic exists:
+                        return true;
+                    }
+                }
+
+                return false;
+            },
+            isTopic    = typeof value === 'string' && ( Object.prototype.hasOwnProperty.call(messages, value) || descendantTopicExists(value) ),
+            isToken    = !isTopic && typeof value === 'string',
+            isFunction = typeof value === 'function',
+            result = false,
+            m, message, t;
+
+        if (isTopic){
+            PubSub.clearSubscriptions(value);
+            return;
+        }
+
+        for ( m in messages ){
+            if ( Object.prototype.hasOwnProperty.call( messages, m ) ){
+                message = messages[m];
+
+                if ( isToken && message[value] ){
+                    delete message[value];
+                    result = value;
+                    // tokens are unique, so we can just stop here
+                    break;
+                }
+
+                if (isFunction) {
+                    for ( t in message ){
+                        if (Object.prototype.hasOwnProperty.call(message, t) && message[t] === value){
+                            delete message[t];
+                            result = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    };
+}));
+
+
+/***/ }),
+
 /***/ "./node_modules/react-bootstrap-sweetalert/dist/components/Buttons.js":
 /*!****************************************************************************!*\
   !*** ./node_modules/react-bootstrap-sweetalert/dist/components/Buttons.js ***!
@@ -29284,6 +29825,206 @@ function createBootstrapComponent(Component, opts) {
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ThemeProvider);
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/Toast.js":
+/*!***************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/Toast.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/esm/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _restart_hooks_useTimeout__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @restart/hooks/useTimeout */ "./node_modules/@restart/hooks/esm/useTimeout.js");
+/* harmony import */ var _Fade__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Fade */ "./node_modules/react-bootstrap/esm/Fade.js");
+/* harmony import */ var _ToastHeader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ToastHeader */ "./node_modules/react-bootstrap/esm/ToastHeader.js");
+/* harmony import */ var _ToastBody__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ToastBody */ "./node_modules/react-bootstrap/esm/ToastBody.js");
+/* harmony import */ var _ThemeProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/esm/ThemeProvider.js");
+/* harmony import */ var _ToastContext__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ToastContext */ "./node_modules/react-bootstrap/esm/ToastContext.js");
+
+
+
+
+
+
+
+
+
+
+var Toast = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      className = _ref.className,
+      children = _ref.children,
+      _ref$transition = _ref.transition,
+      Transition = _ref$transition === void 0 ? _Fade__WEBPACK_IMPORTED_MODULE_5__.default : _ref$transition,
+      _ref$show = _ref.show,
+      show = _ref$show === void 0 ? true : _ref$show,
+      _ref$animation = _ref.animation,
+      animation = _ref$animation === void 0 ? true : _ref$animation,
+      _ref$delay = _ref.delay,
+      delay = _ref$delay === void 0 ? 3000 : _ref$delay,
+      _ref$autohide = _ref.autohide,
+      autohide = _ref$autohide === void 0 ? false : _ref$autohide,
+      onClose = _ref.onClose,
+      props = (0,_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__.default)(_ref, ["bsPrefix", "className", "children", "transition", "show", "animation", "delay", "autohide", "onClose"]);
+
+  bsPrefix = (0,_ThemeProvider__WEBPACK_IMPORTED_MODULE_6__.useBootstrapPrefix)(bsPrefix, 'toast'); // We use refs for these, because we don't want to restart the autohide
+  // timer in case these values change.
+
+  var delayRef = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(delay);
+  var onCloseRef = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(onClose);
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
+    delayRef.current = delay;
+    onCloseRef.current = onClose;
+  }, [delay, onClose]);
+  var autohideTimeout = (0,_restart_hooks_useTimeout__WEBPACK_IMPORTED_MODULE_4__.default)();
+  var autohideToast = !!(autohide && show);
+  var autohideFunc = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)(function () {
+    if (autohideToast) {
+      onCloseRef.current == null ? void 0 : onCloseRef.current();
+    }
+  }, [autohideToast]);
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
+    // Only reset timer if show or autohide changes.
+    autohideTimeout.set(autohideFunc, delayRef.current);
+  }, [autohideTimeout, autohideFunc]);
+  var toastContext = (0,react__WEBPACK_IMPORTED_MODULE_2__.useMemo)(function () {
+    return {
+      onClose: onClose
+    };
+  }, [onClose]);
+  var hasAnimation = !!(Transition && animation);
+  var toast = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("div", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, props, {
+    ref: ref,
+    className: classnames__WEBPACK_IMPORTED_MODULE_3___default()(bsPrefix, className, !hasAnimation && (show ? 'show' : 'hide')),
+    role: "alert",
+    "aria-live": "assertive",
+    "aria-atomic": "true"
+  }), children);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement(_ToastContext__WEBPACK_IMPORTED_MODULE_7__.default.Provider, {
+    value: toastContext
+  }, hasAnimation && Transition ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement(Transition, {
+    in: show,
+    unmountOnExit: true
+  }, toast) : toast);
+});
+Toast.displayName = 'Toast';
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.assign(Toast, {
+  Body: _ToastBody__WEBPACK_IMPORTED_MODULE_8__.default,
+  Header: _ToastHeader__WEBPACK_IMPORTED_MODULE_9__.default
+}));
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/ToastBody.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/ToastBody.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _createWithBsPrefix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createWithBsPrefix */ "./node_modules/react-bootstrap/esm/createWithBsPrefix.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_createWithBsPrefix__WEBPACK_IMPORTED_MODULE_0__.default)('toast-body'));
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/ToastContext.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/ToastContext.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+ // TODO: check
+
+var ToastContext = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createContext({
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onClose: function onClose() {}
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ToastContext);
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/ToastHeader.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/ToastHeader.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/esm/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @restart/hooks/useEventCallback */ "./node_modules/@restart/hooks/esm/useEventCallback.js");
+/* harmony import */ var _ThemeProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/esm/ThemeProvider.js");
+/* harmony import */ var _CloseButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./CloseButton */ "./node_modules/react-bootstrap/esm/CloseButton.js");
+/* harmony import */ var _ToastContext__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ToastContext */ "./node_modules/react-bootstrap/esm/ToastContext.js");
+
+
+
+
+
+
+
+
+var defaultProps = {
+  closeLabel: 'Close',
+  closeButton: true
+};
+var ToastHeader = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      closeLabel = _ref.closeLabel,
+      closeButton = _ref.closeButton,
+      className = _ref.className,
+      children = _ref.children,
+      props = (0,_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__.default)(_ref, ["bsPrefix", "closeLabel", "closeButton", "className", "children"]);
+
+  bsPrefix = (0,_ThemeProvider__WEBPACK_IMPORTED_MODULE_5__.useBootstrapPrefix)(bsPrefix, 'toast-header');
+  var context = (0,react__WEBPACK_IMPORTED_MODULE_3__.useContext)(_ToastContext__WEBPACK_IMPORTED_MODULE_7__.default);
+  var handleClick = (0,_restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_4__.default)(function (e) {
+    if (context && context.onClose) {
+      context.onClose(e);
+    }
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__.default)({
+    ref: ref
+  }, props, {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(bsPrefix, className)
+  }), children, closeButton && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement(_CloseButton__WEBPACK_IMPORTED_MODULE_6__.default, {
+    label: closeLabel,
+    onClick: handleClick,
+    className: "ml-2 mb-1",
+    "data-dismiss": "toast"
+  }));
+});
+ToastHeader.displayName = 'ToastHeader';
+ToastHeader.defaultProps = defaultProps;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ToastHeader);
 
 /***/ }),
 
@@ -67028,7 +67769,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _tools_confirm_alert_confirm_alert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../tools/confirm-alert/confirm-alert */ "./resources/react/tools/confirm-alert/confirm-alert.jsx");
 /* harmony import */ var _tools_modals_project_modal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tools/modals/project-modal */ "./resources/react/tools/modals/project-modal.jsx");
 /* harmony import */ var _tools_loading_spinner_loading_spinner__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../tools/loading-spinner/loading-spinner */ "./resources/react/tools/loading-spinner/loading-spinner.jsx");
-/* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
+/* harmony import */ var _tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../tools/toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.jsx");
+/* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
+
 
 
 
@@ -67051,7 +67794,7 @@ try {
 
   var _data = JSON.parse(json_string);
 
-  _stores_new_projects_page_store__WEBPACK_IMPORTED_MODULE_3__.default.dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_9__.setNewProjects)(_data));
+  _stores_new_projects_page_store__WEBPACK_IMPORTED_MODULE_3__.default.dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_10__.setNewProjects)(_data));
 } catch (err) {
   console.error("Init default projects data ERROR");
 }
@@ -67062,7 +67805,7 @@ react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/react__WEBPACK_IMPOR
   className: "card-header ff-card-header"
 }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_projects_page_header__WEBPACK_IMPORTED_MODULE_5__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
   className: "card-body"
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_projects_table__WEBPACK_IMPORTED_MODULE_4__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_confirm_alert_confirm_alert__WEBPACK_IMPORTED_MODULE_6__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_modals_project_modal__WEBPACK_IMPORTED_MODULE_7__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_loading_spinner_loading_spinner__WEBPACK_IMPORTED_MODULE_8__.default, null)), document.getElementById("root-new-projects"));
+}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_projects_table__WEBPACK_IMPORTED_MODULE_4__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_confirm_alert_confirm_alert__WEBPACK_IMPORTED_MODULE_6__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_modals_project_modal__WEBPACK_IMPORTED_MODULE_7__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_loading_spinner_loading_spinner__WEBPACK_IMPORTED_MODULE_8__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9__.default, null)), document.getElementById("root-new-projects"));
 })();
 
 /******/ })()

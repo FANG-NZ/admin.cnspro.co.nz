@@ -13468,3 +13468,45 @@ input[type=range]::-moz-range-thumb {
 .col-image_fields .images-list .uploading .ff-loader-container {
   position: absolute;
 }
+
+.toast {
+  max-width: 350px;
+  font-size: 0.875rem;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  border-radius: 0.25rem;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 2000;
+}
+.toast .toast-header {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  color: #6c757d;
+  background-color: rgba(255, 255, 255, 0.85);
+  background-clip: padding-box;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-top-left-radius: calc(.25rem - 1px);
+  border-top-right-radius: calc(.25rem - 1px);
+}
+.toast .toast-header button {
+  margin-bottom: 0 !important;
+}
+.toast .toast-body {
+  padding: 0.75rem;
+}
+.toast.fade {
+  transition: opacity 0.15s linear;
+}
+.toast.show {
+  display: block;
+  opacity: 1;
+}
+.toast.success .toast-header {
+  color: #31ce77;
+}

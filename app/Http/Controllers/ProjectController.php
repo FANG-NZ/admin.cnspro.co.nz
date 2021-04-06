@@ -58,7 +58,7 @@ class ProjectController extends Controller
 
         $data = $request->all();
 
-
+        sleep(2);
         $project->title = "TESTING for update project request [{$id}]";
 
         return response($project->toJson(), 200);

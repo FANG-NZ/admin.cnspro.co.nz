@@ -38,7 +38,8 @@ export const updateProject = createAsyncThunk(
 
         const response = Client.put(
             '/projects/update/' + _id,
-            data
+            data,
+            {store: store}
         )
         return response
     }

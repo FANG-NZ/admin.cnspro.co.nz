@@ -8,6 +8,7 @@ import ProjectsPageHeader from '../components/projects-page-header'
 import ConfirmAlert from '../tools/confirm-alert/confirm-alert'
 import ProjectModal from '../tools/modals/project-modal'
 import LoadingSpinner from '../tools/loading-spinner/loading-spinner'
+import ToastBox from '../tools/toast-box/toast-box'
 
 import {setNewProjects} from '../stores/projects-slice'
 
@@ -43,6 +44,8 @@ ReactDom.render(
 
         {/* Loading Spinner */}
         <LoadingSpinner />
+
+        <ToastBox />
     </Provider>
     , 
     document.getElementById("root-new-projects")
