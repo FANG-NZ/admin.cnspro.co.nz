@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react'
 import Toast from 'react-bootstrap/Toast'
 import PubSub from 'pubsub-js'
 
+export const EVENT_TOAST_BOX = "Toast_Box"
+
 export enum ToastState{
     'SUCCESS' = "success",
     'ERROR' = "danger"
@@ -42,7 +44,7 @@ const ToastBox = () => {
 
     //define the effect
     useEffect(() => {
-        let _token = PubSub.subscribe("TOAST_BOX", onHandleSubscriber)
+        let _token = PubSub.subscribe(EVENT_TOAST_BOX, onHandleSubscriber)
 
         return function(){
             PubSub.unsubscribe(_token)

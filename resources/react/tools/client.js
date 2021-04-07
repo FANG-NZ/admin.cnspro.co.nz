@@ -1,19 +1,18 @@
 // A tiny wrapper around fetch(), borrowed from
 // https://kentcdodds.com/blog/replace-axios-with-a-simple-custom-fetch-wrapper
-import {show as showLoading , hide as hideLoading} from './loading-spinner/loading-spinner-slice'
+import PubSub from 'pubsub-js'
+import {EVENT_LOADING_SPINNER} from './loading-spinner/loading-spinner'
 
 export async function Client(endpoint, { body, ...customConfig } = {}) {
 
   //define the default header
   let _headers = { 'Content-Type': 'application/json' }
-  let _showloading = false
-  let _store
+  let _showloading = true
   let _is_upload_file = false
 
-  if('store' in customConfig){
-    _showloading = true
-    _store = customConfig.store
-    delete customConfig.store
+  if('is_show_loading' in customConfig){
+    _showloading = customConfig.is_show_loading
+    delete customConfig.is_show_loading
   }
 
   //To reset header to upload file
@@ -36,15 +35,13 @@ export async function Client(endpoint, { body, ...customConfig } = {}) {
   if(body && !_is_upload_file) {
       config.body = JSON.stringify(body)
   }else{
-
-    console.log(body)
-
     config.body = body
   }
 
   //To check if we need to show loading
   if(_showloading){
-    _store.dispatch(showLoading())
+    //trigger show loading spinner
+    PubSub.publish(EVENT_LOADING_SPINNER, true)
   }
 
   let data
@@ -62,7 +59,8 @@ export async function Client(endpoint, { body, ...customConfig } = {}) {
   }finally{
     //To check if we need to show loading
     if(_showloading){
-      _store.dispatch(hideLoading())
+      //trigger hide loading spinner
+      PubSub.publish(EVENT_LOADING_SPINNER, false)
     }
   }
 }

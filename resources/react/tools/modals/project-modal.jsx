@@ -5,7 +5,7 @@ import {unwrapResult, nanoid} from '@reduxjs/toolkit'
 import {useForm, useFormContext, FormProvider} from 'react-hook-form'
 import ImageUploading from 'react-images-uploading'
 import PubSub from 'pubsub-js'
-import {ToastState} from '../toast-box/toast-box'
+import {ToastState, EVENT_TOAST_BOX} from '../toast-box/toast-box'
 
 import {hide, setProject, addImage} from './project-modal-slice'
 import {addNewProject, uploadProjectImage, updateProject} from '../../stores/projects-slice'
@@ -472,13 +472,34 @@ const ProjectModal = () => {
      * request
      */
     function onHandleSubmit(data){
-        //append project ID
-        data.id = _project.id
-
-
+        
         if(_modalData.isNew){
 
+            _dispatch(addNewProject(data))
+                .then(unwrapResult)
+                .then(result => {
+
+                    _dispatch(setProject(result))
+                    onHandleEnter()
+
+                    PubSub.publish(EVENT_TOAST_BOX, {
+                        'title' : "Project added",
+                        'message' : 'The item has been added successfully',
+                        'state' : ToastState.SUCCESS
+                    })
+                })
+                .catch(err => {
+                    PubSub.publish(EVENT_TOAST_BOX, {
+                        'title' : "Error",
+                        'message' : err.message,
+                        'state' : ToastState.ERROR
+                    })
+                })
+
         }else{
+
+            //append project ID
+            data.id = _project.id
 
             _dispatch(updateProject(data))
                 .then(unwrapResult)
@@ -487,7 +508,7 @@ const ProjectModal = () => {
                     _dispatch(setProject(result))
                     onHandleEnter()
 
-                    PubSub.publish('TOAST_BOX', {
+                    PubSub.publish(EVENT_TOAST_BOX, {
                         'title' : "Project updated",
                         'message' : 'The item has been updated successfully',
                         'state' : ToastState.SUCCESS
