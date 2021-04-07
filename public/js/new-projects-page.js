@@ -2451,6 +2451,140 @@ function useWillUnmount(fn) {
 
 /***/ }),
 
+/***/ "./resources/react/tools/toast-box/toast-box.tsx":
+/*!*******************************************************!*\
+  !*** ./resources/react/tools/toast-box/toast-box.tsx ***!
+  \*******************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.ToastState = void 0;
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var Toast_1 = __importDefault(__webpack_require__(/*! react-bootstrap/Toast */ "./node_modules/react-bootstrap/esm/Toast.js"));
+
+var pubsub_js_1 = __importDefault(__webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js"));
+
+var ToastState;
+
+(function (ToastState) {
+  ToastState["SUCCESS"] = "success";
+  ToastState["ERROR"] = "danger";
+})(ToastState = exports.ToastState || (exports.ToastState = {})); //define the default toast data
+
+
+var default_data = {
+  show: false,
+  message: '------',
+  state: ToastState.SUCCESS,
+  title: 'Request done'
+};
+
+var ToastBox = function ToastBox() {
+  var _a = react_1.useState(default_data),
+      status = _a[0],
+      setStatus = _a[1];
+  /**
+   * Function is to handle on subpub
+   * @param {*} msg
+   * @param {*} data
+   */
+
+
+  function onHandleSubscriber(msg, data) {
+    data.show = true;
+    setStatus(data);
+  } //define the effect
+
+
+  react_1.useEffect(function () {
+    var _token = pubsub_js_1["default"].subscribe("TOAST_BOX", onHandleSubscriber);
+
+    return function () {
+      pubsub_js_1["default"].unsubscribe(_token);
+    };
+  }, []);
+  return react_1["default"].createElement(Toast_1["default"], {
+    show: status.show,
+    delay: 3000,
+    autohide: true,
+    className: status.state,
+    onClose: function onClose() {
+      setStatus(__assign(__assign({}, status), {
+        show: false
+      }));
+    }
+  }, react_1["default"].createElement(Toast_1["default"].Header, null, react_1["default"].createElement("strong", {
+    className: "mr-auto"
+  }, status.title)), react_1["default"].createElement(Toast_1["default"].Body, null, status.message));
+};
+
+exports.default = ToastBox;
+
+/***/ }),
+
 /***/ "./resources/react/components/projects-page-header.jsx":
 /*!*************************************************************!*\
   !*** ./resources/react/components/projects-page-header.jsx ***!
@@ -3375,7 +3509,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js");
+/* harmony import */ var react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 /* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.js");
@@ -3383,9 +3517,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_images_uploading__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js");
 /* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _project_modal_slice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
-/* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
+/* harmony import */ var _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.tsx");
+/* harmony import */ var _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _project_modal_slice__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
+/* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 
 
 
@@ -3635,14 +3772,14 @@ var ImageFields = function ImageFields(props) {
       image: _formData
     }; //Update changes into Modal project
 
-    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_6__.addImage)({
+    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_7__.addImage)({
       id: (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.nanoid)(),
       is_uploading: true,
       url: image[0]['data_url']
     })); //call upload image
 
 
-    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_7__.uploadProjectImage)(_data));
+    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_8__.uploadProjectImage)(_data));
   };
 
   function onRemove(_id) {
@@ -3720,7 +3857,7 @@ var ProjectModal = function ProjectModal() {
 
 
   function onHandleClose() {
-    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_6__.hide)());
+    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_7__.hide)());
   }
   /**
    * Function is to handle modal enter
@@ -3755,30 +3892,30 @@ var ProjectModal = function ProjectModal() {
   function onHandleSubmit(data) {
     //append project ID
     data.id = _project.id;
-    pubsub_js__WEBPACK_IMPORTED_MODULE_5___default().publish('TOAST_BOX', {
-      'title': "TEST TITLE",
-      'message': 'Project has been updated successfully',
-      'state': "success"
-    }); // if(_modalData.isNew){
-    // }else{
-    //     _dispatch(updateProject(data))
-    //         .then(unwrapResult)
-    //         .then(result => {
-    //             _dispatch(setProject(result))
-    //             onHandleEnter()
-    //         })
-    // }
+
+    if (_modalData.isNew) {} else {
+      _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_8__.updateProject)(data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.unwrapResult).then(function (result) {
+        _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_7__.setProject)(result));
+
+        onHandleEnter();
+        pubsub_js__WEBPACK_IMPORTED_MODULE_5___default().publish('TOAST_BOX', {
+          'title': "Project updated",
+          'message': 'The item has been updated successfully',
+          'state': _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.ToastState.SUCCESS
+        });
+      });
+    }
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__.default, {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_9__.default, {
     id: "project-modal",
     show: _modalData.shown,
     onHide: onHandleClose,
     onEnter: onHandleEnter,
     className: _modalCalssname
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__.default.Header, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_9__.default.Header, {
     className: "modal-header-lg"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__.default.Title, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_9__.default.Title, {
     style: {
       marginBottom: 0
     }
@@ -3790,7 +3927,7 @@ var ProjectModal = function ProjectModal() {
     onClick: onHandleClose
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("i", {
     className: "mdi mdi-close"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__.default.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_9__.default.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-info_fields"
@@ -3803,7 +3940,7 @@ var ProjectModal = function ProjectModal() {
     className: "col-image_fields"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(ImageFields, {
     project: _project
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__.default.Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_9__.default.Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     type: "button",
     className: "btn btn-light",
     onClick: onHandleClose
@@ -3820,85 +3957,6 @@ var ProjectModal = function ProjectModal() {
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ProjectModal);
-
-/***/ }),
-
-/***/ "./resources/react/tools/toast-box/toast-box.jsx":
-/*!*******************************************************!*\
-  !*** ./resources/react/tools/toast-box/toast-box.jsx ***!
-  \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react_bootstrap_Toast__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap/Toast */ "./node_modules/react-bootstrap/esm/Toast.js");
-/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js");
-/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_1__);
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-
-
-var defaultStatus = {
-  show: false,
-  message: '---',
-  state: 'success',
-  title: 'Request done'
-};
-
-var ToastBox = function ToastBox() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(defaultStatus),
-      _useState2 = _slicedToArray(_useState, 2),
-      status = _useState2[0],
-      setStatus = _useState2[1];
-  /**
-   * Function is to handle on subpub
-   * @param {*} msg 
-   * @param {*} data 
-   */
-
-
-  function onHandleSubscriber(msg, data) {
-    data.show = true;
-    setStatus(data);
-  } //define the effect
-
-
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var _token = pubsub_js__WEBPACK_IMPORTED_MODULE_1___default().subscribe("TOAST_BOX", onHandleSubscriber);
-
-    return function () {
-      pubsub_js__WEBPACK_IMPORTED_MODULE_1___default().unsubscribe(_token);
-    };
-  }, []);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Toast__WEBPACK_IMPORTED_MODULE_2__.default, {
-    show: status.show,
-    delay: 3000,
-    autohide: true,
-    className: "success",
-    onClose: function onClose() {
-      return setStatus(defaultStatus);
-    }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Toast__WEBPACK_IMPORTED_MODULE_2__.default.Header, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("strong", {
-    className: "mr-auto"
-  }, status.title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Toast__WEBPACK_IMPORTED_MODULE_2__.default.Body, null, status.message));
-};
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ToastBox);
 
 /***/ }),
 
@@ -67769,7 +67827,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _tools_confirm_alert_confirm_alert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../tools/confirm-alert/confirm-alert */ "./resources/react/tools/confirm-alert/confirm-alert.jsx");
 /* harmony import */ var _tools_modals_project_modal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tools/modals/project-modal */ "./resources/react/tools/modals/project-modal.jsx");
 /* harmony import */ var _tools_loading_spinner_loading_spinner__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../tools/loading-spinner/loading-spinner */ "./resources/react/tools/loading-spinner/loading-spinner.jsx");
-/* harmony import */ var _tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../tools/toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.jsx");
+/* harmony import */ var _tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../tools/toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.tsx");
+/* harmony import */ var _tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
 
 
@@ -67805,7 +67864,7 @@ react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/react__WEBPACK_IMPOR
   className: "card-header ff-card-header"
 }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_projects_page_header__WEBPACK_IMPORTED_MODULE_5__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
   className: "card-body"
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_projects_table__WEBPACK_IMPORTED_MODULE_4__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_confirm_alert_confirm_alert__WEBPACK_IMPORTED_MODULE_6__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_modals_project_modal__WEBPACK_IMPORTED_MODULE_7__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_loading_spinner_loading_spinner__WEBPACK_IMPORTED_MODULE_8__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9__.default, null)), document.getElementById("root-new-projects"));
+}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_projects_table__WEBPACK_IMPORTED_MODULE_4__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_confirm_alert_confirm_alert__WEBPACK_IMPORTED_MODULE_6__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_modals_project_modal__WEBPACK_IMPORTED_MODULE_7__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_tools_loading_spinner_loading_spinner__WEBPACK_IMPORTED_MODULE_8__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((_tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9___default()), null)), document.getElementById("root-new-projects"));
 })();
 
 /******/ })()

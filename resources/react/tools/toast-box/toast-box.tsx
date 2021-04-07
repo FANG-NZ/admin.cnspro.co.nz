@@ -2,25 +2,41 @@ import React, {useEffect, useState} from 'react'
 import Toast from 'react-bootstrap/Toast'
 import PubSub from 'pubsub-js'
 
-const defaultStatus = {
+export enum ToastState{
+    'SUCCESS' = "success",
+    'ERROR' = "danger"
+}
+
+/**
+ * define the type of 
+ * Subscriber Data
+ */
+type ToastData = {
+    show: boolean,
+    message: string,
+    state: ToastState
+    title: string
+}
+
+//define the default toast data
+const default_data = {
     show: false,
-    message: '---',
-    state: 'success',
+    message: '------',
+    state: ToastState.SUCCESS,
     title: 'Request done'
 }
 
 const ToastBox = () => {
-    const [status, setStatus] = useState(defaultStatus)
+    const [status, setStatus] = useState(default_data)
 
     /**
      * Function is to handle on subpub
      * @param {*} msg 
      * @param {*} data 
      */
-    function onHandleSubscriber(msg, data){
+    function onHandleSubscriber(msg : string, data: ToastData){
 
         data.show = true
-
         setStatus(data)
     }
 
@@ -34,8 +50,10 @@ const ToastBox = () => {
     }, [])
 
     return(
-        <Toast show={status.show} delay={3000} autohide className="success"
-            onClose={() => setStatus(defaultStatus)}
+        <Toast show={status.show} delay={3000} autohide className={status.state}
+            onClose={() => {
+                setStatus({...status, show:false})
+            }}
         >
              <Toast.Header>
                 <strong className="mr-auto">{status.title}</strong>
