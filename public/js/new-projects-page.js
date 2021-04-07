@@ -3377,14 +3377,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.js");
-/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-images-uploading */ "./node_modules/react-images-uploading/dist/index.js");
-/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_images_uploading__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js");
-/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _project_modal_slice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
-/* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.js");
+/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-images-uploading */ "./node_modules/react-images-uploading/dist/index.js");
+/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_images_uploading__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js");
+/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _project_modal_slice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
+/* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 
@@ -3406,7 +3406,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
   var project = _ref.project,
       register = _ref.register;
 
-  var _useFormContext = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
+  var _useFormContext = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_3__.useFormContext)(),
       errors = _useFormContext.errors;
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -3635,14 +3635,14 @@ var ImageFields = function ImageFields(props) {
       image: _formData
     }; //Update changes into Modal project
 
-    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_5__.addImage)({
-      id: (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_7__.nanoid)(),
+    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_6__.addImage)({
+      id: (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.nanoid)(),
       is_uploading: true,
       url: image[0]['data_url']
     })); //call upload image
 
 
-    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_6__.uploadProjectImage)(_data));
+    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_7__.uploadProjectImage)(_data));
   };
 
   function onRemove(_id) {
@@ -3651,7 +3651,7 @@ var ImageFields = function ImageFields(props) {
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "image-upload"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_images_uploading__WEBPACK_IMPORTED_MODULE_3___default()), {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_images_uploading__WEBPACK_IMPORTED_MODULE_4___default()), {
     onChange: onChange,
     dataURLKey: "data_url"
   }, function (_ref3) {
@@ -3700,7 +3700,7 @@ var ProjectModal = function ProjectModal() {
 
   var _dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
 
-  var _form = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_2__.useForm)();
+  var _form = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_3__.useForm)();
 
   var register = _form.register,
       handleSubmit = _form.handleSubmit,
@@ -3720,7 +3720,7 @@ var ProjectModal = function ProjectModal() {
 
 
   function onHandleClose() {
-    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_5__.hide)());
+    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_6__.hide)());
   }
   /**
    * Function is to handle modal enter
@@ -3755,7 +3755,7 @@ var ProjectModal = function ProjectModal() {
   function onHandleSubmit(data) {
     //append project ID
     data.id = _project.id;
-    pubsub_js__WEBPACK_IMPORTED_MODULE_4___default().publish('TOAST_BOX', {
+    pubsub_js__WEBPACK_IMPORTED_MODULE_5___default().publish('TOAST_BOX', {
       'title': "TEST TITLE",
       'message': 'Project has been updated successfully',
       'state': "success"
@@ -3794,7 +3794,7 @@ var ProjectModal = function ProjectModal() {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-info_fields"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_2__.FormProvider, _form, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_3__.FormProvider, _form, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
     onSubmit: handleSubmit(onHandleSubmit)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(ProjectInfoFields, {
     project: _project,
@@ -29982,8 +29982,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @restart/hooks/useEventCallback */ "./node_modules/@restart/hooks/esm/useEventCallback.js");
 /* harmony import */ var _ThemeProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/esm/ThemeProvider.js");
-/* harmony import */ var _CloseButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./CloseButton */ "./node_modules/react-bootstrap/esm/CloseButton.js");
-/* harmony import */ var _ToastContext__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ToastContext */ "./node_modules/react-bootstrap/esm/ToastContext.js");
+/* harmony import */ var _CloseButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./CloseButton */ "./node_modules/react-bootstrap/esm/CloseButton.js");
+/* harmony import */ var _ToastContext__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ToastContext */ "./node_modules/react-bootstrap/esm/ToastContext.js");
 
 
 
@@ -30005,7 +30005,7 @@ var ToastHeader = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.forwardRef(fun
       props = (0,_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__.default)(_ref, ["bsPrefix", "closeLabel", "closeButton", "className", "children"]);
 
   bsPrefix = (0,_ThemeProvider__WEBPACK_IMPORTED_MODULE_5__.useBootstrapPrefix)(bsPrefix, 'toast-header');
-  var context = (0,react__WEBPACK_IMPORTED_MODULE_3__.useContext)(_ToastContext__WEBPACK_IMPORTED_MODULE_7__.default);
+  var context = (0,react__WEBPACK_IMPORTED_MODULE_3__.useContext)(_ToastContext__WEBPACK_IMPORTED_MODULE_6__.default);
   var handleClick = (0,_restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_4__.default)(function (e) {
     if (context && context.onClose) {
       context.onClose(e);
@@ -30015,7 +30015,7 @@ var ToastHeader = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.forwardRef(fun
     ref: ref
   }, props, {
     className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(bsPrefix, className)
-  }), children, closeButton && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement(_CloseButton__WEBPACK_IMPORTED_MODULE_6__.default, {
+  }), children, closeButton && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement(_CloseButton__WEBPACK_IMPORTED_MODULE_7__.default, {
     label: closeLabel,
     onClick: handleClick,
     className: "ml-2 mb-1",
