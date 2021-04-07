@@ -5,6 +5,7 @@ import {unwrapResult, nanoid} from '@reduxjs/toolkit'
 import {useForm, useFormContext, FormProvider} from 'react-hook-form'
 import ImageUploading from 'react-images-uploading'
 import PubSub from 'pubsub-js'
+import {ToastState} from '../toast-box/toast-box'
 
 import {hide, setProject, addImage} from './project-modal-slice'
 import {addNewProject, uploadProjectImage, updateProject} from '../../stores/projects-slice'
@@ -477,7 +478,8 @@ const ProjectModal = () => {
         PubSub.publish('TOAST_BOX', {
             'title' : "TEST TITLE",
             'message' : 'Project has been updated successfully',
-            'state' : "success"
+            //'state' : ToastState.SUCCESS
+            'state' : ToastState.ERROR
         })
 
         // if(_modalData.isNew){

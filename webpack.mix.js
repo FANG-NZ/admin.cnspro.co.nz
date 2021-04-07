@@ -5,7 +5,19 @@ const path = require('path');
 //Import jquery lib locally
 mix.webpackConfig({
 
+    //To add custom modules
+    module: {
+        rules: [
+            {
+                test: /\.tsx?$/,
+                loader: "ts-loader",
+                exclude: /node_modules/
+            }
+        ]
+    },
+
     resolve:{
+        extensions: ["*", ".js", ".jsx", ".vue", ".ts", ".tsx"],
         alias:{
             'jquery': path.resolve(__dirname, 'resources/libs/jquery/jquery.min.js')
         }
