@@ -149,6 +149,8 @@ const EmptyProjectItem = (props) => {
 const ProjectsTable = () => {
     const _projects = useSelector(allNewProjects)
 
+console.log(_projects)
+
     //define the warning message
     const _message = <>There is <strong>NO</strong> any new projects added</>
 

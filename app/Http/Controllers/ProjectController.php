@@ -14,8 +14,9 @@ class ProjectController extends Controller
     public function index(){
 
         //To load all NEW project
-        //$projects = Project::where('is_new', false)->get();
-        $projects = Project::all();
+        $projects = Project::get()->sortByDesc("completed_on")->values();
+        //$projects = Project::get()->sortBy("created_at");
+        //$projects = Project::all();
 
         return view("newprojects")->with(['projects' => $projects->toJson()]);
     }
@@ -32,7 +33,10 @@ class ProjectController extends Controller
 
         $data = $request->all();
 
-        $project = Project::find(1);
+        //To create new project
+        $project = Project::create($data);
+        
+        //$project = Project::find(1);
         // $catalog = new FFMCatalog();
         // $catalog->id = time();
         // $catalog->name = $data['name'];

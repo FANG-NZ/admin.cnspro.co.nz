@@ -85,7 +85,25 @@ const ProjectsSlice = createSlice({
     //START extra reducers
     extraReducers: {
 
-        
+        /**
+         * TODO
+         * Handle add new project done callback
+         * @param {*} state 
+         * @param {*} action 
+         */
+        [addNewProject.fulfilled]: (state, action) => {
+
+            const _project = action.payload
+
+            if(_project.is_new){
+                //To add new porject at the beginning of new list
+                state.newProjects.unshift(_project)
+            }
+            else{
+                state.allProjects.unshift(_project)
+            }
+
+        }
 
         // [uploadProjectImage.pending]: (state, action) => {
 

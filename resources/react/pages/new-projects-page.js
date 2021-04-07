@@ -22,6 +22,9 @@ try{
     //Try to load data from DOM attribute,
     //if there is NO data, we just send AJAX request to fetch from server
     const _data = JSON.parse(json_string)
+
+    console.log(typeof _data)
+
     store.dispatch(setNewProjects(_data))
 
 }catch(err){

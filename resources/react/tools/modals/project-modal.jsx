@@ -104,7 +104,7 @@ const ProjectInfoFields = ({project, register, control}) => {
                 <Controller 
                     name="completed_on"
                     control={control}
-                    defaultValue={project.completed_on}
+                    defaultValue={project.completed_on? project.completed_on : null}
                     render={({ onChange, value }) => (
 
                         <div className="input-group datepicker-holder">
@@ -489,8 +489,22 @@ const ProjectModal = () => {
     function onHandleSubmit(data){
 
         //To convert completed_on to string format
-        data.completed_on = moment(data.completed_on).format("YYYY-MM-DD")
+        if(data.completed_on){
+            data.completed_on = moment(data.completed_on).format("YYYY-MM-DD")
+        }
+
+        //To resetup is_new value
+        if(data.is_new){
+            data.is_new = 1
+        }
+        else{
+            data.is_new = 0
+        }
         
+
+        // console.log(data)
+        // return
+
         if(_modalData.isNew){
 
             _dispatch(addNewProject(data))
