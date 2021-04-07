@@ -95,7 +95,35 @@
     }
 }
 
-//START col-images_fields style
+
+// START col-info_fields style
+// ------------------------------
+.col-info_fields{
+
+    //START datepicker style
+    .datepicker-holder{
+
+        .input-group-text{
+            line-height: 1.4;
+        }
+
+        .react-datepicker-wrapper{
+            flex: 1;
+        }    
+
+        .form-control{
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+    }
+    
+}
+
+
+
+// START col-images_fields style
+// -------------------------------
 .col-image_fields{
     .image-upload{
         margin-bottom: .75rem;

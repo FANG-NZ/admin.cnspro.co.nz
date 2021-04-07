@@ -2,13 +2,18 @@ import React, { useEffect, useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import {useSelector, useDispatch} from 'react-redux'
 import {unwrapResult, nanoid} from '@reduxjs/toolkit'
-import {useForm, useFormContext, FormProvider} from 'react-hook-form'
+import {useForm, useFormContext, FormProvider, Controller} from 'react-hook-form'
 import ImageUploading from 'react-images-uploading'
 import PubSub from 'pubsub-js'
 import {ToastState, EVENT_TOAST_BOX} from '../toast-box/toast-box'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import moment from 'moment'
 
 import {hide, setProject, addImage} from './project-modal-slice'
 import {addNewProject, uploadProjectImage, updateProject} from '../../stores/projects-slice'
+import { groupBy } from 'lodash-es'
+import { CardGroup } from 'react-bootstrap'
 
 
 /**
@@ -16,7 +21,7 @@ import {addNewProject, uploadProjectImage, updateProject} from '../../stores/pro
  * define the project info fields block
  * @returns 
  */
-const ProjectInfoFields = ({project, register}) => {
+const ProjectInfoFields = ({project, register, control}) => {
     const {errors} = useFormContext()
 
     return(
@@ -96,14 +101,30 @@ const ProjectInfoFields = ({project, register}) => {
             <div className="col-6">
                 <label>Completed On</label>
 
-                <input 
-                    type="text"
-                    name="completed_on" 
-                    placeholder="The project will be completed on" 
-                    className="form-control" 
+                <Controller 
+                    name="completed_on"
+                    control={control}
                     defaultValue={project.completed_on}
-                    ref={register}
-                />   
+                    render={({ onChange, value }) => (
+
+                        <div className="input-group datepicker-holder">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">
+                                    <i className="mdi mdi-calendar-clock"></i>
+                                </span>
+                            </div>
+                            <DatePicker
+                                className="form-control"
+                                placeholderText="Completed on"
+                                selected={value ? moment(value).toDate() : null}
+                                dateFormat="dd MMMM yyyy"
+                                onChange={onChange}
+                            />
+                        </div>
+
+                    )}
+                />
+
             </div>
         </div>
 
@@ -239,7 +260,7 @@ const ProjectInfoFields = ({project, register}) => {
                 
             </div>
         </div>
-        
+       
         </React.Fragment>
     )
 }
@@ -283,12 +304,6 @@ const ImageBlock = ({image, onRemoveCallback}) => {
 const ImageFields = (props) => {
     const _project = props.project
     const _dispatch = useDispatch()
-
-    // const [images, setImages] = useState([])
-    // useEffect(() => {
-    //     setImages(_project.images)
-    // }, [images])
-    
     
     /**
      * Function is to handle image upload
@@ -426,7 +441,7 @@ const ProjectModal = () => {
     const _dispatch = useDispatch()
 
     const _form = useForm()
-    const {register, handleSubmit, errors, reset, formState} = _form
+    const {register, handleSubmit, errors, reset, formState, control} = _form
     const { isDirty } = formState
 
     //setup modal vars
@@ -472,6 +487,9 @@ const ProjectModal = () => {
      * request
      */
     function onHandleSubmit(data){
+
+        //To convert completed_on to string format
+        data.completed_on = moment(data.completed_on).format("YYYY-MM-DD")
         
         if(_modalData.isNew){
 
@@ -551,6 +569,7 @@ const ProjectModal = () => {
                             <ProjectInfoFields 
                                 project={_project}
                                 register={register}
+                                control={control}
                             />
                         </form>
                         </FormProvider>

@@ -13429,6 +13429,17 @@ input[type=range]::-moz-range-thumb {
   margin-right: 5px;
 }
 
+.col-info_fields .datepicker-holder .input-group-text {
+  line-height: 1.4;
+}
+.col-info_fields .datepicker-holder .react-datepicker-wrapper {
+  flex: 1;
+}
+.col-info_fields .datepicker-holder .form-control {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
 .col-image_fields .image-upload {
   margin-bottom: 0.75rem;
 }

@@ -1,6 +1,5 @@
 import {createSlice, createAsyncThunk, nanoid} from '@reduxjs/toolkit'
 import {Client} from '../tools/client'
-import store from './new-projects-page-store'
 
 const initialState = {
     'newProjects':[],
@@ -18,10 +17,9 @@ export const addNewProject = createAsyncThunk(
     'Projects/addNewProject',
     async (data) => {
         const response = await Client.post(
-                                            "/projects/add", 
-                                            data, 
-                                            //{store: store}
-                                        )
+            "/projects/add", 
+            data
+        )
         return response
     }
 )
@@ -38,8 +36,7 @@ export const updateProject = createAsyncThunk(
 
         const response = Client.put(
             '/projects/update/' + _id,
-            data,
-            {store: store}
+            data
         )
         return response
     }
@@ -87,6 +84,8 @@ const ProjectsSlice = createSlice({
 
     //START extra reducers
     extraReducers: {
+
+        
 
         // [uploadProjectImage.pending]: (state, action) => {
 
