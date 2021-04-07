@@ -475,28 +475,26 @@ const ProjectModal = () => {
         //append project ID
         data.id = _project.id
 
-        PubSub.publish('TOAST_BOX', {
-            'title' : "TEST TITLE",
-            'message' : 'Project has been updated successfully',
-            //'state' : ToastState.SUCCESS
-            'state' : ToastState.ERROR
-        })
 
-        // if(_modalData.isNew){
+        if(_modalData.isNew){
 
-        // }else{
+        }else{
 
-        //     _dispatch(updateProject(data))
-        //         .then(unwrapResult)
-        //         .then(result => {
+            _dispatch(updateProject(data))
+                .then(unwrapResult)
+                .then(result => {
 
-        //             _dispatch(setProject(result))
-        //             onHandleEnter()
+                    _dispatch(setProject(result))
+                    onHandleEnter()
 
-                    
-        //         })
+                    PubSub.publish('TOAST_BOX', {
+                        'title' : "Project updated",
+                        'message' : 'The item has been updated successfully',
+                        'state' : ToastState.SUCCESS
+                    })
+                })
 
-        // }
+        }
     }
 
 

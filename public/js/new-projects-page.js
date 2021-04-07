@@ -2460,6 +2460,22 @@ function useWillUnmount(fn) {
 "use strict";
 
 
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
   Object.defineProperty(o, k2, {
@@ -2514,14 +2530,14 @@ var pubsub_js_1 = __importDefault(__webpack_require__(/*! pubsub-js */ "./node_m
 var ToastState;
 
 (function (ToastState) {
-  ToastState["SUCCESS"] = "alert-success";
-  ToastState["ERROR"] = "alert-danger";
+  ToastState["SUCCESS"] = "success";
+  ToastState["ERROR"] = "danger";
 })(ToastState = exports.ToastState || (exports.ToastState = {})); //define the default toast data
 
 
 var default_data = {
   show: false,
-  message: '---',
+  message: '------',
   state: ToastState.SUCCESS,
   title: 'Request done'
 };
@@ -2556,7 +2572,9 @@ var ToastBox = function ToastBox() {
     autohide: true,
     className: status.state,
     onClose: function onClose() {
-      setStatus(default_data);
+      setStatus(__assign(__assign({}, status), {
+        show: false
+      }));
     }
   }, react_1["default"].createElement(Toast_1["default"].Header, null, react_1["default"].createElement("strong", {
     className: "mr-auto"
@@ -3874,20 +3892,19 @@ var ProjectModal = function ProjectModal() {
   function onHandleSubmit(data) {
     //append project ID
     data.id = _project.id;
-    pubsub_js__WEBPACK_IMPORTED_MODULE_5___default().publish('TOAST_BOX', {
-      'title': "TEST TITLE",
-      'message': 'Project has been updated successfully',
-      //'state' : ToastState.SUCCESS
-      'state': _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.ToastState.ERROR
-    }); // if(_modalData.isNew){
-    // }else{
-    //     _dispatch(updateProject(data))
-    //         .then(unwrapResult)
-    //         .then(result => {
-    //             _dispatch(setProject(result))
-    //             onHandleEnter()
-    //         })
-    // }
+
+    if (_modalData.isNew) {} else {
+      _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_8__.updateProject)(data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.unwrapResult).then(function (result) {
+        _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_7__.setProject)(result));
+
+        onHandleEnter();
+        pubsub_js__WEBPACK_IMPORTED_MODULE_5___default().publish('TOAST_BOX', {
+          'title': "Project updated",
+          'message': 'The item has been updated successfully',
+          'state': _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.ToastState.SUCCESS
+        });
+      });
+    }
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_9__.default, {

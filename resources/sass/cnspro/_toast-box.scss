@@ -48,10 +48,15 @@
     }
 
     //define the success style
-    // &.success{
-        
-    //     .toast-header{
-    //         color:  #31ce77;
-    //     }
-    // }
+    &.success{
+        background-color: #d6f5e4;
+        color: #196b3e;
+        border-color: #c5f1d9;
+    }
+
+    &.danger{
+        background-color: #fddbd9;
+        color: #7e2623;
+        border-color: #fcccca;
+    }
 }

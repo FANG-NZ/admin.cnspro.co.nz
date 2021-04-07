@@ -3,8 +3,8 @@ import Toast from 'react-bootstrap/Toast'
 import PubSub from 'pubsub-js'
 
 export enum ToastState{
-    'SUCCESS' = "alert-success",
-    'ERROR' = "alert-danger"
+    'SUCCESS' = "success",
+    'ERROR' = "danger"
 }
 
 /**
@@ -21,7 +21,7 @@ type ToastData = {
 //define the default toast data
 const default_data = {
     show: false,
-    message: '---',
+    message: '------',
     state: ToastState.SUCCESS,
     title: 'Request done'
 }
@@ -37,7 +37,6 @@ const ToastBox = () => {
     function onHandleSubscriber(msg : string, data: ToastData){
 
         data.show = true
-
         setStatus(data)
     }
 
@@ -53,7 +52,7 @@ const ToastBox = () => {
     return(
         <Toast show={status.show} delay={3000} autohide className={status.state}
             onClose={() => {
-                setStatus(default_data)
+                setStatus({...status, show:false})
             }}
         >
              <Toast.Header>
