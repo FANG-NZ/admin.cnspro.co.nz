@@ -10,7 +10,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
 
-import {hide, setProject, addImage} from './project-modal-slice'
+import {hide, setProject, addImage, isAddingNewProject} from './project-modal-slice'
 import {addNewProject, uploadProjectImage, updateProject} from '../../stores/projects-slice'
 
 
@@ -99,7 +99,7 @@ const ProjectInfoFields = ({project, register, control}) => {
             <div className="col-6">
                 <label>Completed On</label>
 
-                <Controller 
+                {/* <Controller 
                     name="completed_on"
                     control={control}
                     defaultValue={project.completed_on? project.completed_on : null}
@@ -121,14 +121,14 @@ const ProjectInfoFields = ({project, register, control}) => {
                         </div>
 
                     )}
-                />
+                /> */}
 
             </div>
         </div>
 
 
         <h5 className="header-title">Properties</h5>
-
+{/*  
         <div className="row properties-holder">
             <div className="col-6 mb-2">
                 <label>
@@ -258,7 +258,7 @@ const ProjectInfoFields = ({project, register, control}) => {
                 
             </div>
         </div>
-       
+*/}       
         </React.Fragment>
     )
 }
@@ -436,6 +436,7 @@ const ImageFields = (props) => {
 const ProjectModal = () => {
     const _modalData = useSelector(state => state.ProjectModal)
     const _project = _modalData.project
+    const _isAddingNewProject = useSelector(isAddingNewProject)
     const _dispatch = useDispatch()
 
     const _form = useForm()
@@ -444,9 +445,9 @@ const ProjectModal = () => {
 
     //setup modal vars
     //FOR classname
-    const _modalCalssname = _modalData.isNew? 'modal-new_project' : 'modal-update_project'
+    const _modalCalssname = _isAddingNewProject? 'modal-new_project' : 'modal-update_project'
     //FOR title
-    const _title = _modalData.isNew? "Add new project" : `${_project.title}`
+    const _title = _isAddingNewProject? "Add new project" : `${_project.title}`
 
     /**
      * Function is to handle close modal
@@ -467,15 +468,15 @@ const ProjectModal = () => {
             'is_new': _project.is_new === 1 ? true : false,
             'street': _project.street,
             'city': _project.city,
-            'completed_on': _project.completed_on,
-            'bedrooms': _project.bedrooms,
-            'bathrooms': _project.bathrooms,
-            'carpark': _project.carpark,
-            'livingrooms': _project.livingrooms,
-            'land_area': _project.land_area,
-            'floor_area': _project.floor_area,
-            'short_description': _project.short_description,
-            'description': _project.description
+            //'completed_on': _project.completed_on,
+            //'bedrooms': _project.bedrooms,
+            //'bathrooms': _project.bathrooms,
+            //'carpark': _project.carpark,
+            //'livingrooms': _project.livingrooms,
+            //'land_area': _project.land_area,
+            //'floor_area': _project.floor_area,
+            //'short_description': _project.short_description,
+            //'description': _project.description
         })
         
     }
@@ -499,13 +500,8 @@ const ProjectModal = () => {
             data.is_new = 0
         }
         
-
-        // console.log(data)
-        // return
-
-        if(_modalData.isNew){
-
-            console.log("call add new")
+        //check request is for Adding New Project
+        if(_isAddingNewProject){
 
             _dispatch(addNewProject(data))
                 .then(unwrapResult)
@@ -528,9 +524,10 @@ const ProjectModal = () => {
                     })
                 })
 
-        }else{
+        }
+        //This is for updating exists project
+        else{
 
-            console.log("Call updated")
             //append project ID
             data.id = _project.id
 
@@ -591,7 +588,7 @@ const ProjectModal = () => {
                     </div>
                     
                     {/* START project images fields */}
-                    {!_modalData.isNew &&
+                    {!_isAddingNewProject &&
                         <div className="col-image_fields">
                             <ImageFields project={_project} />
                         </div>
@@ -610,7 +607,7 @@ const ProjectModal = () => {
                     onClick={handleSubmit(onHandleSubmit)}
                 >
                     <i className="mdi mdi-database-plus"></i>
-                    <span>{_modalData.isNew ? "Add new project" : "Edit"}</span>
+                    <span>{_isAddingNewProject ? "Add new project" : "Edit"}</span>
                 </button>
             </Modal.Footer>
 

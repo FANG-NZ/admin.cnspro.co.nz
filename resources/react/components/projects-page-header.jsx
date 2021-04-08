@@ -1,6 +1,6 @@
 import React from 'react'
 import {useDispatch} from 'react-redux'
-import {show} from '../tools/modals/project-modal-slice'
+import {show, NEW_PROJECT} from '../tools/modals/project-modal-slice'
 
 const ProjectsPageHeader = () => {
     const _dispatch = useDispatch()
@@ -18,7 +18,7 @@ const ProjectsPageHeader = () => {
 
                 <button className="btn btn-success" 
                     onClick={() => {
-                        _dispatch(show())
+                        _dispatch(show(NEW_PROJECT.NEW))
                     }}
                 >
                     <i className="mdi mdi-plus-circle"></i>

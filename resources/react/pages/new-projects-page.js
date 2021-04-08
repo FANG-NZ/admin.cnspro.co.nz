@@ -10,7 +10,7 @@ import ProjectModal from '../tools/modals/project-modal'
 import LoadingSpinner from '../tools/loading-spinner/loading-spinner'
 import ToastBox from '../tools/toast-box/toast-box'
 
-import {setNewProjects} from '../stores/projects-slice'
+import {setProjects} from '../stores/projects-slice'
 
 //To get json string from DOM
 try{
@@ -22,7 +22,7 @@ try{
     //Try to load data from DOM attribute,
     //if there is NO data, we just send AJAX request to fetch from server
     const _data = JSON.parse(json_string)
-    store.dispatch(setNewProjects(_data))
+    store.dispatch(setProjects(_data))
 
 }catch(err){
     console.error("Init default projects data ERROR")

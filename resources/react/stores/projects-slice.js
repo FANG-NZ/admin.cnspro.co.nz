@@ -2,12 +2,12 @@ import {createSlice, createAsyncThunk, nanoid} from '@reduxjs/toolkit'
 import {Client} from '../tools/client'
 
 const initialState = {
-    'newProjects':[],
+    'projects':[],
     'allProjects':[]
 }
 
 //To get all new projects
-export const allNewProjects = state => state.Projects.newProjects
+export const allNewProjects = state => state.Projects.projects.filter((item) => item.is_new === 1)
 
 /**
  * TODO
@@ -76,8 +76,8 @@ const ProjectsSlice = createSlice({
          * @param {*} action 
          * @returns 
          */
-        setNewProjects(state, action){
-            state.newProjects = action.payload
+        setProjects(state, action){
+            state.projects = action.payload
         }
 
     },
@@ -94,14 +94,8 @@ const ProjectsSlice = createSlice({
         [addNewProject.fulfilled]: (state, action) => {
 
             const _project = action.payload
-
-            if(_project.is_new){
-                //To add new porject at the beginning of new list
-                state.newProjects.unshift(_project)
-            }
-            else{
-                state.allProjects.unshift(_project)
-            }
+            //To add new porject at the beginning of new list
+            state.projects.unshift(_project)
 
         },
 
@@ -115,7 +109,9 @@ const ProjectsSlice = createSlice({
         [updateProject.fulfilled]: (state, action) => {
             const _project = action.payload
 
-            //const _index = state
+            const _index = state.projects.findIndex((item) => item.id === _project.id)
+            //To update project
+            state.projects[_index] = {...state.projects[_index], ..._project}
 
         },
 
@@ -138,5 +134,5 @@ const ProjectsSlice = createSlice({
 })
 
 
-export const {setNewProjects} = ProjectsSlice.actions
+export const {setProjects} = ProjectsSlice.actions
 export default ProjectsSlice.reducer

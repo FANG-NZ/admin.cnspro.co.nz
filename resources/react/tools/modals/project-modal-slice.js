@@ -1,14 +1,31 @@
 import {createSlice} from '@reduxjs/toolkit'
 
+export const NEW_PROJECT = {
+    'ALL' : {'is_new' : 0},
+    'NEW' : {'is_new': 1}
+}
+
+
 const initialState = {
     'shown': false,
-    //'shown' : true,
-    'isNew' : false,
+    //To indicate if this is for ADDING NEW PROJECT
+    'isAddingNew' : false,
     //'isNew': true, //to check if it is for ADDING NEW request
     'project': {
+        is_new : 1,
         images: []
     }
 }
+
+/**
+ * TODO
+ * Check if this is to add new project
+ * @param {*} state 
+ * @returns 
+ */
+export const isAddingNewProject = state => state.ProjectModal.isAddingNew
+
+
 
 const ProjectModalSlice = createSlice({
     name: 'ProjectModal',
@@ -18,25 +35,31 @@ const ProjectModalSlice = createSlice({
         //To show modal
         show: {
             reducer(state, actions){
-                const {shown, isNew, project} = actions.payload
+                const {shown, isAddingNew, project} = actions.payload
 
                 state.shown = shown
-                state.isNew = isNew
+                state.isAddingNew = isAddingNew
                 state.project = project
             },
             prepare(project){
 
-                let _isNew = true
+                let _isAddingNew = true
                 let _project = initialState.project
-                if(project){
-                    _isNew = false
+
+
+                if(project && 'id' in project){
+                    _isAddingNew = false
                     _project = project
+                }
+                else{
+                    //merge new project objecct 
+                    _project = {..._project, ...project}
                 }
 
                 return{
                     payload:{
                         "shown": true,
-                        "isNew": _isNew,
+                        "isAddingNew": _isAddingNew,
                         "project": _project
                     }
                 }
@@ -47,7 +70,7 @@ const ProjectModalSlice = createSlice({
         //To hide the modal
         hide(state, action){
             state.shown = false
-            state._isNew = true
+            state.isAddingNew = true
             state.project = initialState.project
         },
 
@@ -58,7 +81,7 @@ const ProjectModalSlice = createSlice({
          */
         setProject(state, action){
             state.project = action.payload
-            state.isNew = false
+            state.isAddingNew = false
         },
 
         /**
