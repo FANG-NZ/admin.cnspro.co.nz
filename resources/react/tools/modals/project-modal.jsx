@@ -320,17 +320,19 @@ const ImageFields = (props) => {
             image: _formData
         }
 
-        //Update changes into Modal project
-        _dispatch(addImage({
-            id: nanoid(),
-            is_uploading: true,
-            url: image[0]['data_url']
-        }))
-
         //call upload image
         _dispatch(uploadProjectImage(_data))
+            .then(unwrapResult)
+            .then(result => {
+                //Append image into current modal
+                _dispatch(addImage(result))
+            })
     };
 
+    /**
+     * Function is to handle remove image
+     * @param {*} _id 
+     */
     function onRemove(_id){
         alert("Image removed call");
     }

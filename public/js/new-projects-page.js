@@ -3346,7 +3346,8 @@ var uploadProjectImage = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.create
             _id = data.id;
             _context2.next = 3;
             return _tools_client__WEBPACK_IMPORTED_MODULE_2__.Client.post("/projects/upload/".concat(data.id), data.image, {
-              is_upload_file: true
+              is_upload_file: true //is_show_loading: false
+
             });
 
           case 3:
@@ -3405,6 +3406,15 @@ var ProjectsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice
     });
 
     state.projects = _new_list;
+  }), _defineProperty(_extraReducers, uploadProjectImage.fulfilled, function (state, action) {
+    var _image = action.payload;
+
+    var _index = state.projects.findIndex(function (item) {
+      return item.id === _image.project_id;
+    }); //To append image
+
+
+    state.projects[_index].images.unshift(_image);
   }), _extraReducers)
 });
 var setProjects = ProjectsSlice.actions.setProjects;
@@ -4172,17 +4182,18 @@ var ImageFields = function ImageFields(props) {
       id: _project.id,
       data_url: image[0]['data_url'],
       image: _formData
-    }; //Update changes into Modal project
+    }; //call upload image
 
-    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_9__.addImage)({
-      id: (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.nanoid)(),
-      is_uploading: true,
-      url: image[0]['data_url']
-    })); //call upload image
-
-
-    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_10__.uploadProjectImage)(_data));
+    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_10__.uploadProjectImage)(_data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.unwrapResult).then(function (result) {
+      //Append image into current modal
+      _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_9__.addImage)(result));
+    });
   };
+  /**
+   * Function is to handle remove image
+   * @param {*} _id 
+   */
+
 
   function onRemove(_id) {
     alert("Image removed call");

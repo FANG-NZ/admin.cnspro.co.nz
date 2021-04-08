@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\ProjectImage;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -83,13 +84,25 @@ class ProjectController extends Controller
      */
     public function doUploadImage(Request $request, $id){
 
+        $project = Project::findOrFail($id);
+
+        if(!$project){
+            return response(['message' => "Project not found"], 404);
+        }
+
         $request->validate([
-            'image'     =>  'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image'     =>  'required|image|mimes:jpeg,png,jpg,gif|max:3072'
         ]);
 
-        return response([
-            'name' => 'Test name',
-            'url' => "https://freebw.com/templates/tatee/images/post-10.jpg"
-        ], 200);
+
+        $projectImage = new ProjectImage();
+        $projectImage->id = 100;
+        $projectImage->name = "Test name";
+        $projectImage->url = "https://freebw.com/templates/tatee/images/post-10.jpg";
+        $projectImage->project_id = (int)$id;
+
+        //sleep(2);
+
+        return response($projectImage->toJson(), 200);
     }
 }

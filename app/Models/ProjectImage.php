@@ -11,7 +11,13 @@ class ProjectImage extends Model
 
     protected $fillable = [
         'name',
-        'url'
+        'url',
+        'project_id'
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
     ];
 
     protected $table = "project_images";

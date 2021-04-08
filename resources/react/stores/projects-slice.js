@@ -70,7 +70,10 @@ export const uploadProjectImage = createAsyncThunk(
         const response = await Client.post(
             `/projects/upload/${data.id}`, 
             data.image,
-            {is_upload_file : true}
+            {
+                is_upload_file : true, 
+                //is_show_loading: false
+            }
         )
         return response
     }
@@ -144,21 +147,22 @@ const ProjectsSlice = createSlice({
             state.projects = _new_list  
         },
 
-        // [uploadProjectImage.pending]: (state, action) => {
 
-        //     const _data = action.meta.arg
-        //     const _pid = _data.id
-        //     //To find the item index
-        //     const _index = state.findIndex((item) => item.id == _pid)
+        /**
+         * TODO
+         * Handle project image upload callback
+         * @param {*} state 
+         * @param {*} action 
+         */
+        [uploadProjectImage.fulfilled]: (state, action) => {
+            const _image = action.payload
+            
+            const _index = state.projects.findIndex((item) => item.id === _image.project_id)
 
-        //     //To add new image into begining
-        //     state[_index].images.unshift({
-        //         id: nanoid(),
-        //         is_uploading: true,
-        //         url: _data.data_url
-        //     })
+            //To append image
+            state.projects[_index].images.unshift(_image)
 
-        // },
+        },
     }
 })
 
