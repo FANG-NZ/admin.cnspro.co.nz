@@ -35,6 +35,12 @@ const ProjectItem = (props) => {
                 >
                     {_project.street}<br/>{_project.city}
                 </a>
+
+                <span className="text-muted">
+                    <Moment format="DD MMM YYYY \at\ HH:mm">
+                        {_project.created_at}
+                    </Moment>
+                </span>
             </td>
             <td className="td-title">{_project.title}</td>
             <td className='td-properties'>
@@ -148,8 +154,6 @@ const EmptyProjectItem = (props) => {
  */
 const ProjectsTable = () => {
     const _projects = useSelector(allNewProjects)
-
-console.log(_projects)
 
     //define the warning message
     const _message = <>There is <strong>NO</strong> any new projects added</>

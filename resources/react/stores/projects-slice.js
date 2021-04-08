@@ -30,7 +30,7 @@ export const addNewProject = createAsyncThunk(
  * define the function to update project
  */
 export const updateProject = createAsyncThunk(
-    'Projects/addNewProject',
+    'Projects/updateProject',
     (data) => {
         const _id = data.id
 
@@ -103,7 +103,21 @@ const ProjectsSlice = createSlice({
                 state.allProjects.unshift(_project)
             }
 
-        }
+        },
+
+
+        /**
+         * toDO
+         * Handle update project callback
+         * @param {*} state 
+         * @param {*} action 
+         */
+        [updateProject.fulfilled]: (state, action) => {
+            const _project = action.payload
+
+            //const _index = state
+
+        },
 
         // [uploadProjectImage.pending]: (state, action) => {
 

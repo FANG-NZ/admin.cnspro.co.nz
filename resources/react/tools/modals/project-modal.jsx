@@ -12,8 +12,6 @@ import moment from 'moment'
 
 import {hide, setProject, addImage} from './project-modal-slice'
 import {addNewProject, uploadProjectImage, updateProject} from '../../stores/projects-slice'
-import { groupBy } from 'lodash-es'
-import { CardGroup } from 'react-bootstrap'
 
 
 /**
@@ -493,7 +491,7 @@ const ProjectModal = () => {
             data.completed_on = moment(data.completed_on).format("YYYY-MM-DD")
         }
 
-        //To resetup is_new value
+        //To resetup is_new value=
         if(data.is_new){
             data.is_new = 1
         }
@@ -506,6 +504,8 @@ const ProjectModal = () => {
         // return
 
         if(_modalData.isNew){
+
+            console.log("call add new")
 
             _dispatch(addNewProject(data))
                 .then(unwrapResult)
@@ -530,6 +530,7 @@ const ProjectModal = () => {
 
         }else{
 
+            console.log("Call updated")
             //append project ID
             data.id = _project.id
 
@@ -538,7 +539,7 @@ const ProjectModal = () => {
                 .then(result => {
 
                     _dispatch(setProject(result))
-                    onHandleEnter()
+                    //onHandleEnter()
 
                     PubSub.publish(EVENT_TOAST_BOX, {
                         'title' : "Project updated",

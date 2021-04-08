@@ -13,6 +13,7 @@ class Project extends Model
 
     protected $fillable = [
         'title',
+        'is_new',
         'completed_on',
         'street',
         'city',
@@ -28,7 +29,7 @@ class Project extends Model
     ];
 
     protected $hidden = [
-        'created_at',
+        //'created_at',
         'updated_at',
         'hasImages' //We need to remove hasImages here. Why ???
     ];

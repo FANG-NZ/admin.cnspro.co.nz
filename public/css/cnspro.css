@@ -13353,6 +13353,12 @@ input[type=range]::-moz-range-thumb {
 .projects-table td {
   font-size: 13px;
 }
+.projects-table .td-address a {
+  display: block;
+}
+.projects-table .td-address span {
+  display: block;
+}
 .projects-table .td-properties .properties-item-label {
   margin-right: 5px;
 }
