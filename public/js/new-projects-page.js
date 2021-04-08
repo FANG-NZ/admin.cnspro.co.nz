@@ -3124,7 +3124,7 @@ var ProjectItem = function ProjectItem(props) {
     className: "properties-item-value"
   }, _project.floor_area)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", {
     className: "td-completed-on"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_moment__WEBPACK_IMPORTED_MODULE_2___default()), {
+  }, _project.completed_on && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_moment__WEBPACK_IMPORTED_MODULE_2___default()), {
     format: "MMM YYYY"
   }, _project.completed_on)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", {
     className: "td-btns"
@@ -4241,13 +4241,13 @@ var ProjectModal = function ProjectModal() {
       'is_new': _project.is_new === 1 ? true : false,
       'street': _project.street,
       'city': _project.city,
-      'completed_on': _project.completed_on,
-      'bedrooms': _project.bedrooms,
-      'bathrooms': _project.bathrooms,
-      'carpark': _project.carpark,
-      'livingrooms': _project.livingrooms,
-      'land_area': _project.land_area,
-      'floor_area': _project.floor_area,
+      'completed_on': _project.completed_on ? project.completed_on : "",
+      'bedrooms': _project.bedrooms ? _project.bedrooms : "",
+      'bathrooms': _project.bathrooms ? _project.bathrooms : "",
+      'carpark': _project.carpark ? _project.carpark : "",
+      'livingrooms': _project.livingrooms ? _project.livingrooms : "",
+      'land_area': _project.land_area ? _project.land_area : "",
+      'floor_area': _project.floor_area ? _project.floor_area : "",
       'short_description': _project.short_description ? _project.short_description : "",
       'description': _project.description ? _project.description : ""
     });

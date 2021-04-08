@@ -104,9 +104,11 @@ const ProjectItem = (props) => {
                 </div>
             </td>
             <td className="td-completed-on">
-                <Moment format="MMM YYYY"> 
-                    {_project.completed_on}
-                </Moment>
+                {_project.completed_on && 
+                    <Moment format="MMM YYYY"> 
+                        {_project.completed_on}
+                    </Moment>
+                }
             </td>
             <td className="td-btns">
                 <button className="btn btn-icon btn-danger btn-sm"
