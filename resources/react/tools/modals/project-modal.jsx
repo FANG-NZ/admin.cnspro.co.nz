@@ -227,14 +227,6 @@ const ProjectInfoFields = ({project, register, control}) => {
             <div className="col-12">
                 <label>Short description</label>
 
-                {/* <input 
-                    type="text" 
-                    className="form-control"
-                    name="short_description" 
-                    ref={register}
-                    defaultValue={project.short_description}
-                /> */}
-
                 <textarea 
                     className="form-control" 
                     ref={register}
@@ -464,27 +456,29 @@ const ProjectModal = () => {
         _dispatch(hide())
     }
 
+    
     /**
-     * Function is to handle modal enter
+     * Function is to reset form
+     * @param {*} data 
      */
-    function onHandleEnter(){
+    function resetForm(data){
 
         //reset default values with PROJECT
         reset({
-            'title': _project.title,
+            'title': data.title ? data.title : "",
             //we need to convert into boolean type for checkbox
-            'is_new': _project.is_new === 1 ? true : false,
-            'street': _project.street,
-            'city': _project.city,
-            'completed_on': _project.completed_on ? project.completed_on : "",
-            'bedrooms': _project.bedrooms ? _project.bedrooms : "",
-            'bathrooms': _project.bathrooms ? _project.bathrooms : "",
-            'carpark': _project.carpark ? _project.carpark : "",
-            'livingrooms': _project.livingrooms ? _project.livingrooms : "",
-            'land_area': _project.land_area ? _project.land_area : "",
-            'floor_area': _project.floor_area ? _project.floor_area : "",
-            'short_description': _project.short_description ? _project.short_description : "",
-            'description': _project.description ? _project.description : "" 
+            'is_new': data.is_new === 1 ? true : false,
+            'street': data.street,
+            'city': data.city,
+            'completed_on': data.completed_on ? data.completed_on : "",
+            'bedrooms': data.bedrooms ? data.bedrooms : "",
+            'bathrooms': data.bathrooms ? data.bathrooms : "",
+            'carpark': data.carpark ? data.carpark : "",
+            'livingrooms': data.livingrooms ? data.livingrooms : "",
+            'land_area': data.land_area ? data.land_area : "",
+            'floor_area': data.floor_area ? data.floor_area : "",
+            'short_description': data.short_description ? data.short_description : "",
+            'description': data.description ? data.description : "" 
         })
         
     }
@@ -516,7 +510,7 @@ const ProjectModal = () => {
                 .then(result => {
 
                     _dispatch(setProject(result))
-                    onHandleEnter()
+                    resetForm(result)
 
                     PubSub.publish(EVENT_TOAST_BOX, {
                         'title' : "Project added",
@@ -544,7 +538,7 @@ const ProjectModal = () => {
                 .then(result => {
 
                     _dispatch(setProject(result))
-                    //onHandleEnter()
+                    resetForm(result)
 
                     PubSub.publish(EVENT_TOAST_BOX, {
                         'title' : "Project updated",
@@ -561,7 +555,7 @@ const ProjectModal = () => {
         <Modal id="project-modal"  
             show={_modalData.shown} 
             onHide={onHandleClose} 
-            onEnter={onHandleEnter}
+            onEnter={() => { resetForm(_project) }}
             className={_modalCalssname}
         >
             

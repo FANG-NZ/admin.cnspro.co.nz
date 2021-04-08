@@ -43,5 +43,23 @@ class Project extends Model
     public function hasImages(){
         return $this->hasMany('App\Models\ProjectImage', 'project_id');
     }
+
+
+    /**
+     * STATIC
+     */
+    public static function boot(){
+        parent::boot();
+
+        //call before delete function 
+        self::deleting(function($project){
+
+            //To remove image reacord
+            $project->hasImages()->each(function($image){
+                $image->delete();
+            });
+
+        });
+    }
     
 }

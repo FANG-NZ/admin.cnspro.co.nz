@@ -68,6 +68,12 @@ class ProjectController extends Controller
     public function doDelete(Request $request, $id){
         $project = Project::findOrFail($id);
 
+        if(!$project){
+            return response(['message' => "Project not found"], 404);
+        }
+
+        $project->delete();
+
         return response(['id' => $project->id], 200);
     }
 

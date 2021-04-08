@@ -80,7 +80,9 @@ const ProjectModalSlice = createSlice({
          * @param {*} action 
          */
         setProject(state, action){
-            state.project = action.payload
+            const _project = action.payload
+
+            state.project = {...state.project, ..._project}
             state.isAddingNew = false
         },
 

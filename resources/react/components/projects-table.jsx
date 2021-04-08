@@ -3,9 +3,12 @@ import {useDispatch, useSelector} from 'react-redux'
 import Moment from 'react-moment'
 
 import store from '../stores/new-projects-page-store'
-import {allNewProjects} from '../stores/projects-slice'
+import {allNewProjects, deleteProject} from '../stores/projects-slice'
 import {openAlert} from '../tools/confirm-alert/confirm-alert-slice'
 import {show as showModal} from '../tools/modals/project-modal-slice'
+import { unwrapResult } from '@reduxjs/toolkit'
+import PubSub from 'pubsub-js'
+import {ToastState, EVENT_TOAST_BOX} from '../tools/toast-box/toast-box'
 
 
 /**
@@ -18,10 +21,22 @@ const ProjectItem = (props) => {
     const _dispatch = useDispatch()
 
     /**
-     * Function is to handle delete
+     * Function is to handle delete project
      */
     function _handleDelete(_id){
-        alert("YES DELETED " + _id);
+        
+        _dispatch(deleteProject({id:_id}))
+            .then(unwrapResult)
+            .then(result => {
+
+                PubSub.publish(EVENT_TOAST_BOX, {
+                    'title' : "Project removed",
+                    'message' : 'The item has been removed successfully',
+                    'state' : ToastState.SUCCESS
+                })
+                
+            })
+
     }
 
     return(

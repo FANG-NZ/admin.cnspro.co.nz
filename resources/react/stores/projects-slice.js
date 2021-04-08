@@ -45,6 +45,21 @@ export const updateProject = createAsyncThunk(
 
 /**
  * TODO
+ * define the function to delete project
+ */
+export const deleteProject = createAsyncThunk(
+    'Projects/deleteProject',
+    (data) => {
+        const _id = data.id
+
+        const response = Client.delete('/projects/delete/' + _id)
+        return response
+    }
+)
+
+
+/**
+ * TODO
  * Function is to handle upload image into project
  */
 export const uploadProjectImage = createAsyncThunk(
@@ -101,7 +116,7 @@ const ProjectsSlice = createSlice({
 
 
         /**
-         * toDO
+         * TODO
          * Handle update project callback
          * @param {*} state 
          * @param {*} action 
@@ -113,6 +128,20 @@ const ProjectsSlice = createSlice({
             //To update project
             state.projects[_index] = {...state.projects[_index], ..._project}
 
+        },
+
+
+        /**
+         * TODO
+         * Handle project deleted callback
+         * @param {*} state 
+         * @param {*} action 
+         */
+        [deleteProject.fulfilled]: (state, action) => {
+            const {id} = action.payload
+
+            const _new_list = state.projects.filter((item) => item.id != id)
+            state.projects = _new_list  
         },
 
         // [uploadProjectImage.pending]: (state, action) => {

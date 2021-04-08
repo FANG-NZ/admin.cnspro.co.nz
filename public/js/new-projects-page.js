@@ -3029,6 +3029,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
 /* harmony import */ var _tools_confirm_alert_confirm_alert_slice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../tools/confirm-alert/confirm-alert-slice */ "./resources/react/tools/confirm-alert/confirm-alert-slice.js");
 /* harmony import */ var _tools_modals_project_modal_slice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../tools/modals/project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js");
+/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../tools/toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.tsx");
+/* harmony import */ var _tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9__);
+
+
+
 
 
 
@@ -3047,12 +3055,20 @@ var ProjectItem = function ProjectItem(props) {
 
   var _dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
   /**
-   * Function is to handle delete
+   * Function is to handle delete project
    */
 
 
   function _handleDelete(_id) {
-    alert("YES DELETED " + _id);
+    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_4__.deleteProject)({
+      id: _id
+    })).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_7__.unwrapResult).then(function (result) {
+      pubsub_js__WEBPACK_IMPORTED_MODULE_8___default().publish(_tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9__.EVENT_TOAST_BOX, {
+        'title': "Project removed",
+        'message': 'The item has been removed successfully',
+        'state': _tools_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_9__.ToastState.SUCCESS
+      });
+    });
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", {
@@ -3228,6 +3244,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "allNewProjects": () => (/* binding */ allNewProjects),
 /* harmony export */   "addNewProject": () => (/* binding */ addNewProject),
 /* harmony export */   "updateProject": () => (/* binding */ updateProject),
+/* harmony export */   "deleteProject": () => (/* binding */ deleteProject),
 /* harmony export */   "uploadProjectImage": () => (/* binding */ uploadProjectImage),
 /* harmony export */   "setProjects": () => (/* binding */ setProjects),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -3305,6 +3322,16 @@ var updateProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsync
 });
 /**
  * TODO
+ * define the function to delete project
+ */
+
+var deleteProject = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('Projects/deleteProject', function (data) {
+  var _id = data.id;
+  var response = _tools_client__WEBPACK_IMPORTED_MODULE_2__.Client.delete('/projects/delete/' + _id);
+  return response;
+});
+/**
+ * TODO
  * Function is to handle upload image into project
  */
 
@@ -3370,6 +3397,14 @@ var ProjectsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice
 
 
     state.projects[_index] = _objectSpread(_objectSpread({}, state.projects[_index]), _project);
+  }), _defineProperty(_extraReducers, deleteProject.fulfilled, function (state, action) {
+    var id = action.payload.id;
+
+    var _new_list = state.projects.filter(function (item) {
+      return item.id != id;
+    });
+
+    state.projects = _new_list;
   }), _extraReducers)
 });
 var setProjects = ProjectsSlice.actions.setProjects;
@@ -3818,7 +3853,8 @@ var ProjectModalSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createS
      * @param {*} action 
      */
     setProject: function setProject(state, action) {
-      state.project = action.payload;
+      var _project = action.payload;
+      state.project = _objectSpread(_objectSpread({}, state.project), _project);
       state.isAddingNew = false;
     },
 
@@ -4229,27 +4265,28 @@ var ProjectModal = function ProjectModal() {
     _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_9__.hide)());
   }
   /**
-   * Function is to handle modal enter
+   * Function is to reset form
+   * @param {*} data 
    */
 
 
-  function onHandleEnter() {
+  function resetForm(data) {
     //reset default values with PROJECT
     reset({
-      'title': _project.title,
+      'title': data.title ? data.title : "",
       //we need to convert into boolean type for checkbox
-      'is_new': _project.is_new === 1 ? true : false,
-      'street': _project.street,
-      'city': _project.city,
-      'completed_on': _project.completed_on ? project.completed_on : "",
-      'bedrooms': _project.bedrooms ? _project.bedrooms : "",
-      'bathrooms': _project.bathrooms ? _project.bathrooms : "",
-      'carpark': _project.carpark ? _project.carpark : "",
-      'livingrooms': _project.livingrooms ? _project.livingrooms : "",
-      'land_area': _project.land_area ? _project.land_area : "",
-      'floor_area': _project.floor_area ? _project.floor_area : "",
-      'short_description': _project.short_description ? _project.short_description : "",
-      'description': _project.description ? _project.description : ""
+      'is_new': data.is_new === 1 ? true : false,
+      'street': data.street,
+      'city': data.city,
+      'completed_on': data.completed_on ? data.completed_on : "",
+      'bedrooms': data.bedrooms ? data.bedrooms : "",
+      'bathrooms': data.bathrooms ? data.bathrooms : "",
+      'carpark': data.carpark ? data.carpark : "",
+      'livingrooms': data.livingrooms ? data.livingrooms : "",
+      'land_area': data.land_area ? data.land_area : "",
+      'floor_area': data.floor_area ? data.floor_area : "",
+      'short_description': data.short_description ? data.short_description : "",
+      'description': data.description ? data.description : ""
     });
   }
   /**
@@ -4276,7 +4313,7 @@ var ProjectModal = function ProjectModal() {
       _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_10__.addNewProject)(data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.unwrapResult).then(function (result) {
         _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_9__.setProject)(result));
 
-        onHandleEnter();
+        resetForm(result);
         pubsub_js__WEBPACK_IMPORTED_MODULE_5___default().publish(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.EVENT_TOAST_BOX, {
           'title': "Project added",
           'message': 'The item has been added successfully',
@@ -4295,9 +4332,9 @@ var ProjectModal = function ProjectModal() {
         data.id = _project.id;
 
         _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_10__.updateProject)(data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.unwrapResult).then(function (result) {
-          _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_9__.setProject)(result)); //onHandleEnter()
+          _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_9__.setProject)(result));
 
-
+          resetForm(result);
           pubsub_js__WEBPACK_IMPORTED_MODULE_5___default().publish(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.EVENT_TOAST_BOX, {
             'title': "Project updated",
             'message': 'The item has been updated successfully',
@@ -4311,7 +4348,9 @@ var ProjectModal = function ProjectModal() {
     id: "project-modal",
     show: _modalData.shown,
     onHide: onHandleClose,
-    onEnter: onHandleEnter,
+    onEnter: function onEnter() {
+      resetForm(_project);
+    },
     className: _modalCalssname
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_12__.default.Header, {
     className: "modal-header-lg"
