@@ -99,7 +99,7 @@ const ProjectInfoFields = ({project, register, control}) => {
             <div className="col-6">
                 <label>Completed On</label>
 
-                {/* <Controller 
+                <Controller 
                     name="completed_on"
                     control={control}
                     defaultValue={project.completed_on? project.completed_on : null}
@@ -121,14 +121,14 @@ const ProjectInfoFields = ({project, register, control}) => {
                         </div>
 
                     )}
-                /> */}
+                />
 
             </div>
         </div>
 
 
         <h5 className="header-title">Properties</h5>
-{/*  
+
         <div className="row properties-holder">
             <div className="col-6 mb-2">
                 <label>
@@ -227,6 +227,14 @@ const ProjectInfoFields = ({project, register, control}) => {
             <div className="col-12">
                 <label>Short description</label>
 
+                {/* <input 
+                    type="text" 
+                    className="form-control"
+                    name="short_description" 
+                    ref={register}
+                    defaultValue={project.short_description}
+                /> */}
+
                 <textarea 
                     className="form-control" 
                     ref={register}
@@ -258,7 +266,7 @@ const ProjectInfoFields = ({project, register, control}) => {
                 
             </div>
         </div>
-*/}       
+  
         </React.Fragment>
     )
 }
@@ -468,15 +476,15 @@ const ProjectModal = () => {
             'is_new': _project.is_new === 1 ? true : false,
             'street': _project.street,
             'city': _project.city,
-            //'completed_on': _project.completed_on,
-            //'bedrooms': _project.bedrooms,
-            //'bathrooms': _project.bathrooms,
-            //'carpark': _project.carpark,
-            //'livingrooms': _project.livingrooms,
-            //'land_area': _project.land_area,
-            //'floor_area': _project.floor_area,
-            //'short_description': _project.short_description,
-            //'description': _project.description
+            'completed_on': _project.completed_on,
+            'bedrooms': _project.bedrooms,
+            'bathrooms': _project.bathrooms,
+            'carpark': _project.carpark,
+            'livingrooms': _project.livingrooms,
+            'land_area': _project.land_area,
+            'floor_area': _project.floor_area,
+            'short_description': _project.short_description ? _project.short_description : "",
+            'description': _project.description ? _project.description : "" 
         })
         
     }
