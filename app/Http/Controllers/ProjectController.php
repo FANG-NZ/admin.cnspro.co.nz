@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\ProjectImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -16,8 +17,6 @@ class ProjectController extends Controller
 
         //To load all NEW project
         $projects = Project::get()->sortByDesc("created_at")->values();
-        //$projects = Project::get()->sortBy("created_at");
-        //$projects = Project::all();
 
         return view("newprojects")->with(['projects' => $projects->toJson()]);
     }
@@ -95,16 +94,52 @@ class ProjectController extends Controller
         ]);
 
 
-
+        $filename = $request->file("image")->getClientOriginalName();
+        $ext = $request->file("image")->extension();
         
-
+    
+        $path = Storage::putFile(
+            'public/projects',
+            $request->file("image")
+        );
+        
+        $url = Storage::url($path);
+        
+        //To create project image object
         $projectImage = new ProjectImage();
-        $projectImage->id = 100;
-        $projectImage->name = "Test name";
-        $projectImage->url = "https://freebw.com/templates/tatee/images/post-10.jpg";
+        
+        $projectImage->name = $filename;
+        $projectImage->url = $url;
         $projectImage->project_id = (int)$id;
 
-        //sleep(2);
+        $projectImage->save();
+
+        return response($projectImage->toJson(), 200);
+    }
+
+
+    /**
+     * Function is to handle remove image from project
+     */
+    public function doDeleteImage(Request $request, $id){
+        $project = Project::findOrFail($id);
+
+        if(!$project){
+            return response(['message' => "Project not found"], 404);
+        }
+
+        $request->validate([
+            'image_id'     =>  'required|numeric'
+        ]);
+
+        $projectImage = ProjectImage::where([
+            ['id', '=', $request->input('image_id')],
+            ['project_id', '=', $id]
+        ])->first();
+
+        if(!$projectImage){
+            return response(['message' => "Image not found"], 404);
+        }
 
         return response($projectImage->toJson(), 200);
     }

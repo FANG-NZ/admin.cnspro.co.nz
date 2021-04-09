@@ -37,7 +37,7 @@ class Project extends Model
     protected $appends = ['images'];
 
     public function getImagesAttribute(){
-        return $this->hasImages;
+        return $this->hasImages->sortByDesc("created_at")->values();
     }
 
     public function hasImages(){

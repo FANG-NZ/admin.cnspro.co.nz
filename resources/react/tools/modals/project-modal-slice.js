@@ -93,10 +93,20 @@ const ProjectModalSlice = createSlice({
          */
         addImage(state, action){
             state.project.images.unshift(action.payload)
-        }
+        },
+
+        /**
+         * Function is to delete image
+         */
+        deleteImage(state, action){
+            const _id = action.payload
+
+            const _new_images = state.project.images.filter((item) => item.id != _id)
+            state.project.images = _new_images
+        },
 
     }
 })
 
-export const { show, hide, setProject, addImage} = ProjectModalSlice.actions
+export const { show, hide, setProject, addImage, deleteImage} = ProjectModalSlice.actions
 export default ProjectModalSlice.reducer

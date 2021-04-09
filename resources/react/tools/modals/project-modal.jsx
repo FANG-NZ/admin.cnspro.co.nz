@@ -10,8 +10,8 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
 
-import {hide, setProject, addImage, isAddingNewProject} from './project-modal-slice'
-import {addNewProject, uploadProjectImage, updateProject} from '../../stores/projects-slice'
+import {hide, setProject, addImage, isAddingNewProject, deleteImage} from './project-modal-slice'
+import {addNewProject, uploadProjectImage, updateProject, deleteProjectImage} from '../../stores/projects-slice'
 
 
 /**
@@ -331,10 +331,24 @@ const ImageFields = (props) => {
 
     /**
      * Function is to handle remove image
-     * @param {*} _id 
+     * @param {*} image 
      */
-    function onRemove(_id){
-        alert("Image removed call");
+    function onRemove(image){
+        
+        _dispatch(deleteProjectImage(image))
+            .then(unwrapResult)
+            .then(() => {
+
+                _dispatch(deleteImage(image.id))
+
+                PubSub.publish(EVENT_TOAST_BOX, {
+                    'title' : "Image removed",
+                    'message' : 'The item has been removed successfully',
+                    'state' : ToastState.SUCCESS
+                })
+
+            })
+
     }
 
     return(

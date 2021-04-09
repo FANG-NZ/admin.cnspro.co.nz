@@ -79,6 +79,20 @@ export const uploadProjectImage = createAsyncThunk(
     }
 )
 
+/**
+ * TODO
+ * Function is to handle delete image from project
+ */
+export const deleteProjectImage = createAsyncThunk(
+    'Projects/deleteProjectImage',
+    (data) => {
+        const _id = data.project_id
+
+        const response = Client.delete('/projects/delete/' + _id, {'image_id' : data.id})
+        return response
+    }
+)
+
 
 /**
  * create Projects Slice
@@ -163,6 +177,21 @@ const ProjectsSlice = createSlice({
             state.projects[_index].images.unshift(_image)
 
         },
+
+        /**
+         * TODO
+         * Handle project image removed callback
+         * @param {*} state 
+         * @param {*} action 
+         */
+        [deleteProjectImage.fulfilled]: (state, action) => {
+            const _image = action.payload
+
+            const _index = state.projects.findIndex((item) => item.id === _image.project_id)
+            //To reget new images list
+            const _new_images = state.projects[_index].images.filter((item) => item.id != _image.id)
+            state.projects[_index].images = _new_images
+        }
     }
 })
 

@@ -37,7 +37,7 @@ Route::middleware(['auth:admin'])->group(function(){
         Route::delete('/projects/delete/{id}', [ProjectController::class, "doDelete"]);
         Route::put('/projects/update/{id}', [ProjectController::class, "doUpdate"]);
         Route::post('/projects/upload/{id}', [ProjectController::class, "doUploadImage"]);
-
+        Route::delete('/projects/delete/{id}', [ProjectController::class, "doDeleteImage"]);
     });
 });
 

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit"
-//import store from '../../stores/new-projects-page-store'
 
 const initialState = {
     'shown' : false,
@@ -36,7 +35,7 @@ export const openAlert = (store, content = {}) => {
             const unsubscribe = store.subscribe(onStateChange)
         })
     }
-  }
+}
   
 
 const ConfirmAlertSlice = createSlice({
