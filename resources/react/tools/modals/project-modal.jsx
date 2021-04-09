@@ -343,11 +343,13 @@ const ImageFields = (props) => {
             <ImageUploading
                 onChange={onChange}
                 dataURLKey="data_url"
+                maxFileSize="3145728"
             >     
             {({  
                 onImageUpload,
                 isDragging,
                 dragProps,
+                errors
             }) => (
 
                 // START drop button
@@ -360,7 +362,15 @@ const ImageFields = (props) => {
                         <i className="mdi mdi-cloud-upload text-muted"></i>
                         <h3>Drop files or click to upload</h3>
                     </div>
+
+                    {errors && 
+                        <span className="alert alert-danger">
+                            The file size cannot be greater than 3M
+                        </span>
+                    }
+                    
                 </button>
+
             )}
             </ImageUploading>
         </div>

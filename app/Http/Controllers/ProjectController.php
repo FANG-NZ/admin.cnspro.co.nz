@@ -95,6 +95,9 @@ class ProjectController extends Controller
         ]);
 
 
+
+        
+
         $projectImage = new ProjectImage();
         $projectImage->id = 100;
         $projectImage->name = "Test name";
