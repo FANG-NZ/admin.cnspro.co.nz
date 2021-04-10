@@ -96,11 +96,64 @@ File: Main App js
         }
     },
 
+
+    /**
+     * Init the toast messsage box
+     */
+    App.prototype.initToast = function() {
+        var $toast = $("#toast-box");
+
+        if($toast.length === 0){
+            return;
+        }
+
+        var _toast = JSON.parse($toast.attr("toast-data")),
+            _color,
+            _icon;
+
+        
+        switch(_toast.status){
+            case "success":
+                _color = "#5ba035";
+                _icon = "success";
+                break;
+
+            case "error":
+                _color = "#bf441d";
+                _icon = "error";
+                break;
+
+            case "warning":
+                _color = "#da8609";
+                _icon = "warning";
+                break;
+
+        }
+
+
+        var options = {
+            heading: _toast.title,
+            text: _toast.content,
+            position: "top-right",
+            loaderBg: _color,
+            icon: _icon,
+            hideAfter: 3000,
+            //hideAfter: false,
+            stack: 1
+        };
+        $.toast(options);
+    },
+
+
+
+
     //initilizing
     App.prototype.init = function() {
         var $this = this;
         this.initLayout();
         this.initMenu();
+
+        this.initToast();
 
         // handle responsiveness when reload
         this.$window.on('resize', function(e) {

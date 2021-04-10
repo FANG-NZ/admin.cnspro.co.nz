@@ -39,6 +39,9 @@
         <!-- START react PORTAL BOX -->
         <div id="portal-box"></div>
 
+        {{-- Include toast template --}}
+        @include('partial.toast')
+
         {{-- Laravel Mix - JS File --}}
         <script src="{{ mix('js/app.js') }}"></script>
         @yield('pagejs')

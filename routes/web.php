@@ -31,6 +31,7 @@ Route::middleware(['auth:admin'])->group(function(){
     Route::get('/dashboard', [DashboardController::class, "index"])->name("dashboard");
     Route::get('/projects', [ProjectController::class, "index"])->name("projects");
     Route::get('/settings', [SettingsController::class, "index"])->name("settings");
+    Route::put('/settings/update', [SettingsController::class, 'doUpdate'])->name("settings.update");
 
     //To setup json response middleware
     Route::middleware(['json.response'])->group(function(){

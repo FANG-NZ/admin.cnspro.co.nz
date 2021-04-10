@@ -2,6 +2,14 @@
 // ----------------------- 
 
 //TODO
+//override form parsley style
+.parsley-errors-list > li:before{
+    top: 1px;
+}
+
+
+
+//TODO
 //add style for FF page card header
 .ff-card-header {
     display: flex;
@@ -13,7 +21,6 @@
     text-align: right;
     flex: 0 0 200px;
 }
-
 
 
 

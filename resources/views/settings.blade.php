@@ -14,7 +14,11 @@
 
     <div class="row">
         <div class="col-12">
-            <form action="">
+            <form action="{{ route('settings.update') }}" method="POST" data-parsley-validate>
+
+            {{csrf_field()}}
+
+            @method('PUT')
 
             {{-- START basic info --}}
             <div class="card-box">
@@ -23,11 +27,25 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="email">Email address</label>
-                        <input type="email" 
+                        <input type="text" 
                             class="form-control" 
                             id="email"
                             name="email" 
-                            placeholder="Enter email adress" />
+                            value=""
+                            placeholder="Enter email adress" 
+
+                            required   
+                            data-parsley-type="email" 
+                            data-parsley-required-message="Please enter your email address"
+                            data-parsley-type-message="Please enter valid email address"
+                        />
+
+                        @error('email')
+                        <ul class="parsley-errors-list filled">
+                            <li class="parsley-required">{{$message}}</li>
+                        </ul>
+                        @enderror
+
                         <small class="form-text text-muted">All email will be sent to this address</small>
                     </div>
 
@@ -38,8 +56,19 @@
                             class="form-control" 
                             id="phone" 
                             name="phone"
-                            placeholder="Enter phone number" />
+                            placeholder="Enter phone number" 
+
+                            required    
+                            data-parsley-required-message="Please enter phone number"    
+                        />
+
+                        @error('phone')
+                            <ul class="parsley-errors-list filled">
+                                <li class="parsley-required">{{$message}}</li>
+                            </ul>
+                        @enderror
                     </div>
+
                 </div>
                 
                 <div class="row">
@@ -51,7 +80,10 @@
                             class="form-control"
                             cols="30" 
                             rows="3"
-                            placeholder="Enter compnay address"    
+                            placeholder="Enter compnay address"  
+                            
+                            required    
+                            data-parsley-required-message="Please enter your address"
                         ></textarea>
                     </div>
                 </div>
@@ -85,7 +117,7 @@
                                     <i class="mdi mdi-instagram"></i>
                                 </div>
                             </div>
-                            <input type="text" class="form-control" name="facebook" placeholder="Enter instagram link"/>
+                            <input type="text" class="form-control" name="instagram" placeholder="Enter instagram link"/>
                         </div>
                     </div>
                 </div>
@@ -100,7 +132,8 @@
                     <div class="form-group col-md-6">
                         <label for="new-password">New password</label>
                         <input type="password" 
-                            autocomplete="false"
+                            
+                            autocomplete="new-password"
                             class="form-control" 
                             id="new-password"
                             name="new_password" 
@@ -115,7 +148,12 @@
                             class="form-control" 
                             id="repeat-new-password"
                             name="repeat_new_password" 
-                            placeholder="Repeat new password" />
+                            placeholder="Repeat new password" 
+                        
+                            data-parsley-validate-if-empty
+                            data-parsley-equalto="#new-password"
+                            data-parsley-equalto-message="Please confirm your new password again"
+                        />
                     </div>
                 </div>
             </div>
@@ -139,5 +177,5 @@
 
 
 @section('pagejs')
-    <script src="{{ mix('js/new-projects-page.js') }}"></script>
+    {{-- <script src="{{ mix('js/new-projects-page.js') }}"></script> --}}
 @endsection
