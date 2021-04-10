@@ -12,6 +12,7 @@ class ProjectSeeder extends Seeder
         //First
         [
             'title' => "MAGNIFICENT WITH TWO MASTERS",
+            'is_new' => true,
             'completed_on' => "2021-01-19",
             'street' => "5 capricorn place",
             'city' => "Hamilton",

@@ -17,8 +17,8 @@ class CreateProjectImagesTb extends Migration
             $table->id();
             $table->timestamps();
 
-            $table->string('name', 40);
-            $table->string('url', 80);
+            $table->string('name', 200);
+            $table->string('url', 200);
             $table->foreignId('project_id');
         });
     }

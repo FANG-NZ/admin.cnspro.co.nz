@@ -3942,21 +3942,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.js");
-/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-images-uploading */ "./node_modules/react-images-uploading/dist/index.js");
-/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_images_uploading__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js");
-/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.tsx");
-/* harmony import */ var _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var react_datepicker__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-datepicker */ "./node_modules/react-datepicker/dist/react-datepicker.min.js");
-/* harmony import */ var react_datepicker__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_datepicker__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var react_datepicker_dist_react_datepicker_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-datepicker/dist/react-datepicker.css */ "./node_modules/react-datepicker/dist/react-datepicker.css");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _project_modal_slice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
-/* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.js");
+/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-images-uploading */ "./node_modules/react-images-uploading/dist/index.js");
+/* harmony import */ var react_images_uploading__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_images_uploading__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js");
+/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.tsx");
+/* harmony import */ var _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var react_datepicker__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-datepicker */ "./node_modules/react-datepicker/dist/react-datepicker.min.js");
+/* harmony import */ var react_datepicker__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_datepicker__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var react_datepicker_dist_react_datepicker_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-datepicker/dist/react-datepicker.css */ "./node_modules/react-datepicker/dist/react-datepicker.css");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _project_modal_slice__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./project-modal-slice */ "./resources/react/tools/modals/project-modal-slice.js");
+/* harmony import */ var _stores_projects_slice__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../stores/projects-slice */ "./resources/react/stores/projects-slice.js");
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 
@@ -3983,7 +3983,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
       register = _ref.register,
       control = _ref.control;
 
-  var _useFormContext = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
+  var _useFormContext = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_3__.useFormContext)(),
       errors = _useFormContext.errors;
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -4045,7 +4045,7 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
     className: "row mb-2"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-6"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Completed On"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_2__.Controller, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Completed On"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_3__.Controller, {
     name: "completed_on",
     control: control,
     defaultValue: project.completed_on ? project.completed_on : null,
@@ -4060,10 +4060,10 @@ var ProjectInfoFields = function ProjectInfoFields(_ref) {
         className: "input-group-text"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("i", {
         className: "mdi mdi-calendar-clock"
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_datepicker__WEBPACK_IMPORTED_MODULE_10___default()), {
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_datepicker__WEBPACK_IMPORTED_MODULE_11___default()), {
         className: "form-control",
         placeholderText: "Completed on",
-        selected: value ? moment__WEBPACK_IMPORTED_MODULE_7___default()(value).toDate() : null,
+        selected: value ? moment__WEBPACK_IMPORTED_MODULE_8___default()(value).toDate() : null,
         dateFormat: "dd MMMM yyyy",
         onChange: onChange
       }));
@@ -4224,9 +4224,9 @@ var ImageFields = function ImageFields(props) {
       image: _formData
     }; //call upload image
 
-    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_9__.uploadProjectImage)(_data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_11__.unwrapResult).then(function (result) {
+    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_10__.uploadProjectImage)(_data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.unwrapResult).then(function (result) {
       //Append image into current modal
-      _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_8__.addImage)(result));
+      _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_9__.addImage)(result));
     });
   };
   /**
@@ -4236,20 +4236,26 @@ var ImageFields = function ImageFields(props) {
 
 
   function onRemove(image) {
-    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_9__.deleteProjectImage)(image)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_11__.unwrapResult).then(function () {
-      _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_8__.deleteImage)(image.id));
+    _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_10__.deleteProjectImage)(image)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.unwrapResult).then(function () {
+      _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_9__.deleteImage)(image.id));
 
-      pubsub_js__WEBPACK_IMPORTED_MODULE_4___default().publish(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_5__.EVENT_TOAST_BOX, {
+      pubsub_js__WEBPACK_IMPORTED_MODULE_5___default().publish(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.EVENT_TOAST_BOX, {
         'title': "Image removed",
         'message': 'The item has been removed successfully',
-        'state': _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_5__.ToastState.SUCCESS
+        'state': _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.ToastState.SUCCESS
+      });
+    })["catch"](function (error) {
+      pubsub_js__WEBPACK_IMPORTED_MODULE_5___default().publish(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.EVENT_TOAST_BOX, {
+        'title': "Image removed error",
+        'message': error.message,
+        'state': _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.ToastState.ERROR
       });
     });
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "image-upload"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_images_uploading__WEBPACK_IMPORTED_MODULE_3___default()), {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_images_uploading__WEBPACK_IMPORTED_MODULE_4___default()), {
     onChange: onChange,
     dataURLKey: "data_url",
     maxFileSize: "3145728"
@@ -4300,11 +4306,11 @@ var ProjectModal = function ProjectModal() {
 
   var _project = _modalData.project;
 
-  var _isAddingNewProject = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(_project_modal_slice__WEBPACK_IMPORTED_MODULE_8__.isAddingNewProject);
+  var _isAddingNewProject = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(_project_modal_slice__WEBPACK_IMPORTED_MODULE_9__.isAddingNewProject);
 
   var _dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
 
-  var _form = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_2__.useForm)();
+  var _form = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_3__.useForm)();
 
   var register = _form.register,
       handleSubmit = _form.handleSubmit,
@@ -4325,7 +4331,7 @@ var ProjectModal = function ProjectModal() {
 
 
   function onHandleClose() {
-    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_8__.hide)());
+    _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_9__.hide)());
   }
   /**
    * Function is to reset form
@@ -4361,7 +4367,7 @@ var ProjectModal = function ProjectModal() {
   function onHandleSubmit(data) {
     //To convert completed_on to string format
     if (data.completed_on) {
-      data.completed_on = moment__WEBPACK_IMPORTED_MODULE_7___default()(data.completed_on).format("YYYY-MM-DD");
+      data.completed_on = moment__WEBPACK_IMPORTED_MODULE_8___default()(data.completed_on).format("YYYY-MM-DD");
     } //To resetup is_new value=
 
 
@@ -4373,20 +4379,20 @@ var ProjectModal = function ProjectModal() {
 
 
     if (_isAddingNewProject) {
-      _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_9__.addNewProject)(data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_11__.unwrapResult).then(function (result) {
-        _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_8__.setProject)(result));
+      _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_10__.addNewProject)(data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.unwrapResult).then(function (result) {
+        _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_9__.setProject)(result));
 
         resetForm(result);
-        pubsub_js__WEBPACK_IMPORTED_MODULE_4___default().publish(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_5__.EVENT_TOAST_BOX, {
+        pubsub_js__WEBPACK_IMPORTED_MODULE_5___default().publish(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.EVENT_TOAST_BOX, {
           'title': "Project added",
           'message': 'The item has been added successfully',
-          'state': _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_5__.ToastState.SUCCESS
+          'state': _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.ToastState.SUCCESS
         });
       })["catch"](function (err) {
-        pubsub_js__WEBPACK_IMPORTED_MODULE_4___default().publish(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_5__.EVENT_TOAST_BOX, {
+        pubsub_js__WEBPACK_IMPORTED_MODULE_5___default().publish(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.EVENT_TOAST_BOX, {
           'title': "Error",
           'message': err.message,
-          'state': _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_5__.ToastState.ERROR
+          'state': _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.ToastState.ERROR
         });
       });
     } //This is for updating exists project
@@ -4394,14 +4400,14 @@ var ProjectModal = function ProjectModal() {
         //append project ID
         data.id = _project.id;
 
-        _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_9__.updateProject)(data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_11__.unwrapResult).then(function (result) {
-          _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_8__.setProject)(result));
+        _dispatch((0,_stores_projects_slice__WEBPACK_IMPORTED_MODULE_10__.updateProject)(data)).then(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.unwrapResult).then(function (result) {
+          _dispatch((0,_project_modal_slice__WEBPACK_IMPORTED_MODULE_9__.setProject)(result));
 
           resetForm(result);
-          pubsub_js__WEBPACK_IMPORTED_MODULE_4___default().publish(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_5__.EVENT_TOAST_BOX, {
+          pubsub_js__WEBPACK_IMPORTED_MODULE_5___default().publish(_toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.EVENT_TOAST_BOX, {
             'title': "Project updated",
             'message': 'The item has been updated successfully',
-            'state': _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_5__.ToastState.SUCCESS
+            'state': _toast_box_toast_box__WEBPACK_IMPORTED_MODULE_6__.ToastState.SUCCESS
           });
         });
       }
@@ -4433,7 +4439,7 @@ var ProjectModal = function ProjectModal() {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-info_fields"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_2__.FormProvider, _form, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_3__.FormProvider, _form, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
     onSubmit: handleSubmit(onHandleSubmit)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(ProjectInfoFields, {
     project: _project,

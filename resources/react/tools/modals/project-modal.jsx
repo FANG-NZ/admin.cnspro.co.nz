@@ -348,6 +348,15 @@ const ImageFields = (props) => {
                 })
 
             })
+            .catch((error)=>{
+
+                PubSub.publish(EVENT_TOAST_BOX, {
+                    'title' : "Image removed error",
+                    'message' : error.message,
+                    'state' : ToastState.ERROR
+                })
+
+            })
 
     }
 

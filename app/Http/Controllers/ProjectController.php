@@ -93,26 +93,8 @@ class ProjectController extends Controller
             'image'     =>  'required|image|mimes:jpeg,png,jpg,gif|max:3072'
         ]);
 
-
-        $filename = $request->file("image")->getClientOriginalName();
-        $ext = $request->file("image")->extension();
-        
-    
-        $path = Storage::putFile(
-            'public/projects',
-            $request->file("image")
-        );
-        
-        $url = Storage::url($path);
-        
-        //To create project image object
-        $projectImage = new ProjectImage();
-        
-        $projectImage->name = $filename;
-        $projectImage->url = $url;
-        $projectImage->project_id = (int)$id;
-
-        $projectImage->save();
+        //call method to upload image
+        $projectImage = $project->uploadImage($request->file('image'));
 
         return response($projectImage->toJson(), 200);
     }
@@ -132,13 +114,11 @@ class ProjectController extends Controller
             'image_id'     =>  'required|numeric'
         ]);
 
-        $projectImage = ProjectImage::where([
-            ['id', '=', $request->input('image_id')],
-            ['project_id', '=', $id]
-        ])->first();
+        
+        $projectImage = $project->deleteImage($request->input('image_id'));
 
         if(!$projectImage){
-            return response(['message' => "Image not found"], 404);
+            return response(['message' => "Delete image error"], 404);
         }
 
         return response($projectImage->toJson(), 200);
