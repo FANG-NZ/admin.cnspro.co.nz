@@ -51,8 +51,8 @@
 
                 <li class="menu-title">More</li>
 
-                <li>
-                    <a href="{{ route('dashboard')}}">
+                <li class="{{ Request::is('settings') ? 'active' : '' }}">
+                    <a href="{{ route('settings')}}">
                         <i class="mdi mdi-map"></i> <span> Settings </span> 
                     </a>
                 </li>

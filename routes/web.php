@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Route::middleware(['auth:admin'])->group(function(){
 
     Route::get('/dashboard', [DashboardController::class, "index"])->name("dashboard");
     Route::get('/projects', [ProjectController::class, "index"])->name("projects");
+    Route::get('/settings', [SettingsController::class, "index"])->name("settings");
 
     //To setup json response middleware
     Route::middleware(['json.response'])->group(function(){
