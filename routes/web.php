@@ -18,7 +18,7 @@ use App\Http\Controllers\SettingsController;
 |
 */
 
-Route::get('/login', [LoginController::class, "index"])->name("login");
+Route::get('/login', [LoginController::class, "index"])->name("page.login");
 Route::post('/login', [LoginController::class, "doLogin"])->name("dologin");
 Route::post('/logout', [LoginController::class, "doLogout"])->name("dologout");
 
@@ -28,9 +28,9 @@ Route::middleware(['auth:admin'])->group(function(){
         return redirect('/dashboard');
     });
 
-    Route::get('/dashboard', [DashboardController::class, "index"])->name("dashboard");
-    Route::get('/projects', [ProjectController::class, "index"])->name("projects");
-    Route::get('/settings', [SettingsController::class, "index"])->name("settings");
+    Route::get('/dashboard', [DashboardController::class, "index"])->name("page.dashboard");
+    Route::get('/projects', [ProjectController::class, "index"])->name("page.projects");
+    Route::get('/settings', [SettingsController::class, "index"])->name("page.settings");
     Route::put('/settings/update', [SettingsController::class, 'doUpdate'])->name("settings.update");
 
     //To setup json response middleware

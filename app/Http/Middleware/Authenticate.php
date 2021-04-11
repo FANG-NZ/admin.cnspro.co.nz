@@ -28,7 +28,7 @@ class Authenticate extends Middleware
         $request->session()->flash('ff-message', $msg);
 
         if (! $request->expectsJson()) {
-            return route('login');
+            return route('page.login');
         }
     }
 }

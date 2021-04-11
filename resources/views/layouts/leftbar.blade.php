@@ -11,13 +11,13 @@
                 <li class="menu-title">Navigation</li>
 
                 <li class="{{ Request::is('dashboard') ? 'active' : '' }}">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('page.dashboard') }}">
                         <i class="mdi mdi-view-dashboard"></i> <span> Dashboard </span>
                     </a>
                 </li>
 
                 <li class="{{ Request::is('projects') ? 'active' : '' }}">
-                    <a href="{{ route('projects') }}">
+                    <a href="{{ route('page.projects') }}">
                         <i class="mdi mdi-atom"></i> <span> New Project(s) </span>
                     </a>
 
@@ -52,7 +52,7 @@
                 <li class="menu-title">More</li>
 
                 <li class="{{ Request::is('settings') ? 'active' : '' }}">
-                    <a href="{{ route('settings')}}">
+                    <a href="{{ route('page.settings')}}">
                         <i class="mdi mdi-map"></i> <span> Settings </span> 
                     </a>
                 </li>
