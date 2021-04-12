@@ -28,10 +28,10 @@ Route::middleware(['auth:admin'])->group(function(){
         return redirect('/dashboard');
     });
 
-    Route::get('/dashboard', [DashboardController::class, "index"])->name("page.dashboard");
-    Route::get('/projects', [ProjectController::class, "index"])->name("page.projects");
-    Route::get('/settings', [SettingsController::class, "index"])->name("page.settings");
-    Route::put('/settings/update', [SettingsController::class, 'doUpdate'])->name("settings.update");
+    Route::get('/dashboard', [DashboardController::class, "index"])->name("page_dashboard");
+    Route::get('/projects', [ProjectController::class, "index"])->name("page_projects");
+    Route::get('/settings', [SettingsController::class, "index"])->name("page_settings");
+    Route::put('/settings/update', [SettingsController::class, 'doUpdate'])->name("page_settings.update");
 
     //To setup json response middleware
     Route::middleware(['json.response'])->group(function(){

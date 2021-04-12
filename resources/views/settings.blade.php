@@ -14,7 +14,7 @@
 
     <div class="row">
         <div class="col-12">
-            <form action="{{ route('settings.update') }}" method="POST" data-parsley-validate>
+            <form action="{{ route('page_settings.update') }}" method="POST" data-parsley-validate>
 
             {{csrf_field()}}
 

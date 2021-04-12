@@ -34,7 +34,25 @@ class SiteConfigTest extends TestCase
         $config->email = $test_email;
         $config->save();
 
-        $new_config = SiteConfig::current();
-        $this->assertEquals($test_email, $new_config->email);
+        $config = SiteConfig::current();
+        $this->assertEquals($test_email, $config->email);
+
+        $data = [
+            'email' => "test2@test.com",
+            'phone' => "09 999 8888",
+            'address' => "168 somewhere street, Hamilton",
+
+            'facebook' => "https://www.facebook.com/profile.php?id=100011258371033",
+            'instagram' => ""
+        ];
+        $config->update($data);
+
+        $config = SiteConfig::current();
+
+        $this->assertEquals($data['email'], $config->email);
+        $this->assertEquals($data['phone'], $config->phone);
+        $this->assertEquals($data['address'], $config->address);
+        $this->assertEquals($data['facebook'], $config->facebook);
+        $this->assertEquals($data['instagram'], $config->instagram);
     }
 }
