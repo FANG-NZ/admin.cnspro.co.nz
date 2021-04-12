@@ -31,7 +31,7 @@
                             class="form-control" 
                             id="email"
                             name="email" 
-                            value=""
+                            value="test@test.com"
                             placeholder="Enter email adress" 
 
                             required   
@@ -137,7 +137,14 @@
                             class="form-control" 
                             id="new-password"
                             name="new_password" 
-                            placeholder="Enter new password" />
+                            placeholder="Enter new password" 
+                        />
+
+                        @error('new_password')
+                            <ul class="parsley-errors-list filled">
+                                <li class="parsley-required">{{$message}}</li>
+                            </ul>
+                        @enderror
                     </div>
                 </div>
 
@@ -154,6 +161,12 @@
                             data-parsley-equalto="#new-password"
                             data-parsley-equalto-message="Please confirm your new password again"
                         />
+
+                        @error('repeat_new_password')
+                            <ul class="parsley-errors-list filled">
+                                <li class="parsley-required">{{$message}}</li>
+                            </ul>
+                        @enderror
                     </div>
                 </div>
             </div>

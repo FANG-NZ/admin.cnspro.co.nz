@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SiteConfig;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller{
@@ -23,9 +24,25 @@ class SettingsController extends Controller{
             'phone' => "required",
             'address' => "required",
 
-            'new_password' => "min:8",
-            'repeat_new_password' => "same:new_password"
+            'new_password' => "nullable|min:8",
+            'repeat_new_password' => "nullable|same:new_password"
         ]);
+
+        //To update SiteConfig
+        $config = SiteConfig::current();
+
+        $config->update([
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'address' => $request->input('address'),
+            'facebook' => $request->input('facebook'),
+            'instagram' => $request->input('instagram'),
+        ]);
+
+
+        
+
+
 
         //To add session message
         $msg = [
