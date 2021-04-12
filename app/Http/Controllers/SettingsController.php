@@ -21,7 +21,10 @@ class SettingsController extends Controller{
         $request->validate([
             'email' => "required | email",
             'phone' => "required",
-            'address' => "required"
+            'address' => "required",
+
+            'new_password' => "min:8",
+            'repeat_new_password' => "same:new_password"
         ]);
 
         //To add session message

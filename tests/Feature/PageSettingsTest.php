@@ -41,7 +41,7 @@ class PageSettingsTest extends TestCase
      * TEST CASE
      * This is to test form validator
      */
-    public function test_form_submit_validator()
+    public function test_form_info_validator()
     {
         $admin = AdminUser::factory()->make();
 
@@ -87,5 +87,51 @@ class PageSettingsTest extends TestCase
                             ]
                         );
         $response->assertSessionHasNoErrors();
+    }
+
+
+    /**
+     * TEST CASE
+     * This is to test form password validator
+     */
+    public function test_form_password_validator()
+    {
+        $admin = AdminUser::factory()->make();
+
+        //For password length < 8
+        $response = $this->actingAs($admin, 'admin')
+                        ->put(
+                            route('page_settings.update'), 
+                            ['new_password' => "88"]
+                        );
+        $response->assertSessionHasErrors(['new_password']);
+
+        //For verify password right
+        $response = $this->actingAs($admin, 'admin')
+                        ->put(
+                            route('page_settings.update'), 
+                            ['new_password' => "12345678"]
+                        );
+        $response->assertSessionDoesntHaveErrors(['new_password']);
+
+        $response = $this->actingAs($admin, 'admin')
+                        ->put(
+                            route('page_settings.update'), 
+                            [
+                                'new_password' => "",
+                                'repeat_new_password' => "12345678"
+                            ]
+                        );
+        $response->assertSessionHasErrors(['repeat_new_password']);
+
+        $response = $this->actingAs($admin, 'admin')
+                        ->put(
+                            route('page_settings.update'), 
+                            [
+                                'new_password' => "12345678",
+                                'repeat_new_password' => "12345678"
+                            ]
+                        );
+        $response->assertSessionDoesntHaveErrors(['new_password', 'repeat_new_password']);
     }
 }
