@@ -18,9 +18,9 @@ use App\Http\Controllers\SettingsController;
 |
 */
 
-Route::get('/login', [LoginController::class, "index"])->name("page.login");
-Route::post('/login', [LoginController::class, "doLogin"])->name("dologin");
-Route::post('/logout', [LoginController::class, "doLogout"])->name("dologout");
+Route::get('/login', [LoginController::class, "index"])->name("page_login");
+Route::post('/login', [LoginController::class, "doLogin"])->name("page_login.dologin");
+Route::post('/logout', [LoginController::class, "doLogout"])->name("page_login.dologout");
 
 Route::middleware(['auth:admin'])->group(function(){
 

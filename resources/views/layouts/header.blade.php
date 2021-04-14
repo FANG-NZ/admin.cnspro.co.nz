@@ -106,7 +106,7 @@
                     </a>
                     --}}
                     <!-- item-->
-                    <form action="{{ route('dologout') }}" method="POST">
+                    <form action="{{ route('page_login.dologout') }}" method="POST">
                         @csrf
                         
                         <button type="submit" class="dropdown-item notify-item" style="cursor:pointer;">
