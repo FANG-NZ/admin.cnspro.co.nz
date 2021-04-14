@@ -13347,6 +13347,24 @@ input[type=range]::-moz-range-thumb {
   font-size: 16px;
 }
 
+.main-banner-slider-item {
+  box-shadow: none;
+  border: 1px solid rgba(152, 166, 173, 0.2) !important;
+}
+.main-banner-slider-item img {
+  height: 115px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.main-banner-slider-item .card-body {
+  padding: 0.75rem;
+}
+.main-banner-slider-item .card-title {
+  margin: 0;
+  height: 64px;
+  overflow: hidden;
+}
+
 .projects-table {
   table-layout: fixed;
 }

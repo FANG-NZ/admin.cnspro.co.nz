@@ -48,6 +48,26 @@
 
 // START page dashboard 
 // ---------------------------------
+.main-banner-slider-item{
+    box-shadow: none;
+    border: 1px solid rgba(152, 166, 173, 0.2) !important;
+
+    img{
+        height: 115px;
+        object-fit: contain;
+    }
+
+    .card-body{
+        padding: .75rem;
+    }
+
+    .card-title{
+        margin: 0;
+        height: 64px;
+        overflow: hidden;
+    }
+}
+
 
 
 // START 

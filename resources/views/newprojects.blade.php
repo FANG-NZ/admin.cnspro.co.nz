@@ -18,6 +18,6 @@
 @endsection
 
 
-@section('pagejs')
+@push('pagescripts')
     <script src="{{ mix('js/new-projects-page.js') }}"></script>
-@endsection
+@endpush

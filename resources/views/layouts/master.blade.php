@@ -44,7 +44,7 @@
 
         {{-- Laravel Mix - JS File --}}
         <script src="{{ mix('js/app.js') }}"></script>
-        @yield('pagejs')
+        @stack('pagescripts')
 
     </body>
 </html>
