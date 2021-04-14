@@ -6,8 +6,11 @@ use App\Models\SiteConfig;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Traits\ResponseTrait;
 
 class SettingsController extends Controller{
+
+    use ResponseTrait;
 
     /**
      * Function is to show index
@@ -54,14 +57,10 @@ class SettingsController extends Controller{
         }
 
 
-
-        //To add session message
-        $msg = [
-            'status' => 'success',
-            'title' => "Upadte success",
-            'content' => "Your request has been updated successfully"
-        ];
-        $request->session()->flash('CNSPRO_MESSAGE', json_encode($msg));
+        $this->successResponse(
+            "Your request has been updated successfully",
+            "Upadte success"
+        );
 
         return redirect()->back();
     }

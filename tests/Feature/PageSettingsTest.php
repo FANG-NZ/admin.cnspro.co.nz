@@ -15,6 +15,12 @@ class PageSettingsTest extends TestCase
      */
     public function test_view_setting_page()
     {
+        $response = $this->get(route('page_settings'));
+        //Test admin not logged in
+        $response->assertStatus(302);
+        $response->assertRedirect(Route('page_login'));
+
+
         $admin = AdminUser::factory()->make();
 
         $response = $this->actingAs($admin, 'admin')
@@ -31,10 +37,9 @@ class PageSettingsTest extends TestCase
     {
         //Test if admin user logged in 
         $response = $this->put(route('page_settings.update'), []);
-        $this->assertEquals(
-            $response->exception->getMessage(),
-            'Unauthenticated.'
-        );
+        //Test admin not logged in
+        $response->assertStatus(302);
+        $response->assertRedirect(Route('page_login'));
     }
 
     /**
