@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\SiteConfig;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class SettingsController extends Controller{
 
@@ -11,7 +13,9 @@ class SettingsController extends Controller{
      * Function is to show index
      */
     public function index(){
-        return view("settings");
+        $config = SiteConfig::current();
+
+        return view("settings", ['SiteConfig' => $config]);
     }
 
     /**
@@ -40,7 +44,14 @@ class SettingsController extends Controller{
         ]);
 
 
-        
+        //If there is NEW PASSWORD passed, we need to handle
+        //update password
+        if($password = $request->input('new_password')){
+            $admin = Auth::user();
+
+            $admin->password = Hash::make($password);
+            $admin->save();
+        }
 
 
 

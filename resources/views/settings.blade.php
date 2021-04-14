@@ -14,11 +14,15 @@
 
     <div class="row">
         <div class="col-12">
-            <form action="{{ route('page_settings.update') }}" method="POST" data-parsley-validate>
-
-            {{csrf_field()}}
-
-            @method('PUT')
+            {{-- <form action="{{ route('page_settings.update') }}" method="POST" data-parsley-validate> --}}
+            {!! Form::model(
+                    $SiteConfig, 
+                    [
+                        'route' => 'page_settings.update',
+                        'method' => "PUT",
+                        'data-parsley-validate'    
+                    ]
+                ) !!}
 
             {{-- START basic info --}}
             <div class="card-box">
@@ -27,18 +31,20 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="email">Email address</label>
-                        <input type="text" 
-                            class="form-control" 
-                            id="email"
-                            name="email" 
-                            value="test@test.com"
-                            placeholder="Enter email adress" 
 
-                            required   
-                            data-parsley-type="email" 
-                            data-parsley-required-message="Please enter your email address"
-                            data-parsley-type-message="Please enter valid email address"
-                        />
+                        {!! Form::text(
+                            'email', 
+                            null,
+                            [
+                                'id' => "email",
+                                'class' => "form-control",
+                                'placeholder' => "Enter email adress",
+                                'required',   
+                                'data-parsley-type' => "email", 
+                                'data-parsley-required-message' => "Please enter your email address",
+                                'data-parsley-type-message' => "Please enter valid email address"
+                            ]) 
+                        !!}
 
                         @error('email')
                         <ul class="parsley-errors-list filled">
@@ -51,16 +57,18 @@
 
                     <div class="form-group col-md-6">
                         <label for="phone">Phone</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="phone" 
-                            name="phone"
-                            placeholder="Enter phone number" 
 
-                            required    
-                            data-parsley-required-message="Please enter phone number"    
-                        />
+                        {!! Form::text(
+                            'phone', 
+                            null,
+                            [
+                                'id' => "phone",
+                                'class' => "form-control",
+                                'placeholder' => "Enter phone number",
+                                'required',   
+                                'data-parsley-required-message' => "Please enter phone number",
+                            ]) 
+                        !!}
 
                         @error('phone')
                             <ul class="parsley-errors-list filled">
@@ -74,17 +82,18 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="address">Address</label>
-                        <textarea 
-                            name="address" 
-                            id="address" 
-                            class="form-control"
-                            cols="30" 
-                            rows="3"
-                            placeholder="Enter compnay address"  
-                            
-                            required    
-                            data-parsley-required-message="Please enter your address"
-                        ></textarea>
+
+                        {!! Form::textarea(
+                            'address', 
+                            null,
+                            [
+                                'id' => "address",
+                                'class' => "form-control",
+                                'placeholder' => "Enter compnay address",
+                                'cols' => "30",   
+                                'rows' => "3"
+                            ]) 
+                        !!}
                     </div>
                 </div>
             </div>
@@ -103,7 +112,16 @@
                                     <i class="mdi mdi-facebook-box"></i>
                                 </div>
                             </div>
-                            <input type="text" class="form-control" name="facebook" placeholder="Enter facebook link"/>
+
+                            {!! Form::text(
+                                'facebook', 
+                                null,
+                                [
+                                    'class' => "form-control",
+                                    'placeholder' => "Enter facebook link",
+                                ]) 
+                            !!}
+
                         </div>
                     </div>
                 </div>
@@ -117,7 +135,15 @@
                                     <i class="mdi mdi-instagram"></i>
                                 </div>
                             </div>
-                            <input type="text" class="form-control" name="instagram" placeholder="Enter instagram link"/>
+
+                            {!! Form::text(
+                                'instagram', 
+                                null,
+                                [
+                                    'class' => "form-control",
+                                    'placeholder' => "Enter instagram link",
+                                ]) 
+                            !!}
                         </div>
                     </div>
                 </div>
@@ -131,13 +157,16 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="new-password">New password</label>
-                        <input type="password" 
-                            
+
+                        <input type="password"   
                             autocomplete="new-password"
                             class="form-control" 
                             id="new-password"
                             name="new_password" 
                             placeholder="Enter new password" 
+
+                            minlength="8"
+                            data-parsley-minlength-message="The new password must be at least 8 characters"
                         />
 
                         @error('new_password')
@@ -181,7 +210,8 @@
                 </div>
             </div>
 
-            </form>
+            {!! Form::close() !!}
+            {{-- </form> --}}
         </div>
     </div>
     
