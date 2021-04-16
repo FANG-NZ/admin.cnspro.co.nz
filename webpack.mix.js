@@ -27,17 +27,21 @@ mix.webpackConfig({
 
 
 // Add @babel/preset-react (https://git.io/JfeDR) to the 'presets' section of your Babel config to enable transformation
-mix.babelConfig({
-    "presets": ["@babel/preset-react"],
-    // "plugins": [
-    //     [
-    //       "@babel/plugin-proposal-class-properties",
-    //       {
-    //         "loose": true
-    //       }
-    //     ]
-    // ]
-});
+// mix.babelConfig({
+//     "presets": [
+//         '@babel/preset-env',
+//         "@babel/preset-react",
+//         '@babel/preset-typescript'
+//     ],
+//     "plugins": [
+//         [
+//           "@babel/plugin-proposal-class-properties",
+//           {
+//             "loose": true
+//           }
+//         ]
+//     ]
+// });
 
 /*
  |--------------------------------------------------------------------------
