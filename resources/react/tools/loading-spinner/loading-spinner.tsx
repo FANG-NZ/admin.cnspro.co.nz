@@ -5,8 +5,8 @@ import PubSub from 'pubsub-js'
 export const EVENT_LOADING_SPINNER = "Loading_Spinner"
 
 //define the loading spinner
-const LoadingSpinner = () => {
-    const _portalBox = document.getElementById("portal-box")!
+const LoadingSpinner = ():JSX.Element => {
+    const _portalBox:HTMLElement = document.getElementById("portal-box")!
     const [show, setShow] = useState(false)
     
     /**

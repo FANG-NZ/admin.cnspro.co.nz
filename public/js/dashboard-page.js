@@ -2405,10 +2405,10 @@ react_dom_1["default"].render(react_1["default"].createElement(react_redux_1.Pro
 
 /***/ }),
 
-/***/ "./resources/react/pages/dashboard/components/main-banner-slider.tsx":
-/*!***************************************************************************!*\
-  !*** ./resources/react/pages/dashboard/components/main-banner-slider.tsx ***!
-  \***************************************************************************/
+/***/ "./resources/react/pages/dashboard/components/main-banner-slider-header.tsx":
+/*!**********************************************************************************!*\
+  !*** ./resources/react/pages/dashboard/components/main-banner-slider-header.tsx ***!
+  \**********************************************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2452,6 +2452,162 @@ var MainBannerSliderHeader = function MainBannerSliderHeader() {
     className: "mdi mdi-plus-circle"
   }), react_1["default"].createElement("span", null, "New item"))));
 };
+
+exports.default = MainBannerSliderHeader;
+
+/***/ }),
+
+/***/ "./resources/react/pages/dashboard/components/main-banner-slider-item.tsx":
+/*!********************************************************************************!*\
+  !*** ./resources/react/pages/dashboard/components/main-banner-slider-item.tsx ***!
+  \********************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.MainBannerSliderEmptyItem = void 0;
+
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+/**
+ * TODO
+ * define the empty slider item
+ * @returns
+ */
+
+
+var MainBannerSliderEmptyItem = function MainBannerSliderEmptyItem() {
+  return react_1["default"].createElement("div", {
+    className: "col-12"
+  }, react_1["default"].createElement("div", {
+    className: "alert alert-warning mb-0"
+  }, "There is ", react_1["default"].createElement("strong", null, "NO"), " any SLIDER ITEM added"));
+};
+
+exports.MainBannerSliderEmptyItem = MainBannerSliderEmptyItem;
+/**
+ * TODO
+ * defien the slider item
+ * @param BannerSliderItem item
+ * @returns
+ */
+
+var MainBannerSliderItem = function MainBannerSliderItem(_a) {
+  var item = _a.item;
+  return react_1["default"].createElement("div", {
+    className: "col-md-3"
+  }, react_1["default"].createElement("div", {
+    className: "card main-banner-slider-item"
+  }, react_1["default"].createElement("img", {
+    src: item.url,
+    alt: "",
+    className: "card-img-top img-fluid"
+  }), react_1["default"].createElement("div", {
+    className: "card-body"
+  }, react_1["default"].createElement("div", {
+    className: "card-title"
+  }, item.title)), react_1["default"].createElement("div", {
+    className: "card-body card-btns"
+  }, react_1["default"].createElement("button", {
+    className: "btn btn-success btn-sm"
+  }, react_1["default"].createElement("i", {
+    className: "mdi mdi-database-plus"
+  }), react_1["default"].createElement("span", null, "Edit")), react_1["default"].createElement("button", {
+    className: "btn btn-danger btn-sm"
+  }, react_1["default"].createElement("i", {
+    className: "mdi mdi-delete"
+  }), react_1["default"].createElement("span", null, "Delete")))));
+};
+
+exports.default = MainBannerSliderItem;
+
+/***/ }),
+
+/***/ "./resources/react/pages/dashboard/components/main-banner-slider.tsx":
+/*!***************************************************************************!*\
+  !*** ./resources/react/pages/dashboard/components/main-banner-slider.tsx ***!
+  \***************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var main_banner_slider_header_1 = __importDefault(__webpack_require__(/*! ./main-banner-slider-header */ "./resources/react/pages/dashboard/components/main-banner-slider-header.tsx"));
+
+var main_banner_slider_item_1 = __importStar(__webpack_require__(/*! ./main-banner-slider-item */ "./resources/react/pages/dashboard/components/main-banner-slider-item.tsx"));
+
+var main_banner_slider_slice_1 = __webpack_require__(/*! ../slice/main-banner-slider-slice */ "./resources/react/pages/dashboard/slice/main-banner-slider-slice.ts");
+
+var dashboard_store_1 = __webpack_require__(/*! ../store/dashboard-store */ "./resources/react/pages/dashboard/store/dashboard-store.ts");
+
+var MainBannerSliderList = function MainBannerSliderList(_a) {
+  var sliders = _a.sliders;
+  return react_1["default"].createElement("div", {
+    className: "card-body"
+  }, react_1["default"].createElement("div", {
+    className: "row"
+  }, sliders.length === 0 ? react_1["default"].createElement(main_banner_slider_item_1.MainBannerSliderEmptyItem, null) : sliders.map(function (item) {
+    return react_1["default"].createElement(main_banner_slider_item_1["default"], {
+      item: item,
+      key: item.id
+    });
+  })));
+};
 /**
  * TODO
  * defien the MainBannerSlider
@@ -2460,10 +2616,15 @@ var MainBannerSliderHeader = function MainBannerSliderHeader() {
 
 
 var MainBannerSlider = function MainBannerSlider() {
+  //To load sliders from STORE
+  var _sliders = dashboard_store_1.useAppSelector(main_banner_slider_slice_1.allSliders);
+
   return react_1["default"].createElement("div", {
     id: "main-banner-slider",
     className: "card"
-  }, react_1["default"].createElement(MainBannerSliderHeader, null));
+  }, react_1["default"].createElement(main_banner_slider_header_1["default"], null), react_1["default"].createElement(MainBannerSliderList, {
+    sliders: _sliders
+  }));
 };
 
 exports.default = MainBannerSlider;

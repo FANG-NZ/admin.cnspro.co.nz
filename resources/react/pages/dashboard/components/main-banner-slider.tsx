@@ -1,36 +1,32 @@
 import React from 'react'
+import MainBannerSliderHeader from './main-banner-slider-header'
+import MainBannerSliderItem, {MainBannerSliderEmptyItem} from './main-banner-slider-item'
+import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
+import {allSliders} from '../slice/main-banner-slider-slice'
+import {useAppDispatch , useAppSelector} from '../store/dashboard-store'
 
-/**
- * TODO
- * define the main banner image header
- * @returns
- */
-const MainBannerSliderHeader = () : JSX.Element => {
+
+type BannerSliderListProps = {
+    sliders : Array<BannerSliderItem>
+}
+
+const MainBannerSliderList : React.FC<BannerSliderListProps> = ({sliders}):JSX.Element => {
 
     return(
-        <div className="card-header ff-card-header">
-            <div className="card-header-content">
-                <h4 className="m-t-0 header-title">Main banner images</h4>
-                <p className="text-muted font-13">
-                    All items will be displayed on Home Page main SLIDER
-                </p>
-            </div>
-            
-            <div className="card-header-tools">
+        <div className="card-body">
+            <div className="row">
 
-                <button className="btn btn-success" 
-                    onClick={() => {
-                        alert("clicked")
-                    }}
-                >
-                    <i className="mdi mdi-plus-circle"></i>
-                    <span>New item</span>
-                </button>   
+                {sliders.length === 0 
+                    ? <MainBannerSliderEmptyItem />
+                    : sliders.map((item) => <MainBannerSliderItem item={item} key={item.id} />)
+                }
 
             </div>
         </div>
     )
 }
+
+
 
 
 /**
@@ -39,11 +35,14 @@ const MainBannerSliderHeader = () : JSX.Element => {
  * @returns 
  */
 const MainBannerSlider = ():JSX.Element => {
-
+    //To load sliders from STORE
+    const _sliders : Array<BannerSliderItem> = useAppSelector(allSliders)
 
     return(
         <div id="main-banner-slider" className="card">
             <MainBannerSliderHeader />
+
+            <MainBannerSliderList sliders={_sliders} />
         </div>
     )
 }

@@ -13364,6 +13364,12 @@ input[type=range]::-moz-range-thumb {
   height: 64px;
   overflow: hidden;
 }
+.main-banner-slider-item .card-btns {
+  text-align: right;
+}
+.main-banner-slider-item .card-btns button {
+  margin-left: 5px;
+}
 
 .projects-table {
   table-layout: fixed;
