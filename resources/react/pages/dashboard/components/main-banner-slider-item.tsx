@@ -1,5 +1,4 @@
 import React from 'react'
-import { JsxFragment } from 'typescript'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
 
 /**
@@ -33,7 +32,7 @@ const MainBannerSliderItem : React.FC<{item:BannerSliderItem}> = ({item}):JSX.El
             <div className="card main-banner-slider-item">
                 <img src={item.url} alt="" className="card-img-top img-fluid" />
                 <div className="card-body">
-                    <div className="card-title">{item.title}</div>
+                    <div className="card-title" aria-label="title">{item.title}</div>
                 </div>
                 <div className="card-body card-btns">
                     
