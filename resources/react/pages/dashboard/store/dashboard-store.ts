@@ -1,10 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {TypedUseSelectorHook, useSelector, useDispatch} from 'react-redux'
 import MainBannerSliderReducer from '../slice/main-banner-slider-slice'
+import BannerSliderModalReducer from '../slice/banner-slider-modal-slice'
 
 const store = configureStore({
     reducer: {
-        MainBannerSlider : MainBannerSliderReducer
+        MainBannerSlider : MainBannerSliderReducer,
+        BannerSliderModal : BannerSliderModalReducer
     }
 })
 

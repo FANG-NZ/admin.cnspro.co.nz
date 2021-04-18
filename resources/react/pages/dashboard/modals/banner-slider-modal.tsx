@@ -80,7 +80,7 @@ const ModalBody:React.FC<{item:BannerSliderItem|null}> = ({item}):JSX.Element =>
             <div id="banner-slider-item-image" className="form-group row">
 
                 <div className="image-box col-md-6">
-                    <img src={NoImageIcon} />
+                    {/* <img src={NoImageIcon} /> */}
                 </div>
 
                 <ImageUploading

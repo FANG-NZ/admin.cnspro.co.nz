@@ -1,0 +1,28 @@
+// START banner slider item image
+// --------------------------------
+#banner-slider-item-image{
+
+    .image-box{
+        height: 100px;
+
+        img{
+            width: 100%;
+            height: auto;
+            margin: auto;
+            object-fit: contain;
+        }
+    }
+
+    .image-upload-box{
+        .dropzone{
+            padding: 10px;
+            h3{font-size: 1rem; margin: 5px 0;}
+
+            .alert{
+                width: 80%;
+                background-color: rgba($color: #fddbd9, $alpha: .9);
+            }
+        }
+    }
+
+}

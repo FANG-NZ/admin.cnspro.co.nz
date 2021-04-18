@@ -6,7 +6,7 @@ export const EVENT_LOADING_SPINNER = "Loading_Spinner"
 
 //define the loading spinner
 const LoadingSpinner = ():JSX.Element => {
-    const _portalBox:HTMLElement = document.getElementById("portal-box")!
+    const _portalBox:HTMLElement = document.getElementById("portal-box") as HTMLElement
     const [show, setShow] = useState(false)
     
     /**

@@ -2095,6 +2095,50 @@ function isAsyncThunkAction() {
 
 /***/ }),
 
+/***/ "./node_modules/@restart/hooks/esm/useCallbackRef.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/@restart/hooks/esm/useCallbackRef.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ useCallbackRef)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+/**
+ * A convenience hook around `useState` designed to be paired with
+ * the component [callback ref](https://reactjs.org/docs/refs-and-the-dom.html#callback-refs) api.
+ * Callback refs are useful over `useRef()` when you need to respond to the ref being set
+ * instead of lazily accessing it in an effect.
+ *
+ * ```ts
+ * const [element, attachRef] = useCallbackRef<HTMLDivElement>()
+ *
+ * useEffect(() => {
+ *   if (!element) return
+ *
+ *   const calendar = new FullCalendar.Calendar(element)
+ *
+ *   return () => {
+ *     calendar.destroy()
+ *   }
+ * }, [element])
+ *
+ * return <div ref={attachRef} />
+ * ```
+ *
+ * @category refs
+ */
+
+function useCallbackRef() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+}
+
+/***/ }),
+
 /***/ "./node_modules/@restart/hooks/esm/useCommittedRef.js":
 /*!************************************************************!*\
   !*** ./node_modules/@restart/hooks/esm/useCommittedRef.js ***!
@@ -2199,6 +2243,47 @@ function useMounted() {
     };
   }, []);
   return isMounted.current;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@restart/hooks/esm/usePrevious.js":
+/*!********************************************************!*\
+  !*** ./node_modules/@restart/hooks/esm/usePrevious.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ usePrevious)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+/**
+ * Store the last of some value. Tracked via a `Ref` only updating it
+ * after the component renders.
+ *
+ * Helpful if you need to compare a prop value to it's previous value during render.
+ *
+ * ```ts
+ * function Component(props) {
+ *   const lastProps = usePrevious(props)
+ *
+ *   if (lastProps.foo !== props.foo)
+ *     resetValueFromProps(props.foo)
+ * }
+ * ```
+ *
+ * @param value the value to track
+ */
+
+function usePrevious(value) {
+  var ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    ref.current = value;
+  });
+  return ref.current;
 }
 
 /***/ }),
@@ -2388,6 +2473,8 @@ var toast_box_1 = __importDefault(__webpack_require__(/*! ../tools/toast-box/toa
 
 var main_banner_slider_1 = __importDefault(__webpack_require__(/*! ./dashboard/components/main-banner-slider */ "./resources/react/pages/dashboard/components/main-banner-slider.tsx"));
 
+var banner_slider_modal_1 = __importDefault(__webpack_require__(/*! ./dashboard/modals/banner-slider-modal */ "./resources/react/pages/dashboard/modals/banner-slider-modal.tsx"));
+
 var banner_list = [{
   id: 1,
   url: "https://freebw.com/templates/tatee/images/slide-01.jpg",
@@ -2401,7 +2488,7 @@ var banner_list = [{
 dashboard_store_1["default"].dispatch(main_banner_slider_slice_1.setSliders(banner_list));
 react_dom_1["default"].render(react_1["default"].createElement(react_redux_1.Provider, {
   store: dashboard_store_1["default"]
-}, react_1["default"].createElement(main_banner_slider_1["default"], null), react_1["default"].createElement(toast_box_1["default"], null)), document.getElementById("root-dashboard"));
+}, react_1["default"].createElement(main_banner_slider_1["default"], null), react_1["default"].createElement(toast_box_1["default"], null), react_1["default"].createElement(banner_slider_modal_1["default"], null)), document.getElementById("root-dashboard"));
 
 /***/ }),
 
@@ -2425,6 +2512,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 
 var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts");
 /**
  * TODO
  * define the main banner image header
@@ -2433,6 +2524,8 @@ var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/r
 
 
 var MainBannerSliderHeader = function MainBannerSliderHeader() {
+  var _dispatch = react_redux_1.useDispatch();
+
   return react_1["default"].createElement("div", {
     className: "card-header ff-card-header"
   }, react_1["default"].createElement("div", {
@@ -2446,7 +2539,7 @@ var MainBannerSliderHeader = function MainBannerSliderHeader() {
   }, react_1["default"].createElement("button", {
     className: "btn btn-success",
     onClick: function onClick() {
-      alert("clicked");
+      _dispatch(banner_slider_modal_slice_1.show(null));
     }
   }, react_1["default"].createElement("i", {
     className: "mdi mdi-plus-circle"
@@ -2514,7 +2607,8 @@ var MainBannerSliderItem = function MainBannerSliderItem(_a) {
   }), react_1["default"].createElement("div", {
     className: "card-body"
   }, react_1["default"].createElement("div", {
-    className: "card-title"
+    className: "card-title",
+    "aria-label": "title"
   }, item.title)), react_1["default"].createElement("div", {
     className: "card-body card-btns"
   }, react_1["default"].createElement("button", {
@@ -2631,6 +2725,346 @@ exports.default = MainBannerSlider;
 
 /***/ }),
 
+/***/ "./resources/react/pages/dashboard/modals/banner-slider-modal.tsx":
+/*!************************************************************************!*\
+  !*** ./resources/react/pages/dashboard/modals/banner-slider-modal.tsx ***!
+  \************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_dom_1 = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+
+var react_hook_form_1 = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.js");
+
+var react_images_uploading_1 = __importDefault(__webpack_require__(/*! react-images-uploading */ "./node_modules/react-images-uploading/dist/index.js"));
+
+var Modal_1 = __importDefault(__webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js"));
+
+var dashboard_store_1 = __webpack_require__(/*! ../store/dashboard-store */ "./resources/react/pages/dashboard/store/dashboard-store.ts");
+
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts"); //import NoImageIcon from '../../../../images/no-image.png'
+
+/**
+ * TODO
+ * define the Modal Header
+ * @param param0
+ * @returns
+ */
+
+
+var ModalHeader = function ModalHeader(_a) {
+  var title = _a.title,
+      onHandleClose = _a.onHandleClose;
+  return react_1["default"].createElement(Modal_1["default"].Header, null, react_1["default"].createElement(Modal_1["default"].Title, null, react_1["default"].createElement("i", {
+    className: "mdi mdi-home-variant"
+  }), react_1["default"].createElement("span", null, title)), react_1["default"].createElement("button", {
+    type: "button",
+    className: "close",
+    onClick: onHandleClose
+  }, react_1["default"].createElement("i", {
+    className: "mdi mdi-close"
+  })));
+};
+/**
+ * TODO
+ * define the Modal Footer
+ * @param param0
+ * @returns
+ */
+
+
+var ModalFooter = function ModalFooter(_a) {
+  var is_adding_new = _a.is_adding_new,
+      onHandleClose = _a.onHandleClose,
+      isDirty = _a.isDirty;
+  return react_1["default"].createElement(Modal_1["default"].Footer, null, react_1["default"].createElement("button", {
+    type: "button",
+    className: "btn btn-light",
+    onClick: onHandleClose
+  }, react_1["default"].createElement("i", {
+    className: "mdi mdi-cancel"
+  }), react_1["default"].createElement("span", null, "Close")), react_1["default"].createElement("button", {
+    type: "submit",
+    className: "btn btn-success",
+    disabled: !isDirty
+  }, react_1["default"].createElement("i", {
+    className: "mdi mdi-database-plus"
+  }), react_1["default"].createElement("span", null, is_adding_new ? "Add new project" : "Edit")));
+};
+/**
+ * TODO
+ * define the modal body
+ * @param param0
+ * @returns
+ */
+
+
+var ModalBody = function ModalBody(_a) {
+  var item = _a.item;
+
+  var _b = react_hook_form_1.useFormContext(),
+      errors = _b.errors,
+      register = _b.register;
+
+  var _c = react_1.useState([]),
+      images = _c[0],
+      setImages = _c[1];
+
+  var onHandleChange = function onHandleChange(images) {};
+
+  return react_1["default"].createElement(Modal_1["default"].Body, null, react_1["default"].createElement("div", {
+    id: "banner-slider-item-image",
+    className: "form-group row"
+  }, react_1["default"].createElement("div", {
+    className: "image-box col-md-6"
+  }), react_1["default"].createElement(react_images_uploading_1["default"], {
+    value: images,
+    onChange: onHandleChange,
+    dataURLKey: "data_url",
+    maxFileSize: 3145728
+  }, function (_a) {
+    var onImageUpload = _a.onImageUpload,
+        isDragging = _a.isDragging,
+        dragProps = _a.dragProps,
+        errors = _a.errors;
+    return (// START drop button
+      react_1["default"].createElement("div", {
+        className: "image-upload-box col-md-6"
+      }, react_1["default"].createElement("button", __assign({
+        className: "dropzone",
+        onClick: function onClick(e) {
+          e.preventDefault();
+          onImageUpload();
+        }
+      }, dragProps), react_1["default"].createElement("div", {
+        className: "dz-message"
+      }, react_1["default"].createElement("i", {
+        className: "mdi mdi-cloud-upload text-muted"
+      }), react_1["default"].createElement("h3", null, "Drop or click")), errors && react_1["default"].createElement("span", {
+        className: "alert alert-danger"
+      }, "The file size cannot be greater than 3M")))
+    );
+  })), react_1["default"].createElement("div", {
+    className: "form-group"
+  }, react_1["default"].createElement("label", {
+    htmlFor: "title"
+  }, "Title"), react_1["default"].createElement("input", {
+    type: "text",
+    id: "title",
+    name: "title",
+    placeholder: "Enter title",
+    className: "form-control",
+    defaultValue: item ? item.title : "",
+    ref: register({
+      required: true
+    })
+  }), errors.title && react_1["default"].createElement("span", {
+    className: "error text-danger"
+  }, "Please enter title")));
+};
+/**
+ * TODO
+ * define the main banner slider modal
+ * @returns
+ */
+
+
+var BannerSliderModal = function BannerSliderModal() {
+  //To get modal data from MODAL STORE
+  var _modal_data = dashboard_store_1.useAppSelector(function (state) {
+    return state.BannerSliderModal;
+  });
+
+  var _dispatch = react_redux_1.useDispatch();
+
+  var _form = react_hook_form_1.useForm();
+
+  var register = _form.register,
+      handleSubmit = _form.handleSubmit,
+      errors = _form.errors,
+      reset = _form.reset,
+      formState = _form.formState,
+      control = _form.control;
+  var isDirty = formState.isDirty;
+  /**
+   * Function is to handle close modal
+   */
+
+  var onHandleClose = function onHandleClose() {
+    _dispatch(banner_slider_modal_slice_1.hide());
+  };
+  /**
+   * Function is to define on handle enter
+   */
+
+
+  var onHandleEnter = function onHandleEnter() {
+    console.log("ON ENTER CALLED");
+  };
+  /**
+   * Function is to handle form submit
+   * @param data
+   */
+
+
+  var onHandleSubmitted = function onHandleSubmitted(data) {
+    console.log(data);
+  };
+
+  return react_dom_1.createPortal(react_1["default"].createElement(Modal_1["default"], {
+    id: "main-banner-slider-modal",
+    show: _modal_data.shown,
+    onHide: onHandleClose,
+    onEnter: onHandleEnter
+  }, react_1["default"].createElement(react_hook_form_1.FormProvider, __assign({}, _form), react_1["default"].createElement("form", {
+    onSubmit: handleSubmit(onHandleSubmitted)
+  }, react_1["default"].createElement(ModalHeader, {
+    title: 'Test Header',
+    onHandleClose: onHandleClose
+  }), react_1["default"].createElement(ModalBody, {
+    item: _modal_data.item
+  }), react_1["default"].createElement(ModalFooter, {
+    is_adding_new: _modal_data.is_adding_new,
+    onHandleClose: onHandleClose,
+    isDirty: isDirty
+  })))), document.getElementById("portal-box"));
+};
+
+exports.default = BannerSliderModal;
+
+/***/ }),
+
+/***/ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts":
+/*!****************************************************************************!*\
+  !*** ./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _a;
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.hide = exports.show = void 0;
+
+var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+
+var initialState = {
+  shown: true,
+  is_adding_new: true,
+  item: null
+};
+var BannerSliderModalSlice = toolkit_1.createSlice({
+  name: 'BannerSliderModal',
+  initialState: initialState,
+  reducers: {
+    /**
+     * TODO
+     * define the function to open the modal
+     */
+    show: {
+      reducer: function reducer(state, action) {
+        state.shown = true;
+        state.item = action.payload.item;
+        state.is_adding_new = action.payload.is_adding_new;
+      },
+      prepare: function prepare(_item) {
+        var payload = {
+          item: _item,
+          is_adding_new: true
+        };
+        return {
+          payload: payload
+        };
+      }
+    },
+
+    /**
+     * TODO
+     * Function is to close modal
+     * @param state
+     */
+    hide: function hide(state) {
+      state.shown = false;
+      state.is_adding_new = true;
+      state.item = null;
+    }
+  }
+});
+exports.show = (_a = BannerSliderModalSlice.actions, _a.show), exports.hide = _a.hide;
+exports.default = BannerSliderModalSlice.reducer;
+
+/***/ }),
+
 /***/ "./resources/react/pages/dashboard/slice/main-banner-slider-slice.ts":
 /*!***************************************************************************!*\
   !*** ./resources/react/pages/dashboard/slice/main-banner-slider-slice.ts ***!
@@ -2703,9 +3137,12 @@ var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react
 
 var main_banner_slider_slice_1 = __importDefault(__webpack_require__(/*! ../slice/main-banner-slider-slice */ "./resources/react/pages/dashboard/slice/main-banner-slider-slice.ts"));
 
+var banner_slider_modal_slice_1 = __importDefault(__webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts"));
+
 var store = toolkit_1.configureStore({
   reducer: {
-    MainBannerSlider: main_banner_slider_slice_1["default"]
+    MainBannerSlider: main_banner_slider_slice_1["default"],
+    BannerSliderModal: banner_slider_modal_slice_1["default"]
   }
 }); //Hook
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
@@ -2916,6 +3353,65 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 /***/ }),
 
+/***/ "./node_modules/dom-helpers/esm/activeElement.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/dom-helpers/esm/activeElement.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ activeElement)
+/* harmony export */ });
+/* harmony import */ var _ownerDocument__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ownerDocument */ "./node_modules/dom-helpers/esm/ownerDocument.js");
+
+/**
+ * Return the actively focused element safely.
+ *
+ * @param doc the document to checl
+ */
+
+function activeElement(doc) {
+  if (doc === void 0) {
+    doc = (0,_ownerDocument__WEBPACK_IMPORTED_MODULE_0__.default)();
+  }
+
+  // Support: IE 9 only
+  // IE9 throws an "Unspecified error" accessing document.activeElement from an <iframe>
+  try {
+    var active = doc.activeElement; // IE11 returns a seemingly empty object in some cases when accessing
+    // document.activeElement from an <iframe>
+
+    if (!active || !active.nodeName) return null;
+    return active;
+  } catch (e) {
+    /* ie throws if no active element */
+    return doc.body;
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/dom-helpers/esm/addClass.js":
+/*!**************************************************!*\
+  !*** ./node_modules/dom-helpers/esm/addClass.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ addClass)
+/* harmony export */ });
+/* harmony import */ var _hasClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./hasClass */ "./node_modules/dom-helpers/esm/hasClass.js");
+
+function addClass(element, className) {
+  if (element.classList) element.classList.add(className);else if (!(0,_hasClass__WEBPACK_IMPORTED_MODULE_0__.default)(element, className)) if (typeof element.className === 'string') element.className = element.className + " " + className;else element.setAttribute('class', (element.className && element.className.baseVal || '') + " " + className);
+}
+
+/***/ }),
+
 /***/ "./node_modules/dom-helpers/esm/addEventListener.js":
 /*!**********************************************************!*\
   !*** ./node_modules/dom-helpers/esm/addEventListener.js ***!
@@ -3019,6 +3515,27 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/dom-helpers/esm/contains.js":
+/*!**************************************************!*\
+  !*** ./node_modules/dom-helpers/esm/contains.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ contains)
+/* harmony export */ });
+/* eslint-disable no-bitwise, no-cond-assign */
+// HTML DOM and SVG DOM may have different support levels,
+// so we need to check on context instead of a document root element.
+function contains(context, node) {
+  if (context.contains) return context.contains(node);
+  if (context.compareDocumentPosition) return context === node || !!(context.compareDocumentPosition(node) & 16);
+}
+
+/***/ }),
+
 /***/ "./node_modules/dom-helpers/esm/css.js":
 /*!*********************************************!*\
   !*** ./node_modules/dom-helpers/esm/css.js ***!
@@ -3087,6 +3604,24 @@ function getComputedStyle(node, psuedoElement) {
 
 /***/ }),
 
+/***/ "./node_modules/dom-helpers/esm/hasClass.js":
+/*!**************************************************!*\
+  !*** ./node_modules/dom-helpers/esm/hasClass.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ hasClass)
+/* harmony export */ });
+function hasClass(element, className) {
+  if (element.classList) return !!className && element.classList.contains(className);
+  return (" " + (element.className.baseVal || element.className) + " ").indexOf(" " + className + " ") !== -1;
+}
+
+/***/ }),
+
 /***/ "./node_modules/dom-helpers/esm/hyphenate.js":
 /*!***************************************************!*\
   !*** ./node_modules/dom-helpers/esm/hyphenate.js ***!
@@ -3130,6 +3665,23 @@ function hyphenateStyleName(string) {
 
 /***/ }),
 
+/***/ "./node_modules/dom-helpers/esm/isDocument.js":
+/*!****************************************************!*\
+  !*** ./node_modules/dom-helpers/esm/isDocument.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ isDocument)
+/* harmony export */ });
+function isDocument(element) {
+  return 'nodeType' in element && element.nodeType === document.DOCUMENT_NODE;
+}
+
+/***/ }),
+
 /***/ "./node_modules/dom-helpers/esm/isTransform.js":
 /*!*****************************************************!*\
   !*** ./node_modules/dom-helpers/esm/isTransform.js ***!
@@ -3144,6 +3696,27 @@ __webpack_require__.r(__webpack_exports__);
 var supportedTransforms = /^((translate|rotate|scale)(X|Y|Z|3d)?|matrix(3d)?|perspective|skew(X|Y)?)$/i;
 function isTransform(value) {
   return !!(value && supportedTransforms.test(value));
+}
+
+/***/ }),
+
+/***/ "./node_modules/dom-helpers/esm/isWindow.js":
+/*!**************************************************!*\
+  !*** ./node_modules/dom-helpers/esm/isWindow.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ isWindow)
+/* harmony export */ });
+/* harmony import */ var _isDocument__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isDocument */ "./node_modules/dom-helpers/esm/isDocument.js");
+
+function isWindow(node) {
+  if ('window' in node && node.window === node) return node;
+  if ((0,_isDocument__WEBPACK_IMPORTED_MODULE_0__.default)(node)) return node.defaultView || false;
+  return false;
 }
 
 /***/ }),
@@ -3212,6 +3785,52 @@ function ownerWindow(node) {
 
 /***/ }),
 
+/***/ "./node_modules/dom-helpers/esm/querySelectorAll.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/dom-helpers/esm/querySelectorAll.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ qsa)
+/* harmony export */ });
+var toArray = Function.prototype.bind.call(Function.prototype.call, [].slice);
+function qsa(element, selector) {
+  return toArray(element.querySelectorAll(selector));
+}
+
+/***/ }),
+
+/***/ "./node_modules/dom-helpers/esm/removeClass.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/dom-helpers/esm/removeClass.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ removeClass)
+/* harmony export */ });
+function replaceClassName(origClass, classToRemove) {
+  return origClass.replace(new RegExp("(^|\\s)" + classToRemove + "(?:\\s|$)", 'g'), '$1').replace(/\s+/g, ' ').replace(/^\s*|\s*$/g, '');
+}
+
+function removeClass(element, className) {
+  if (element.classList) {
+    element.classList.remove(className);
+  } else if (typeof element.className === 'string') {
+    ;
+    element.className = replaceClassName(element.className, className);
+  } else {
+    element.setAttribute('class', replaceClassName(element.className && element.className.baseVal || '', className));
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/dom-helpers/esm/removeEventListener.js":
 /*!*************************************************************!*\
   !*** ./node_modules/dom-helpers/esm/removeEventListener.js ***!
@@ -3233,6 +3852,40 @@ function removeEventListener(node, eventName, handler, options) {
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (removeEventListener);
+
+/***/ }),
+
+/***/ "./node_modules/dom-helpers/esm/scrollbarSize.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/dom-helpers/esm/scrollbarSize.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ scrollbarSize)
+/* harmony export */ });
+/* harmony import */ var _canUseDOM__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./canUseDOM */ "./node_modules/dom-helpers/esm/canUseDOM.js");
+
+var size;
+function scrollbarSize(recalc) {
+  if (!size && size !== 0 || recalc) {
+    if (_canUseDOM__WEBPACK_IMPORTED_MODULE_0__.default) {
+      var scrollDiv = document.createElement('div');
+      scrollDiv.style.position = 'absolute';
+      scrollDiv.style.top = '-9999px';
+      scrollDiv.style.width = '50px';
+      scrollDiv.style.height = '50px';
+      scrollDiv.style.overflow = 'scroll';
+      document.body.appendChild(scrollDiv);
+      size = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+      document.body.removeChild(scrollDiv);
+    }
+  }
+
+  return size;
+}
 
 /***/ }),
 
@@ -4673,6 +5326,104 @@ module.exports = ReactPropTypesSecret;
 
 /***/ }),
 
+/***/ "./node_modules/react-bootstrap/esm/BootstrapModalManager.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/BootstrapModalManager.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ BootstrapModalManager)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/inheritsLoose */ "./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js");
+/* harmony import */ var dom_helpers_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dom-helpers/css */ "./node_modules/dom-helpers/esm/css.js");
+/* harmony import */ var dom_helpers_querySelectorAll__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! dom-helpers/querySelectorAll */ "./node_modules/dom-helpers/esm/querySelectorAll.js");
+/* harmony import */ var dom_helpers_scrollbarSize__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! dom-helpers/scrollbarSize */ "./node_modules/dom-helpers/esm/scrollbarSize.js");
+/* harmony import */ var react_overlays_ModalManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-overlays/ModalManager */ "./node_modules/react-overlays/esm/ModalManager.js");
+
+
+
+
+
+var Selector = {
+  FIXED_CONTENT: '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top',
+  STICKY_CONTENT: '.sticky-top',
+  NAVBAR_TOGGLER: '.navbar-toggler'
+};
+
+var BootstrapModalManager = /*#__PURE__*/function (_ModalManager) {
+  (0,_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__.default)(BootstrapModalManager, _ModalManager);
+
+  function BootstrapModalManager() {
+    return _ModalManager.apply(this, arguments) || this;
+  }
+
+  var _proto = BootstrapModalManager.prototype;
+
+  _proto.adjustAndStore = function adjustAndStore(prop, element, adjust) {
+    var _css;
+
+    var actual = element.style[prop]; // TODO: DOMStringMap and CSSStyleDeclaration aren't strictly compatible
+    // @ts-ignore
+
+    element.dataset[prop] = actual;
+    (0,dom_helpers_css__WEBPACK_IMPORTED_MODULE_1__.default)(element, (_css = {}, _css[prop] = parseFloat((0,dom_helpers_css__WEBPACK_IMPORTED_MODULE_1__.default)(element, prop)) + adjust + "px", _css));
+  };
+
+  _proto.restore = function restore(prop, element) {
+    var value = element.dataset[prop];
+
+    if (value !== undefined) {
+      var _css2;
+
+      delete element.dataset[prop];
+      (0,dom_helpers_css__WEBPACK_IMPORTED_MODULE_1__.default)(element, (_css2 = {}, _css2[prop] = value, _css2));
+    }
+  };
+
+  _proto.setContainerStyle = function setContainerStyle(containerState, container) {
+    var _this = this;
+
+    _ModalManager.prototype.setContainerStyle.call(this, containerState, container);
+
+    if (!containerState.overflowing) return;
+    var size = (0,dom_helpers_scrollbarSize__WEBPACK_IMPORTED_MODULE_3__.default)();
+    (0,dom_helpers_querySelectorAll__WEBPACK_IMPORTED_MODULE_2__.default)(container, Selector.FIXED_CONTENT).forEach(function (el) {
+      return _this.adjustAndStore('paddingRight', el, size);
+    });
+    (0,dom_helpers_querySelectorAll__WEBPACK_IMPORTED_MODULE_2__.default)(container, Selector.STICKY_CONTENT).forEach(function (el) {
+      return _this.adjustAndStore('marginRight', el, -size);
+    });
+    (0,dom_helpers_querySelectorAll__WEBPACK_IMPORTED_MODULE_2__.default)(container, Selector.NAVBAR_TOGGLER).forEach(function (el) {
+      return _this.adjustAndStore('marginRight', el, size);
+    });
+  };
+
+  _proto.removeContainerStyle = function removeContainerStyle(containerState, container) {
+    var _this2 = this;
+
+    _ModalManager.prototype.removeContainerStyle.call(this, containerState, container);
+
+    (0,dom_helpers_querySelectorAll__WEBPACK_IMPORTED_MODULE_2__.default)(container, Selector.FIXED_CONTENT).forEach(function (el) {
+      return _this2.restore('paddingRight', el);
+    });
+    (0,dom_helpers_querySelectorAll__WEBPACK_IMPORTED_MODULE_2__.default)(container, Selector.STICKY_CONTENT).forEach(function (el) {
+      return _this2.restore('marginRight', el);
+    });
+    (0,dom_helpers_querySelectorAll__WEBPACK_IMPORTED_MODULE_2__.default)(container, Selector.NAVBAR_TOGGLER).forEach(function (el) {
+      return _this2.restore('marginRight', el);
+    });
+  };
+
+  return BootstrapModalManager;
+}(react_overlays_ModalManager__WEBPACK_IMPORTED_MODULE_4__.default);
+
+
+
+/***/ }),
+
 /***/ "./node_modules/react-bootstrap/esm/CloseButton.js":
 /*!*********************************************************!*\
   !*** ./node_modules/react-bootstrap/esm/CloseButton.js ***!
@@ -4787,6 +5538,541 @@ var Fade = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.forwardRef(function (
 Fade.defaultProps = defaultProps;
 Fade.displayName = 'Fade';
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Fade);
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/Modal.js":
+/*!***************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/Modal.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/esm/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var dom_helpers_addEventListener__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! dom-helpers/addEventListener */ "./node_modules/dom-helpers/esm/addEventListener.js");
+/* harmony import */ var dom_helpers_canUseDOM__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! dom-helpers/canUseDOM */ "./node_modules/dom-helpers/esm/canUseDOM.js");
+/* harmony import */ var dom_helpers_ownerDocument__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! dom-helpers/ownerDocument */ "./node_modules/dom-helpers/esm/ownerDocument.js");
+/* harmony import */ var dom_helpers_removeEventListener__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! dom-helpers/removeEventListener */ "./node_modules/dom-helpers/esm/removeEventListener.js");
+/* harmony import */ var dom_helpers_scrollbarSize__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! dom-helpers/scrollbarSize */ "./node_modules/dom-helpers/esm/scrollbarSize.js");
+/* harmony import */ var _restart_hooks_useCallbackRef__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @restart/hooks/useCallbackRef */ "./node_modules/@restart/hooks/esm/useCallbackRef.js");
+/* harmony import */ var _restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @restart/hooks/useEventCallback */ "./node_modules/@restart/hooks/esm/useEventCallback.js");
+/* harmony import */ var _restart_hooks_useWillUnmount__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @restart/hooks/useWillUnmount */ "./node_modules/@restart/hooks/esm/useWillUnmount.js");
+/* harmony import */ var dom_helpers_transitionEnd__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! dom-helpers/transitionEnd */ "./node_modules/dom-helpers/esm/transitionEnd.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react_overlays_Modal__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-overlays/Modal */ "./node_modules/react-overlays/esm/Modal.js");
+/* harmony import */ var warning__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! warning */ "./node_modules/warning/warning.js");
+/* harmony import */ var warning__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(warning__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _BootstrapModalManager__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./BootstrapModalManager */ "./node_modules/react-bootstrap/esm/BootstrapModalManager.js");
+/* harmony import */ var _Fade__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Fade */ "./node_modules/react-bootstrap/esm/Fade.js");
+/* harmony import */ var _ModalBody__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./ModalBody */ "./node_modules/react-bootstrap/esm/ModalBody.js");
+/* harmony import */ var _ModalContext__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./ModalContext */ "./node_modules/react-bootstrap/esm/ModalContext.js");
+/* harmony import */ var _ModalDialog__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./ModalDialog */ "./node_modules/react-bootstrap/esm/ModalDialog.js");
+/* harmony import */ var _ModalFooter__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./ModalFooter */ "./node_modules/react-bootstrap/esm/ModalFooter.js");
+/* harmony import */ var _ModalHeader__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./ModalHeader */ "./node_modules/react-bootstrap/esm/ModalHeader.js");
+/* harmony import */ var _ModalTitle__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./ModalTitle */ "./node_modules/react-bootstrap/esm/ModalTitle.js");
+/* harmony import */ var _ThemeProvider__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/esm/ThemeProvider.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var manager;
+var defaultProps = {
+  show: false,
+  backdrop: true,
+  keyboard: true,
+  autoFocus: true,
+  enforceFocus: true,
+  restoreFocus: true,
+  animation: true,
+  dialogAs: _ModalDialog__WEBPACK_IMPORTED_MODULE_14__.default
+};
+/* eslint-disable no-use-before-define, react/no-multi-comp */
+
+function DialogTransition(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_12__.createElement(_Fade__WEBPACK_IMPORTED_MODULE_15__.default, props);
+}
+
+function BackdropTransition(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_12__.createElement(_Fade__WEBPACK_IMPORTED_MODULE_15__.default, props);
+}
+/* eslint-enable no-use-before-define */
+
+
+var Modal = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_12__.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      className = _ref.className,
+      style = _ref.style,
+      dialogClassName = _ref.dialogClassName,
+      contentClassName = _ref.contentClassName,
+      children = _ref.children,
+      Dialog = _ref.dialogAs,
+      ariaLabelledby = _ref['aria-labelledby'],
+      show = _ref.show,
+      animation = _ref.animation,
+      backdrop = _ref.backdrop,
+      keyboard = _ref.keyboard,
+      onEscapeKeyDown = _ref.onEscapeKeyDown,
+      onShow = _ref.onShow,
+      onHide = _ref.onHide,
+      container = _ref.container,
+      autoFocus = _ref.autoFocus,
+      enforceFocus = _ref.enforceFocus,
+      restoreFocus = _ref.restoreFocus,
+      restoreFocusOptions = _ref.restoreFocusOptions,
+      onEntered = _ref.onEntered,
+      onExit = _ref.onExit,
+      onExiting = _ref.onExiting,
+      onEnter = _ref.onEnter,
+      onEntering = _ref.onEntering,
+      onExited = _ref.onExited,
+      backdropClassName = _ref.backdropClassName,
+      propsManager = _ref.manager,
+      props = (0,_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__.default)(_ref, ["bsPrefix", "className", "style", "dialogClassName", "contentClassName", "children", "dialogAs", "aria-labelledby", "show", "animation", "backdrop", "keyboard", "onEscapeKeyDown", "onShow", "onHide", "container", "autoFocus", "enforceFocus", "restoreFocus", "restoreFocusOptions", "onEntered", "onExit", "onExiting", "onEnter", "onEntering", "onExited", "backdropClassName", "manager"]);
+
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_12__.useState)({}),
+      modalStyle = _useState[0],
+      setStyle = _useState[1];
+
+  var _useState2 = (0,react__WEBPACK_IMPORTED_MODULE_12__.useState)(false),
+      animateStaticModal = _useState2[0],
+      setAnimateStaticModal = _useState2[1];
+
+  var waitingForMouseUpRef = (0,react__WEBPACK_IMPORTED_MODULE_12__.useRef)(false);
+  var ignoreBackdropClickRef = (0,react__WEBPACK_IMPORTED_MODULE_12__.useRef)(false);
+  var removeStaticModalAnimationRef = (0,react__WEBPACK_IMPORTED_MODULE_12__.useRef)(null); // TODO: what's this type
+
+  var _useCallbackRef = (0,_restart_hooks_useCallbackRef__WEBPACK_IMPORTED_MODULE_8__.default)(),
+      modal = _useCallbackRef[0],
+      setModalRef = _useCallbackRef[1];
+
+  var handleHide = (0,_restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_9__.default)(onHide);
+  bsPrefix = (0,_ThemeProvider__WEBPACK_IMPORTED_MODULE_16__.useBootstrapPrefix)(bsPrefix, 'modal');
+  (0,react__WEBPACK_IMPORTED_MODULE_12__.useImperativeHandle)(ref, function () {
+    return {
+      get _modal() {
+         true ? warning__WEBPACK_IMPORTED_MODULE_13___default()(false, 'Accessing `_modal` is not supported and will be removed in a future release') : 0;
+        return modal;
+      }
+
+    };
+  }, [modal]);
+  var modalContext = (0,react__WEBPACK_IMPORTED_MODULE_12__.useMemo)(function () {
+    return {
+      onHide: handleHide
+    };
+  }, [handleHide]);
+
+  function getModalManager() {
+    if (propsManager) return propsManager;
+    if (!manager) manager = new _BootstrapModalManager__WEBPACK_IMPORTED_MODULE_17__.default();
+    return manager;
+  }
+
+  function updateDialogStyle(node) {
+    if (!dom_helpers_canUseDOM__WEBPACK_IMPORTED_MODULE_4__.default) return;
+    var containerIsOverflowing = getModalManager().isContainerOverflowing(modal);
+    var modalIsOverflowing = node.scrollHeight > (0,dom_helpers_ownerDocument__WEBPACK_IMPORTED_MODULE_5__.default)(node).documentElement.clientHeight;
+    setStyle({
+      paddingRight: containerIsOverflowing && !modalIsOverflowing ? (0,dom_helpers_scrollbarSize__WEBPACK_IMPORTED_MODULE_7__.default)() : undefined,
+      paddingLeft: !containerIsOverflowing && modalIsOverflowing ? (0,dom_helpers_scrollbarSize__WEBPACK_IMPORTED_MODULE_7__.default)() : undefined
+    });
+  }
+
+  var handleWindowResize = (0,_restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_9__.default)(function () {
+    if (modal) {
+      updateDialogStyle(modal.dialog);
+    }
+  });
+  (0,_restart_hooks_useWillUnmount__WEBPACK_IMPORTED_MODULE_10__.default)(function () {
+    (0,dom_helpers_removeEventListener__WEBPACK_IMPORTED_MODULE_6__.default)(window, 'resize', handleWindowResize);
+
+    if (removeStaticModalAnimationRef.current) {
+      removeStaticModalAnimationRef.current();
+    }
+  }); // We prevent the modal from closing during a drag by detecting where the
+  // the click originates from. If it starts in the modal and then ends outside
+  // don't close.
+
+  var handleDialogMouseDown = function handleDialogMouseDown() {
+    waitingForMouseUpRef.current = true;
+  };
+
+  var handleMouseUp = function handleMouseUp(e) {
+    if (waitingForMouseUpRef.current && modal && e.target === modal.dialog) {
+      ignoreBackdropClickRef.current = true;
+    }
+
+    waitingForMouseUpRef.current = false;
+  };
+
+  var handleStaticModalAnimation = function handleStaticModalAnimation() {
+    setAnimateStaticModal(true);
+    removeStaticModalAnimationRef.current = (0,dom_helpers_transitionEnd__WEBPACK_IMPORTED_MODULE_11__.default)(modal.dialog, function () {
+      setAnimateStaticModal(false);
+    });
+  };
+
+  var handleStaticBackdropClick = function handleStaticBackdropClick(e) {
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
+    handleStaticModalAnimation();
+  };
+
+  var handleClick = function handleClick(e) {
+    if (backdrop === 'static') {
+      handleStaticBackdropClick(e);
+      return;
+    }
+
+    if (ignoreBackdropClickRef.current || e.target !== e.currentTarget) {
+      ignoreBackdropClickRef.current = false;
+      return;
+    }
+
+    onHide();
+  };
+
+  var handleEscapeKeyDown = function handleEscapeKeyDown(e) {
+    if (!keyboard && backdrop === 'static') {
+      // Call preventDefault to stop modal from closing in react-overlays,
+      // then play our animation.
+      e.preventDefault();
+      handleStaticModalAnimation();
+    } else if (keyboard && onEscapeKeyDown) {
+      onEscapeKeyDown(e);
+    }
+  };
+
+  var handleEnter = function handleEnter(node) {
+    if (node) {
+      node.style.display = 'block';
+      updateDialogStyle(node);
+    }
+
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    if (onEnter) onEnter.apply(void 0, [node].concat(args));
+  };
+
+  var handleExit = function handleExit(node) {
+    if (removeStaticModalAnimationRef.current) {
+      removeStaticModalAnimationRef.current();
+    }
+
+    for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+      args[_key2 - 1] = arguments[_key2];
+    }
+
+    if (onExit) onExit.apply(void 0, [node].concat(args));
+  };
+
+  var handleEntering = function handleEntering(node) {
+    for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+      args[_key3 - 1] = arguments[_key3];
+    }
+
+    if (onEntering) onEntering.apply(void 0, [node].concat(args)); // FIXME: This should work even when animation is disabled.
+
+    (0,dom_helpers_addEventListener__WEBPACK_IMPORTED_MODULE_3__.default)(window, 'resize', handleWindowResize);
+  };
+
+  var handleExited = function handleExited(node) {
+    if (node) node.style.display = ''; // RHL removes it sometimes
+
+    for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+      args[_key4 - 1] = arguments[_key4];
+    }
+
+    if (onExited) onExited.apply(void 0, args); // FIXME: This should work even when animation is disabled.
+
+    (0,dom_helpers_removeEventListener__WEBPACK_IMPORTED_MODULE_6__.default)(window, 'resize', handleWindowResize);
+  };
+
+  var renderBackdrop = (0,react__WEBPACK_IMPORTED_MODULE_12__.useCallback)(function (backdropProps) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_12__.createElement("div", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, backdropProps, {
+      className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(bsPrefix + "-backdrop", backdropClassName, !animation && 'show')
+    }));
+  }, [animation, backdropClassName, bsPrefix]);
+
+  var baseModalStyle = (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, style, modalStyle); // Sets `display` always block when `animation` is false
+
+
+  if (!animation) {
+    baseModalStyle.display = 'block';
+  }
+
+  var renderDialog = function renderDialog(dialogProps) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_12__.createElement("div", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__.default)({
+      role: "dialog"
+    }, dialogProps, {
+      style: baseModalStyle,
+      className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(className, bsPrefix, animateStaticModal && bsPrefix + "-static"),
+      onClick: backdrop ? handleClick : undefined,
+      onMouseUp: handleMouseUp,
+      "aria-labelledby": ariaLabelledby
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_12__.createElement(Dialog, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, props, {
+      onMouseDown: handleDialogMouseDown,
+      className: dialogClassName,
+      contentClassName: contentClassName
+    }), children));
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_12__.createElement(_ModalContext__WEBPACK_IMPORTED_MODULE_18__.default.Provider, {
+    value: modalContext
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_12__.createElement(react_overlays_Modal__WEBPACK_IMPORTED_MODULE_19__.default, {
+    show: show,
+    ref: setModalRef,
+    backdrop: backdrop,
+    container: container,
+    keyboard: true // Always set true - see handleEscapeKeyDown
+    ,
+    autoFocus: autoFocus,
+    enforceFocus: enforceFocus,
+    restoreFocus: restoreFocus,
+    restoreFocusOptions: restoreFocusOptions,
+    onEscapeKeyDown: handleEscapeKeyDown,
+    onShow: onShow,
+    onHide: onHide,
+    onEnter: handleEnter,
+    onEntering: handleEntering,
+    onEntered: onEntered,
+    onExit: handleExit,
+    onExiting: onExiting,
+    onExited: handleExited,
+    manager: getModalManager(),
+    containerClassName: bsPrefix + "-open",
+    transition: animation ? DialogTransition : undefined,
+    backdropTransition: animation ? BackdropTransition : undefined,
+    renderBackdrop: renderBackdrop,
+    renderDialog: renderDialog
+  }));
+});
+Modal.displayName = 'Modal';
+Modal.defaultProps = defaultProps;
+Modal.Body = _ModalBody__WEBPACK_IMPORTED_MODULE_20__.default;
+Modal.Header = _ModalHeader__WEBPACK_IMPORTED_MODULE_21__.default;
+Modal.Title = _ModalTitle__WEBPACK_IMPORTED_MODULE_22__.default;
+Modal.Footer = _ModalFooter__WEBPACK_IMPORTED_MODULE_23__.default;
+Modal.Dialog = _ModalDialog__WEBPACK_IMPORTED_MODULE_14__.default;
+Modal.TRANSITION_DURATION = 300;
+Modal.BACKDROP_TRANSITION_DURATION = 150;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Modal);
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/ModalBody.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/ModalBody.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _createWithBsPrefix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createWithBsPrefix */ "./node_modules/react-bootstrap/esm/createWithBsPrefix.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_createWithBsPrefix__WEBPACK_IMPORTED_MODULE_0__.default)('modal-body'));
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/ModalContext.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/ModalContext.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var ModalContext = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createContext({
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onHide: function onHide() {}
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ModalContext);
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/ModalDialog.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/ModalDialog.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/esm/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _ThemeProvider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/esm/ThemeProvider.js");
+
+
+
+
+
+var ModalDialog = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      className = _ref.className,
+      contentClassName = _ref.contentClassName,
+      centered = _ref.centered,
+      size = _ref.size,
+      children = _ref.children,
+      scrollable = _ref.scrollable,
+      props = (0,_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__.default)(_ref, ["bsPrefix", "className", "contentClassName", "centered", "size", "children", "scrollable"]);
+
+  bsPrefix = (0,_ThemeProvider__WEBPACK_IMPORTED_MODULE_4__.useBootstrapPrefix)(bsPrefix, 'modal');
+  var dialogClass = bsPrefix + "-dialog";
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, props, {
+    ref: ref,
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(dialogClass, className, size && bsPrefix + "-" + size, centered && dialogClass + "-centered", scrollable && dialogClass + "-scrollable")
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(bsPrefix + "-content", contentClassName)
+  }, children));
+});
+ModalDialog.displayName = 'ModalDialog';
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ModalDialog);
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/ModalFooter.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/ModalFooter.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _createWithBsPrefix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createWithBsPrefix */ "./node_modules/react-bootstrap/esm/createWithBsPrefix.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_createWithBsPrefix__WEBPACK_IMPORTED_MODULE_0__.default)('modal-footer'));
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/ModalHeader.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/ModalHeader.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/esm/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @restart/hooks/useEventCallback */ "./node_modules/@restart/hooks/esm/useEventCallback.js");
+/* harmony import */ var _ThemeProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/esm/ThemeProvider.js");
+/* harmony import */ var _CloseButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./CloseButton */ "./node_modules/react-bootstrap/esm/CloseButton.js");
+/* harmony import */ var _ModalContext__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ModalContext */ "./node_modules/react-bootstrap/esm/ModalContext.js");
+
+
+
+
+
+
+
+
+var defaultProps = {
+  closeLabel: 'Close',
+  closeButton: false
+};
+var ModalHeader = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      closeLabel = _ref.closeLabel,
+      closeButton = _ref.closeButton,
+      onHide = _ref.onHide,
+      className = _ref.className,
+      children = _ref.children,
+      props = (0,_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__.default)(_ref, ["bsPrefix", "closeLabel", "closeButton", "onHide", "className", "children"]);
+
+  bsPrefix = (0,_ThemeProvider__WEBPACK_IMPORTED_MODULE_5__.useBootstrapPrefix)(bsPrefix, 'modal-header');
+  var context = (0,react__WEBPACK_IMPORTED_MODULE_3__.useContext)(_ModalContext__WEBPACK_IMPORTED_MODULE_6__.default);
+  var handleClick = (0,_restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_4__.default)(function () {
+    if (context) context.onHide();
+    if (onHide) onHide();
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__.default)({
+    ref: ref
+  }, props, {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(className, bsPrefix)
+  }), children, closeButton && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement(_CloseButton__WEBPACK_IMPORTED_MODULE_7__.default, {
+    label: closeLabel,
+    onClick: handleClick
+  }));
+});
+ModalHeader.displayName = 'ModalHeader';
+ModalHeader.defaultProps = defaultProps;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ModalHeader);
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/ModalTitle.js":
+/*!********************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/ModalTitle.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _createWithBsPrefix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createWithBsPrefix */ "./node_modules/react-bootstrap/esm/createWithBsPrefix.js");
+/* harmony import */ var _divWithClassName__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./divWithClassName */ "./node_modules/react-bootstrap/esm/divWithClassName.js");
+
+
+var DivStyledAsH4 = (0,_divWithClassName__WEBPACK_IMPORTED_MODULE_0__.default)('h4');
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_createWithBsPrefix__WEBPACK_IMPORTED_MODULE_1__.default)('modal-title', {
+  Component: DivStyledAsH4
+}));
 
 /***/ }),
 
@@ -5110,6 +6396,35 @@ function createWithBsPrefix(prefix, _temp) {
   BsComponent.displayName = displayName;
   return BsComponent;
 }
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/divWithClassName.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/divWithClassName.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function (className) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.forwardRef(function (p, ref) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, p, {
+      ref: ref,
+      className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(p.className, className)
+    }));
+  });
+});
 
 /***/ }),
 
@@ -31480,6 +32795,2448 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "./node_modules/react-hook-form/dist/index.cjs.development.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/react-hook-form/dist/index.cjs.development.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var isHTMLElement = (value) => value instanceof HTMLElement;
+
+const EVENTS = {
+    BLUR: 'blur',
+    CHANGE: 'change',
+    INPUT: 'input',
+};
+const VALIDATION_MODE = {
+    onBlur: 'onBlur',
+    onChange: 'onChange',
+    onSubmit: 'onSubmit',
+    onTouched: 'onTouched',
+    all: 'all',
+};
+const SELECT = 'select';
+const UNDEFINED = 'undefined';
+const INPUT_VALIDATION_RULES = {
+    max: 'max',
+    min: 'min',
+    maxLength: 'maxLength',
+    minLength: 'minLength',
+    pattern: 'pattern',
+    required: 'required',
+    validate: 'validate',
+};
+
+function attachEventListeners({ ref }, shouldAttachChangeEvent, handleChange) {
+    if (isHTMLElement(ref) && handleChange) {
+        ref.addEventListener(shouldAttachChangeEvent ? EVENTS.CHANGE : EVENTS.INPUT, handleChange);
+        ref.addEventListener(EVENTS.BLUR, handleChange);
+    }
+}
+
+var isNullOrUndefined = (value) => value == null;
+
+const isObjectType = (value) => typeof value === 'object';
+var isObject = (value) => !isNullOrUndefined(value) &&
+    !Array.isArray(value) &&
+    isObjectType(value) &&
+    !(value instanceof Date);
+
+var isKey = (value) => /^\w*$/.test(value);
+
+var compact = (value) => value.filter(Boolean);
+
+var stringToPath = (input) => compact(input
+    .replace(/["|']/g, '')
+    .replace(/\[/g, '.')
+    .replace(/\]/g, '')
+    .split('.'));
+
+function set(object, path, value) {
+    let index = -1;
+    const tempPath = isKey(path) ? [path] : stringToPath(path);
+    const length = tempPath.length;
+    const lastIndex = length - 1;
+    while (++index < length) {
+        const key = tempPath[index];
+        let newValue = value;
+        if (index !== lastIndex) {
+            const objValue = object[key];
+            newValue =
+                isObject(objValue) || Array.isArray(objValue)
+                    ? objValue
+                    : !isNaN(+tempPath[index + 1])
+                        ? []
+                        : {};
+        }
+        object[key] = newValue;
+        object = object[key];
+    }
+    return object;
+}
+
+var transformToNestObject = (data, value = {}) => {
+    for (const key in data) {
+        !isKey(key) ? set(value, key, data[key]) : (value[key] = data[key]);
+    }
+    return value;
+};
+
+var isUndefined = (val) => val === undefined;
+
+var get = (obj = {}, path, defaultValue) => {
+    const result = compact(path.split(/[,[\].]+?/)).reduce((result, key) => (isNullOrUndefined(result) ? result : result[key]), obj);
+    return isUndefined(result) || result === obj
+        ? isUndefined(obj[path])
+            ? defaultValue
+            : obj[path]
+        : result;
+};
+
+var focusOnErrorField = (fields, fieldErrors) => {
+    for (const key in fields) {
+        if (get(fieldErrors, key)) {
+            const field = fields[key];
+            if (field) {
+                if (field.ref.focus && isUndefined(field.ref.focus())) {
+                    break;
+                }
+                else if (field.options) {
+                    field.options[0].ref.focus();
+                    break;
+                }
+            }
+        }
+    }
+};
+
+var removeAllEventListeners = (ref, validateWithStateUpdate) => {
+    if (isHTMLElement(ref) && ref.removeEventListener) {
+        ref.removeEventListener(EVENTS.INPUT, validateWithStateUpdate);
+        ref.removeEventListener(EVENTS.CHANGE, validateWithStateUpdate);
+        ref.removeEventListener(EVENTS.BLUR, validateWithStateUpdate);
+    }
+};
+
+const defaultReturn = {
+    isValid: false,
+    value: null,
+};
+var getRadioValue = (options) => Array.isArray(options)
+    ? options.reduce((previous, option) => option && option.ref.checked
+        ? {
+            isValid: true,
+            value: option.ref.value,
+        }
+        : previous, defaultReturn)
+    : defaultReturn;
+
+var getMultipleSelectValue = (options) => [...options]
+    .filter(({ selected }) => selected)
+    .map(({ value }) => value);
+
+var isRadioInput = (element) => element.type === 'radio';
+
+var isFileInput = (element) => element.type === 'file';
+
+var isCheckBoxInput = (element) => element.type === 'checkbox';
+
+var isMultipleSelect = (element) => element.type === `${SELECT}-multiple`;
+
+const defaultResult = {
+    value: false,
+    isValid: false,
+};
+const validResult = { value: true, isValid: true };
+var getCheckboxValue = (options) => {
+    if (Array.isArray(options)) {
+        if (options.length > 1) {
+            const values = options
+                .filter((option) => option && option.ref.checked)
+                .map(({ ref: { value } }) => value);
+            return { value: values, isValid: !!values.length };
+        }
+        const { checked, value, attributes } = options[0].ref;
+        return checked
+            ? attributes && !isUndefined(attributes.value)
+                ? isUndefined(value) || value === ''
+                    ? validResult
+                    : { value: value, isValid: true }
+                : validResult
+            : defaultResult;
+    }
+    return defaultResult;
+};
+
+function getFieldValue(fieldsRef, name, shallowFieldsStateRef, excludeDisabled, shouldKeepRawValue) {
+    const field = fieldsRef.current[name];
+    if (field) {
+        const { ref: { value, disabled }, ref, valueAsNumber, valueAsDate, setValueAs, } = field;
+        if (disabled && excludeDisabled) {
+            return;
+        }
+        if (isFileInput(ref)) {
+            return ref.files;
+        }
+        if (isRadioInput(ref)) {
+            return getRadioValue(field.options).value;
+        }
+        if (isMultipleSelect(ref)) {
+            return getMultipleSelectValue(ref.options);
+        }
+        if (isCheckBoxInput(ref)) {
+            return getCheckboxValue(field.options).value;
+        }
+        return shouldKeepRawValue
+            ? value
+            : valueAsNumber
+                ? value === ''
+                    ? NaN
+                    : +value
+                : valueAsDate
+                    ? ref.valueAsDate
+                    : setValueAs
+                        ? setValueAs(value)
+                        : value;
+    }
+    if (shallowFieldsStateRef) {
+        return get(shallowFieldsStateRef.current, name);
+    }
+}
+
+function isDetached(element) {
+    if (!element) {
+        return true;
+    }
+    if (!(element instanceof HTMLElement) ||
+        element.nodeType === Node.DOCUMENT_NODE) {
+        return false;
+    }
+    return isDetached(element.parentNode);
+}
+
+var isEmptyObject = (value) => isObject(value) && !Object.keys(value).length;
+
+var isBoolean = (value) => typeof value === 'boolean';
+
+function baseGet(object, updatePath) {
+    const length = updatePath.slice(0, -1).length;
+    let index = 0;
+    while (index < length) {
+        object = isUndefined(object) ? index++ : object[updatePath[index++]];
+    }
+    return object;
+}
+function unset(object, path) {
+    const updatePath = isKey(path) ? [path] : stringToPath(path);
+    const childObject = updatePath.length == 1 ? object : baseGet(object, updatePath);
+    const key = updatePath[updatePath.length - 1];
+    let previousObjRef;
+    if (childObject) {
+        delete childObject[key];
+    }
+    for (let k = 0; k < updatePath.slice(0, -1).length; k++) {
+        let index = -1;
+        let objectRef;
+        const currentPaths = updatePath.slice(0, -(k + 1));
+        const currentPathsLength = currentPaths.length - 1;
+        if (k > 0) {
+            previousObjRef = object;
+        }
+        while (++index < currentPaths.length) {
+            const item = currentPaths[index];
+            objectRef = objectRef ? objectRef[item] : object[item];
+            if (currentPathsLength === index &&
+                ((isObject(objectRef) && isEmptyObject(objectRef)) ||
+                    (Array.isArray(objectRef) &&
+                        !objectRef.filter((data) => (isObject(data) && !isEmptyObject(data)) || isBoolean(data)).length))) {
+                previousObjRef ? delete previousObjRef[item] : delete object[item];
+            }
+            previousObjRef = objectRef;
+        }
+    }
+    return object;
+}
+
+const isSameRef = (fieldValue, ref) => fieldValue && fieldValue.ref === ref;
+function findRemovedFieldAndRemoveListener(fieldsRef, handleChange, field, shallowFieldsStateRef, shouldUnregister, forceDelete) {
+    const { ref, ref: { name }, } = field;
+    const fieldRef = fieldsRef.current[name];
+    if (!shouldUnregister) {
+        const value = getFieldValue(fieldsRef, name, shallowFieldsStateRef);
+        !isUndefined(value) && set(shallowFieldsStateRef.current, name, value);
+    }
+    if (!ref.type || !fieldRef) {
+        delete fieldsRef.current[name];
+        return;
+    }
+    if (isRadioInput(ref) || isCheckBoxInput(ref)) {
+        if (Array.isArray(fieldRef.options) && fieldRef.options.length) {
+            compact(fieldRef.options).forEach((option = {}, index) => {
+                if ((isDetached(option.ref) && isSameRef(option, option.ref)) ||
+                    forceDelete) {
+                    removeAllEventListeners(option.ref, handleChange);
+                    unset(fieldRef.options, `[${index}]`);
+                }
+            });
+            if (fieldRef.options && !compact(fieldRef.options).length) {
+                delete fieldsRef.current[name];
+            }
+        }
+        else {
+            delete fieldsRef.current[name];
+        }
+    }
+    else if ((isDetached(ref) && isSameRef(fieldRef, ref)) || forceDelete) {
+        removeAllEventListeners(ref, handleChange);
+        delete fieldsRef.current[name];
+    }
+}
+
+var isPrimitive = (value) => isNullOrUndefined(value) || !isObjectType(value);
+
+function deepMerge(target, source) {
+    if (isPrimitive(target) || isPrimitive(source)) {
+        return source;
+    }
+    for (const key in source) {
+        const targetValue = target[key];
+        const sourceValue = source[key];
+        try {
+            target[key] =
+                (isObject(targetValue) && isObject(sourceValue)) ||
+                    (Array.isArray(targetValue) && Array.isArray(sourceValue))
+                    ? deepMerge(targetValue, sourceValue)
+                    : sourceValue;
+        }
+        catch (_a) { }
+    }
+    return target;
+}
+
+function deepEqual(object1, object2, isErrorObject) {
+    if (isPrimitive(object1) ||
+        isPrimitive(object2) ||
+        object1 instanceof Date ||
+        object2 instanceof Date) {
+        return object1 === object2;
+    }
+    if (!React.isValidElement(object1)) {
+        const keys1 = Object.keys(object1);
+        const keys2 = Object.keys(object2);
+        if (keys1.length !== keys2.length) {
+            return false;
+        }
+        for (const key of keys1) {
+            const val1 = object1[key];
+            if (!(isErrorObject && key === 'ref')) {
+                const val2 = object2[key];
+                if ((isObject(val1) || Array.isArray(val1)) &&
+                    (isObject(val2) || Array.isArray(val2))
+                    ? !deepEqual(val1, val2, isErrorObject)
+                    : val1 !== val2) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+function setDirtyFields(values, defaultValues, dirtyFields, parentNode, parentName) {
+    let index = -1;
+    while (++index < values.length) {
+        for (const key in values[index]) {
+            if (Array.isArray(values[index][key])) {
+                !dirtyFields[index] && (dirtyFields[index] = {});
+                dirtyFields[index][key] = [];
+                setDirtyFields(values[index][key], get(defaultValues[index] || {}, key, []), dirtyFields[index][key], dirtyFields[index], key);
+            }
+            else {
+                deepEqual(get(defaultValues[index] || {}, key), values[index][key])
+                    ? set(dirtyFields[index] || {}, key)
+                    : (dirtyFields[index] = Object.assign(Object.assign({}, dirtyFields[index]), { [key]: true }));
+            }
+        }
+        parentNode &&
+            !dirtyFields.length &&
+            delete parentNode[parentName];
+    }
+    return dirtyFields;
+}
+var setFieldArrayDirtyFields = (values, defaultValues, dirtyFields) => deepMerge(setDirtyFields(values, defaultValues, dirtyFields.slice(0, values.length)), setDirtyFields(defaultValues, values, dirtyFields.slice(0, values.length)));
+
+var isString = (value) => typeof value === 'string';
+
+var getFieldsValues = (fieldsRef, shallowFieldsState, shouldUnregister, excludeDisabled, search) => {
+    const output = {};
+    for (const name in fieldsRef.current) {
+        if (isUndefined(search) ||
+            (isString(search)
+                ? name.startsWith(search)
+                : Array.isArray(search) && search.find((data) => name.startsWith(data)))) {
+            output[name] = getFieldValue(fieldsRef, name, undefined, excludeDisabled);
+        }
+    }
+    return shouldUnregister
+        ? transformToNestObject(output)
+        : deepMerge(shallowFieldsState, transformToNestObject(output));
+};
+
+var isErrorStateChanged = ({ errors, name, error, validFields, fieldsWithValidation, }) => {
+    const isValid = isUndefined(error);
+    const previousError = get(errors, name);
+    return ((isValid && !!previousError) ||
+        (!isValid && !deepEqual(previousError, error, true)) ||
+        (isValid && get(fieldsWithValidation, name) && !get(validFields, name)));
+};
+
+var isRegex = (value) => value instanceof RegExp;
+
+var getValueAndMessage = (validationData) => isObject(validationData) && !isRegex(validationData)
+    ? validationData
+    : {
+        value: validationData,
+        message: '',
+    };
+
+var isFunction = (value) => typeof value === 'function';
+
+var isMessage = (value) => isString(value) || React.isValidElement(value);
+
+function getValidateError(result, ref, type = 'validate') {
+    if (isMessage(result) || (isBoolean(result) && !result)) {
+        return {
+            type,
+            message: isMessage(result) ? result : '',
+            ref,
+        };
+    }
+}
+
+var appendErrors = (name, validateAllFieldCriteria, errors, type, message) => validateAllFieldCriteria
+    ? Object.assign(Object.assign({}, errors[name]), { types: Object.assign(Object.assign({}, (errors[name] && errors[name].types ? errors[name].types : {})), { [type]: message || true }) }) : {};
+
+var validateField = async (fieldsRef, validateAllFieldCriteria, { ref, ref: { value }, options, required, maxLength, minLength, min, max, pattern, validate, }, shallowFieldsStateRef) => {
+    const name = ref.name;
+    const error = {};
+    const isRadio = isRadioInput(ref);
+    const isCheckBox = isCheckBoxInput(ref);
+    const isRadioOrCheckbox = isRadio || isCheckBox;
+    const isEmpty = value === '';
+    const appendErrorsCurry = appendErrors.bind(null, name, validateAllFieldCriteria, error);
+    const getMinMaxMessage = (exceedMax, maxLengthMessage, minLengthMessage, maxType = INPUT_VALIDATION_RULES.maxLength, minType = INPUT_VALIDATION_RULES.minLength) => {
+        const message = exceedMax ? maxLengthMessage : minLengthMessage;
+        error[name] = Object.assign({ type: exceedMax ? maxType : minType, message,
+            ref }, (exceedMax
+            ? appendErrorsCurry(maxType, message)
+            : appendErrorsCurry(minType, message)));
+    };
+    if (required &&
+        ((!isRadio && !isCheckBox && (isEmpty || isNullOrUndefined(value))) ||
+            (isBoolean(value) && !value) ||
+            (isCheckBox && !getCheckboxValue(options).isValid) ||
+            (isRadio && !getRadioValue(options).isValid))) {
+        const { value, message } = isMessage(required)
+            ? { value: !!required, message: required }
+            : getValueAndMessage(required);
+        if (value) {
+            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.required, message, ref: isRadioOrCheckbox
+                    ? ((fieldsRef.current[name].options || [])[0] || {}).ref
+                    : ref }, appendErrorsCurry(INPUT_VALIDATION_RULES.required, message));
+            if (!validateAllFieldCriteria) {
+                return error;
+            }
+        }
+    }
+    if ((!isNullOrUndefined(min) || !isNullOrUndefined(max)) && value !== '') {
+        let exceedMax;
+        let exceedMin;
+        const maxOutput = getValueAndMessage(max);
+        const minOutput = getValueAndMessage(min);
+        if (!isNaN(value)) {
+            const valueNumber = ref.valueAsNumber || parseFloat(value);
+            if (!isNullOrUndefined(maxOutput.value)) {
+                exceedMax = valueNumber > maxOutput.value;
+            }
+            if (!isNullOrUndefined(minOutput.value)) {
+                exceedMin = valueNumber < minOutput.value;
+            }
+        }
+        else {
+            const valueDate = ref.valueAsDate || new Date(value);
+            if (isString(maxOutput.value)) {
+                exceedMax = valueDate > new Date(maxOutput.value);
+            }
+            if (isString(minOutput.value)) {
+                exceedMin = valueDate < new Date(minOutput.value);
+            }
+        }
+        if (exceedMax || exceedMin) {
+            getMinMaxMessage(!!exceedMax, maxOutput.message, minOutput.message, INPUT_VALIDATION_RULES.max, INPUT_VALIDATION_RULES.min);
+            if (!validateAllFieldCriteria) {
+                return error;
+            }
+        }
+    }
+    if (isString(value) && !isEmpty && (maxLength || minLength)) {
+        const maxLengthOutput = getValueAndMessage(maxLength);
+        const minLengthOutput = getValueAndMessage(minLength);
+        const exceedMax = !isNullOrUndefined(maxLengthOutput.value) &&
+            value.length > maxLengthOutput.value;
+        const exceedMin = !isNullOrUndefined(minLengthOutput.value) &&
+            value.length < minLengthOutput.value;
+        if (exceedMax || exceedMin) {
+            getMinMaxMessage(exceedMax, maxLengthOutput.message, minLengthOutput.message);
+            if (!validateAllFieldCriteria) {
+                return error;
+            }
+        }
+    }
+    if (isString(value) && pattern && !isEmpty) {
+        const { value: patternValue, message } = getValueAndMessage(pattern);
+        if (isRegex(patternValue) && !patternValue.test(value)) {
+            error[name] = Object.assign({ type: INPUT_VALIDATION_RULES.pattern, message,
+                ref }, appendErrorsCurry(INPUT_VALIDATION_RULES.pattern, message));
+            if (!validateAllFieldCriteria) {
+                return error;
+            }
+        }
+    }
+    if (validate) {
+        const fieldValue = getFieldValue(fieldsRef, name, shallowFieldsStateRef, false, true);
+        const validateRef = isRadioOrCheckbox && options ? options[0].ref : ref;
+        if (isFunction(validate)) {
+            const result = await validate(fieldValue);
+            const validateError = getValidateError(result, validateRef);
+            if (validateError) {
+                error[name] = Object.assign(Object.assign({}, validateError), appendErrorsCurry(INPUT_VALIDATION_RULES.validate, validateError.message));
+                if (!validateAllFieldCriteria) {
+                    return error;
+                }
+            }
+        }
+        else if (isObject(validate)) {
+            let validationResult = {};
+            for (const [key, validateFunction] of Object.entries(validate)) {
+                if (!isEmptyObject(validationResult) && !validateAllFieldCriteria) {
+                    break;
+                }
+                const validateResult = await validateFunction(fieldValue);
+                const validateError = getValidateError(validateResult, validateRef, key);
+                if (validateError) {
+                    validationResult = Object.assign(Object.assign({}, validateError), appendErrorsCurry(key, validateError.message));
+                    if (validateAllFieldCriteria) {
+                        error[name] = validationResult;
+                    }
+                }
+            }
+            if (!isEmptyObject(validationResult)) {
+                error[name] = Object.assign({ ref: validateRef }, validationResult);
+                if (!validateAllFieldCriteria) {
+                    return error;
+                }
+            }
+        }
+    }
+    return error;
+};
+
+const getPath = (rootPath, values, paths = []) => {
+    for (const property in values) {
+        const rootName = (rootPath +
+            (isObject(values)
+                ? `.${property}`
+                : `[${property}]`));
+        isPrimitive(values[property])
+            ? paths.push(rootName)
+            : getPath(rootName, values[property], paths);
+    }
+    return paths;
+};
+
+var assignWatchFields = (fieldValues, fieldName, watchFields, inputValue, isSingleField) => {
+    let value = undefined;
+    watchFields.add(fieldName);
+    if (!isEmptyObject(fieldValues)) {
+        value = get(fieldValues, fieldName);
+        if (isObject(value) || Array.isArray(value)) {
+            getPath(fieldName, value).forEach((name) => watchFields.add(name));
+        }
+    }
+    return isUndefined(value)
+        ? isSingleField
+            ? inputValue
+            : get(inputValue, fieldName)
+        : value;
+};
+
+var skipValidation = ({ isOnBlur, isOnChange, isOnTouch, isTouched, isReValidateOnBlur, isReValidateOnChange, isBlurEvent, isSubmitted, isOnAll, }) => {
+    if (isOnAll) {
+        return false;
+    }
+    else if (!isSubmitted && isOnTouch) {
+        return !(isTouched || isBlurEvent);
+    }
+    else if (isSubmitted ? isReValidateOnBlur : isOnBlur) {
+        return !isBlurEvent;
+    }
+    else if (isSubmitted ? isReValidateOnChange : isOnChange) {
+        return isBlurEvent;
+    }
+    return true;
+};
+
+var getFieldArrayParentName = (name) => name.substring(0, name.indexOf('['));
+
+const isMatchFieldArrayName = (name, searchName) => RegExp(`^${searchName}([|.)\\d+`.replace(/\[/g, '\\[').replace(/\]/g, '\\]')).test(name);
+var isNameInFieldArray = (names, name) => [...names].some((current) => isMatchFieldArrayName(name, current));
+
+var isSelectInput = (element) => element.type === `${SELECT}-one`;
+
+function onDomRemove(fieldsRef, removeFieldEventListenerAndRef) {
+    const observer = new MutationObserver(() => {
+        for (const field of Object.values(fieldsRef.current)) {
+            if (field && field.options) {
+                for (const option of field.options) {
+                    if (option && option.ref && isDetached(option.ref)) {
+                        removeFieldEventListenerAndRef(field);
+                    }
+                }
+            }
+            else if (field && isDetached(field.ref)) {
+                removeFieldEventListenerAndRef(field);
+            }
+        }
+    });
+    observer.observe(window.document, {
+        childList: true,
+        subtree: true,
+    });
+    return observer;
+}
+
+var isWeb = typeof window !== UNDEFINED && typeof document !== UNDEFINED;
+
+function cloneObject(data) {
+    var _a;
+    let copy;
+    if (isPrimitive(data) ||
+        (isWeb && (data instanceof File || isHTMLElement(data)))) {
+        return data;
+    }
+    if (!['Set', 'Map', 'Object', 'Date', 'Array'].includes((_a = data.constructor) === null || _a === void 0 ? void 0 : _a.name)) {
+        return data;
+    }
+    if (data instanceof Date) {
+        copy = new Date(data.getTime());
+        return copy;
+    }
+    if (data instanceof Set) {
+        copy = new Set();
+        for (const item of data) {
+            copy.add(item);
+        }
+        return copy;
+    }
+    if (data instanceof Map) {
+        copy = new Map();
+        for (const key of data.keys()) {
+            copy.set(key, cloneObject(data.get(key)));
+        }
+        return copy;
+    }
+    copy = Array.isArray(data) ? [] : {};
+    for (const key in data) {
+        copy[key] = cloneObject(data[key]);
+    }
+    return copy;
+}
+
+var modeChecker = (mode) => ({
+    isOnSubmit: !mode || mode === VALIDATION_MODE.onSubmit,
+    isOnBlur: mode === VALIDATION_MODE.onBlur,
+    isOnChange: mode === VALIDATION_MODE.onChange,
+    isOnAll: mode === VALIDATION_MODE.all,
+    isOnTouch: mode === VALIDATION_MODE.onTouched,
+});
+
+var isRadioOrCheckboxFunction = (ref) => isRadioInput(ref) || isCheckBoxInput(ref);
+
+const isWindowUndefined = typeof window === UNDEFINED;
+const isProxyEnabled = isWeb ? 'Proxy' in window : typeof Proxy !== UNDEFINED;
+function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_MODE.onChange, resolver, context, defaultValues = {}, shouldFocusError = true, shouldUnregister = true, criteriaMode, } = {}) {
+    const fieldsRef = React.useRef({});
+    const fieldArrayDefaultValuesRef = React.useRef({});
+    const fieldArrayValuesRef = React.useRef({});
+    const watchFieldsRef = React.useRef(new Set());
+    const useWatchFieldsRef = React.useRef({});
+    const useWatchRenderFunctionsRef = React.useRef({});
+    const fieldsWithValidationRef = React.useRef({});
+    const validFieldsRef = React.useRef({});
+    const defaultValuesRef = React.useRef(defaultValues);
+    const isUnMount = React.useRef(false);
+    const isWatchAllRef = React.useRef(false);
+    const handleChangeRef = React.useRef();
+    const shallowFieldsStateRef = React.useRef({});
+    const resetFieldArrayFunctionRef = React.useRef({});
+    const contextRef = React.useRef(context);
+    const resolverRef = React.useRef(resolver);
+    const fieldArrayNamesRef = React.useRef(new Set());
+    const modeRef = React.useRef(modeChecker(mode));
+    const { isOnSubmit, isOnTouch } = modeRef.current;
+    const isValidateAllFieldCriteria = criteriaMode === VALIDATION_MODE.all;
+    const [formState, setFormState] = React.useState({
+        isDirty: false,
+        isValidating: false,
+        dirtyFields: {},
+        isSubmitted: false,
+        submitCount: 0,
+        touched: {},
+        isSubmitting: false,
+        isSubmitSuccessful: false,
+        isValid: !isOnSubmit,
+        errors: {},
+    });
+    const readFormStateRef = React.useRef({
+        isDirty: !isProxyEnabled,
+        dirtyFields: !isProxyEnabled,
+        touched: !isProxyEnabled || isOnTouch,
+        isValidating: !isProxyEnabled,
+        isSubmitting: !isProxyEnabled,
+        isValid: !isProxyEnabled,
+    });
+    const formStateRef = React.useRef(formState);
+    const observerRef = React.useRef();
+    const { isOnBlur: isReValidateOnBlur, isOnChange: isReValidateOnChange, } = React.useRef(modeChecker(reValidateMode)).current;
+    contextRef.current = context;
+    resolverRef.current = resolver;
+    formStateRef.current = formState;
+    shallowFieldsStateRef.current = shouldUnregister
+        ? {}
+        : isEmptyObject(shallowFieldsStateRef.current)
+            ? cloneObject(defaultValues)
+            : shallowFieldsStateRef.current;
+    const updateFormState = React.useCallback((state = {}) => {
+        if (!isUnMount.current) {
+            formStateRef.current = Object.assign(Object.assign({}, formStateRef.current), state);
+            setFormState(formStateRef.current);
+        }
+    }, []);
+    const updateIsValidating = () => readFormStateRef.current.isValidating &&
+        updateFormState({
+            isValidating: true,
+        });
+    const shouldRenderBaseOnError = React.useCallback((name, error, shouldRender = false, state = {}, isValid) => {
+        let shouldReRender = shouldRender ||
+            isErrorStateChanged({
+                errors: formStateRef.current.errors,
+                error,
+                name,
+                validFields: validFieldsRef.current,
+                fieldsWithValidation: fieldsWithValidationRef.current,
+            });
+        const previousError = get(formStateRef.current.errors, name);
+        if (error) {
+            unset(validFieldsRef.current, name);
+            shouldReRender =
+                shouldReRender ||
+                    !previousError ||
+                    !deepEqual(previousError, error, true);
+            set(formStateRef.current.errors, name, error);
+        }
+        else {
+            if (get(fieldsWithValidationRef.current, name) || resolverRef.current) {
+                set(validFieldsRef.current, name, true);
+                shouldReRender = shouldReRender || previousError;
+            }
+            unset(formStateRef.current.errors, name);
+        }
+        if ((shouldReRender && !isNullOrUndefined(shouldRender)) ||
+            !isEmptyObject(state) ||
+            readFormStateRef.current.isValidating) {
+            updateFormState(Object.assign(Object.assign(Object.assign({}, state), (resolverRef.current ? { isValid: !!isValid } : {})), { isValidating: false }));
+        }
+    }, []);
+    const setFieldValue = React.useCallback((name, rawValue) => {
+        const { ref, options } = fieldsRef.current[name];
+        const value = isWeb && isHTMLElement(ref) && isNullOrUndefined(rawValue)
+            ? ''
+            : rawValue;
+        if (isRadioInput(ref)) {
+            (options || []).forEach(({ ref: radioRef }) => (radioRef.checked = radioRef.value === value));
+        }
+        else if (isFileInput(ref) && !isString(value)) {
+            ref.files = value;
+        }
+        else if (isMultipleSelect(ref)) {
+            [...ref.options].forEach((selectRef) => (selectRef.selected = value.includes(selectRef.value)));
+        }
+        else if (isCheckBoxInput(ref) && options) {
+            options.length > 1
+                ? options.forEach(({ ref: checkboxRef }) => (checkboxRef.checked = Array.isArray(value)
+                    ? !!value.find((data) => data === checkboxRef.value)
+                    : value === checkboxRef.value))
+                : (options[0].ref.checked = !!value);
+        }
+        else {
+            ref.value = value;
+        }
+    }, []);
+    const isFormDirty = React.useCallback((name, data) => {
+        if (readFormStateRef.current.isDirty) {
+            const formValues = getValues();
+            name && data && set(formValues, name, data);
+            return !deepEqual(formValues, defaultValuesRef.current);
+        }
+        return false;
+    }, []);
+    const updateAndGetDirtyState = React.useCallback((name, shouldRender = true) => {
+        if (readFormStateRef.current.isDirty ||
+            readFormStateRef.current.dirtyFields) {
+            const isFieldDirty = !deepEqual(get(defaultValuesRef.current, name), getFieldValue(fieldsRef, name, shallowFieldsStateRef));
+            const isDirtyFieldExist = get(formStateRef.current.dirtyFields, name);
+            const previousIsDirty = formStateRef.current.isDirty;
+            isFieldDirty
+                ? set(formStateRef.current.dirtyFields, name, true)
+                : unset(formStateRef.current.dirtyFields, name);
+            const state = {
+                isDirty: isFormDirty(),
+                dirtyFields: formStateRef.current.dirtyFields,
+            };
+            const isChanged = (readFormStateRef.current.isDirty &&
+                previousIsDirty !== state.isDirty) ||
+                (readFormStateRef.current.dirtyFields &&
+                    isDirtyFieldExist !== get(formStateRef.current.dirtyFields, name));
+            isChanged && shouldRender && updateFormState(state);
+            return isChanged ? state : {};
+        }
+        return {};
+    }, []);
+    const executeValidation = React.useCallback(async (name, skipReRender) => {
+        {
+            if (!fieldsRef.current[name]) {
+                console.warn('📋 Field is missing with `name` attribute: ', name);
+                return false;
+            }
+        }
+        const error = (await validateField(fieldsRef, isValidateAllFieldCriteria, fieldsRef.current[name], shallowFieldsStateRef))[name];
+        shouldRenderBaseOnError(name, error, skipReRender);
+        return isUndefined(error);
+    }, [shouldRenderBaseOnError, isValidateAllFieldCriteria]);
+    const executeSchemaOrResolverValidation = React.useCallback(async (names) => {
+        const { errors } = await resolverRef.current(getValues(), contextRef.current, isValidateAllFieldCriteria);
+        const previousFormIsValid = formStateRef.current.isValid;
+        if (Array.isArray(names)) {
+            const isInputsValid = names
+                .map((name) => {
+                const error = get(errors, name);
+                error
+                    ? set(formStateRef.current.errors, name, error)
+                    : unset(formStateRef.current.errors, name);
+                return !error;
+            })
+                .every(Boolean);
+            updateFormState({
+                isValid: isEmptyObject(errors),
+                isValidating: false,
+            });
+            return isInputsValid;
+        }
+        else {
+            const error = get(errors, names);
+            shouldRenderBaseOnError(names, error, previousFormIsValid !== isEmptyObject(errors), {}, isEmptyObject(errors));
+            return !error;
+        }
+    }, [shouldRenderBaseOnError, isValidateAllFieldCriteria]);
+    const trigger = React.useCallback(async (name) => {
+        const fields = name || Object.keys(fieldsRef.current);
+        updateIsValidating();
+        if (resolverRef.current) {
+            return executeSchemaOrResolverValidation(fields);
+        }
+        if (Array.isArray(fields)) {
+            !name && (formStateRef.current.errors = {});
+            const result = await Promise.all(fields.map(async (data) => await executeValidation(data, null)));
+            updateFormState({
+                isValidating: false,
+            });
+            return result.every(Boolean);
+        }
+        return await executeValidation(fields);
+    }, [executeSchemaOrResolverValidation, executeValidation]);
+    const setInternalValues = React.useCallback((name, value, { shouldDirty, shouldValidate }) => {
+        const data = {};
+        set(data, name, value);
+        for (const fieldName of getPath(name, value)) {
+            if (fieldsRef.current[fieldName]) {
+                setFieldValue(fieldName, get(data, fieldName));
+                shouldDirty && updateAndGetDirtyState(fieldName);
+                shouldValidate && trigger(fieldName);
+            }
+        }
+    }, [trigger, setFieldValue, updateAndGetDirtyState]);
+    const setInternalValue = React.useCallback((name, value, config) => {
+        !shouldUnregister &&
+            !isPrimitive(value) &&
+            set(shallowFieldsStateRef.current, name, Array.isArray(value) ? [...value] : Object.assign({}, value));
+        if (fieldsRef.current[name]) {
+            setFieldValue(name, value);
+            config.shouldDirty && updateAndGetDirtyState(name);
+            config.shouldValidate && trigger(name);
+        }
+        else if (!isPrimitive(value)) {
+            setInternalValues(name, value, config);
+            if (fieldArrayNamesRef.current.has(name)) {
+                const parentName = getFieldArrayParentName(name) || name;
+                set(fieldArrayDefaultValuesRef.current, name, value);
+                resetFieldArrayFunctionRef.current[parentName]({
+                    [parentName]: get(fieldArrayDefaultValuesRef.current, parentName),
+                });
+                if ((readFormStateRef.current.isDirty ||
+                    readFormStateRef.current.dirtyFields) &&
+                    config.shouldDirty) {
+                    set(formStateRef.current.dirtyFields, name, setFieldArrayDirtyFields(value, get(defaultValuesRef.current, name, []), get(formStateRef.current.dirtyFields, name, [])));
+                    updateFormState({
+                        isDirty: !deepEqual(Object.assign(Object.assign({}, getValues()), { [name]: value }), defaultValuesRef.current),
+                    });
+                }
+            }
+        }
+        !shouldUnregister && set(shallowFieldsStateRef.current, name, value);
+    }, [updateAndGetDirtyState, setFieldValue, setInternalValues]);
+    const isFieldWatched = (name) => isWatchAllRef.current ||
+        watchFieldsRef.current.has(name) ||
+        watchFieldsRef.current.has((name.match(/\w+/) || [])[0]);
+    const renderWatchedInputs = (name) => {
+        let found = true;
+        if (!isEmptyObject(useWatchFieldsRef.current)) {
+            for (const key in useWatchFieldsRef.current) {
+                if (!name ||
+                    !useWatchFieldsRef.current[key].size ||
+                    useWatchFieldsRef.current[key].has(name) ||
+                    useWatchFieldsRef.current[key].has(getFieldArrayParentName(name))) {
+                    useWatchRenderFunctionsRef.current[key]();
+                    found = false;
+                }
+            }
+        }
+        return found;
+    };
+    function setValue(name, value, config) {
+        setInternalValue(name, value, config || {});
+        isFieldWatched(name) && updateFormState();
+        renderWatchedInputs(name);
+    }
+    handleChangeRef.current = handleChangeRef.current
+        ? handleChangeRef.current
+        : async ({ type, target }) => {
+            let name = target.name;
+            const field = fieldsRef.current[name];
+            let error;
+            let isValid;
+            if (field) {
+                const isBlurEvent = type === EVENTS.BLUR;
+                const shouldSkipValidation = skipValidation(Object.assign({ isBlurEvent,
+                    isReValidateOnChange,
+                    isReValidateOnBlur, isTouched: !!get(formStateRef.current.touched, name), isSubmitted: formStateRef.current.isSubmitted }, modeRef.current));
+                let state = updateAndGetDirtyState(name, false);
+                let shouldRender = !isEmptyObject(state) ||
+                    (!isBlurEvent && isFieldWatched(name));
+                if (isBlurEvent &&
+                    !get(formStateRef.current.touched, name) &&
+                    readFormStateRef.current.touched) {
+                    set(formStateRef.current.touched, name, true);
+                    state = Object.assign(Object.assign({}, state), { touched: formStateRef.current.touched });
+                }
+                if (!shouldUnregister && isCheckBoxInput(target)) {
+                    set(shallowFieldsStateRef.current, name, getFieldValue(fieldsRef, name));
+                }
+                if (shouldSkipValidation) {
+                    !isBlurEvent && renderWatchedInputs(name);
+                    return ((!isEmptyObject(state) ||
+                        (shouldRender && isEmptyObject(state))) &&
+                        updateFormState(state));
+                }
+                updateIsValidating();
+                if (resolverRef.current) {
+                    const { errors } = await resolverRef.current(getValues(), contextRef.current, isValidateAllFieldCriteria);
+                    const previousFormIsValid = formStateRef.current.isValid;
+                    error = get(errors, name);
+                    if (isCheckBoxInput(target) &&
+                        !error &&
+                        resolverRef.current) {
+                        const parentNodeName = getFieldArrayParentName(name);
+                        const currentError = get(errors, parentNodeName, {});
+                        currentError.type &&
+                            currentError.message &&
+                            (error = currentError);
+                        if (parentNodeName &&
+                            (currentError ||
+                                get(formStateRef.current.errors, parentNodeName))) {
+                            name = parentNodeName;
+                        }
+                    }
+                    isValid = isEmptyObject(errors);
+                    previousFormIsValid !== isValid && (shouldRender = true);
+                }
+                else {
+                    error = (await validateField(fieldsRef, isValidateAllFieldCriteria, field, shallowFieldsStateRef))[name];
+                }
+                !isBlurEvent && renderWatchedInputs(name);
+                shouldRenderBaseOnError(name, error, shouldRender, state, isValid);
+            }
+        };
+    function setFieldArrayDefaultValues(data) {
+        if (!shouldUnregister) {
+            let copy = cloneObject(data);
+            for (const value of fieldArrayNamesRef.current) {
+                if (isKey(value) && !copy[value]) {
+                    copy = Object.assign(Object.assign({}, copy), { [value]: [] });
+                }
+            }
+            return copy;
+        }
+        return data;
+    }
+    function getValues(payload) {
+        if (isString(payload)) {
+            return getFieldValue(fieldsRef, payload, shallowFieldsStateRef);
+        }
+        if (Array.isArray(payload)) {
+            const data = {};
+            for (const name of payload) {
+                set(data, name, getFieldValue(fieldsRef, name, shallowFieldsStateRef));
+            }
+            return data;
+        }
+        return setFieldArrayDefaultValues(getFieldsValues(fieldsRef, cloneObject(shallowFieldsStateRef.current), shouldUnregister));
+    }
+    const validateResolver = React.useCallback(async (values = {}) => {
+        const newDefaultValues = isEmptyObject(fieldsRef.current)
+            ? defaultValuesRef.current
+            : {};
+        const { errors } = (await resolverRef.current(Object.assign(Object.assign(Object.assign({}, newDefaultValues), getValues()), values), contextRef.current, isValidateAllFieldCriteria)) || {};
+        const isValid = isEmptyObject(errors);
+        formStateRef.current.isValid !== isValid &&
+            updateFormState({
+                isValid,
+            });
+    }, [isValidateAllFieldCriteria]);
+    const removeFieldEventListener = React.useCallback((field, forceDelete) => {
+        findRemovedFieldAndRemoveListener(fieldsRef, handleChangeRef.current, field, shallowFieldsStateRef, shouldUnregister, forceDelete);
+        if (shouldUnregister) {
+            unset(validFieldsRef.current, field.ref.name);
+            unset(fieldsWithValidationRef.current, field.ref.name);
+        }
+    }, [shouldUnregister]);
+    const updateWatchedValue = React.useCallback((name) => {
+        if (isWatchAllRef.current) {
+            updateFormState();
+        }
+        else {
+            for (const watchField of watchFieldsRef.current) {
+                if (watchField.startsWith(name)) {
+                    updateFormState();
+                    break;
+                }
+            }
+            renderWatchedInputs(name);
+        }
+    }, []);
+    const removeFieldEventListenerAndRef = React.useCallback((field, forceDelete) => {
+        if (field) {
+            removeFieldEventListener(field, forceDelete);
+            if (shouldUnregister && !compact(field.options || []).length) {
+                unset(formStateRef.current.errors, field.ref.name);
+                set(formStateRef.current.dirtyFields, field.ref.name, true);
+                updateFormState({
+                    isDirty: isFormDirty(),
+                });
+                readFormStateRef.current.isValid &&
+                    resolverRef.current &&
+                    validateResolver();
+                updateWatchedValue(field.ref.name);
+            }
+        }
+    }, [validateResolver, removeFieldEventListener]);
+    function clearErrors(name) {
+        name &&
+            (Array.isArray(name) ? name : [name]).forEach((inputName) => fieldsRef.current[inputName] && isKey(inputName)
+                ? delete formStateRef.current.errors[inputName]
+                : unset(formStateRef.current.errors, inputName));
+        updateFormState({
+            errors: name ? formStateRef.current.errors : {},
+        });
+    }
+    function setError(name, error) {
+        const ref = (fieldsRef.current[name] || {}).ref;
+        set(formStateRef.current.errors, name, Object.assign(Object.assign({}, error), { ref }));
+        updateFormState({
+            isValid: false,
+        });
+        error.shouldFocus && ref && ref.focus && ref.focus();
+    }
+    const watchInternal = React.useCallback((fieldNames, defaultValue, watchId) => {
+        const watchFields = watchId
+            ? useWatchFieldsRef.current[watchId]
+            : watchFieldsRef.current;
+        let fieldValues = getFieldsValues(fieldsRef, cloneObject(shallowFieldsStateRef.current), shouldUnregister, false, fieldNames);
+        if (isString(fieldNames)) {
+            const parentNodeName = getFieldArrayParentName(fieldNames) || fieldNames;
+            if (fieldArrayNamesRef.current.has(parentNodeName)) {
+                fieldValues = Object.assign(Object.assign({}, fieldArrayValuesRef.current), fieldValues);
+            }
+            return assignWatchFields(fieldValues, fieldNames, watchFields, isUndefined(get(defaultValuesRef.current, fieldNames))
+                ? defaultValue
+                : get(defaultValuesRef.current, fieldNames), true);
+        }
+        const combinedDefaultValues = isUndefined(defaultValue)
+            ? defaultValuesRef.current
+            : defaultValue;
+        if (Array.isArray(fieldNames)) {
+            return fieldNames.reduce((previous, name) => (Object.assign(Object.assign({}, previous), { [name]: assignWatchFields(fieldValues, name, watchFields, combinedDefaultValues) })), {});
+        }
+        isWatchAllRef.current = isUndefined(watchId);
+        return transformToNestObject((!isEmptyObject(fieldValues) && fieldValues) ||
+            combinedDefaultValues);
+    }, []);
+    function watch(fieldNames, defaultValue) {
+        return watchInternal(fieldNames, defaultValue);
+    }
+    function unregister(name) {
+        for (const fieldName of Array.isArray(name) ? name : [name]) {
+            removeFieldEventListenerAndRef(fieldsRef.current[fieldName], true);
+        }
+    }
+    function registerFieldRef(ref, options = {}) {
+        {
+            if (!ref.name) {
+                return console.warn('📋 Field is missing `name` attribute', ref, `https://react-hook-form.com/api#useForm`);
+            }
+            if (fieldArrayNamesRef.current.has(ref.name.split(/\[\d+\]$/)[0]) &&
+                !RegExp(`^${ref.name.split(/\[\d+\]$/)[0]}[\\d+].\\w+`
+                    .replace(/\[/g, '\\[')
+                    .replace(/\]/g, '\\]')).test(ref.name)) {
+                return console.warn('📋 `name` prop should be in object shape: name="test[index].name"', ref, 'https://react-hook-form.com/api#useFieldArray');
+            }
+        }
+        const { name, type, value } = ref;
+        const fieldRefAndValidationOptions = Object.assign({ ref }, options);
+        const fields = fieldsRef.current;
+        const isRadioOrCheckbox = isRadioOrCheckboxFunction(ref);
+        const isFieldArray = isNameInFieldArray(fieldArrayNamesRef.current, name);
+        const compareRef = (currentRef) => isWeb && (!isHTMLElement(ref) || currentRef === ref);
+        let field = fields[name];
+        let isEmptyDefaultValue = true;
+        let defaultValue;
+        if (field &&
+            (isRadioOrCheckbox
+                ? Array.isArray(field.options) &&
+                    compact(field.options).find((option) => {
+                        return value === option.ref.value && compareRef(option.ref);
+                    })
+                : compareRef(field.ref))) {
+            fields[name] = Object.assign(Object.assign({}, field), options);
+            return;
+        }
+        if (type) {
+            field = isRadioOrCheckbox
+                ? Object.assign({ options: [
+                        ...compact((field && field.options) || []),
+                        {
+                            ref,
+                        },
+                    ], ref: { type, name } }, options) : Object.assign({}, fieldRefAndValidationOptions);
+        }
+        else {
+            field = fieldRefAndValidationOptions;
+        }
+        fields[name] = field;
+        const isEmptyUnmountFields = isUndefined(get(shallowFieldsStateRef.current, name));
+        if (!isEmptyObject(defaultValuesRef.current) || !isEmptyUnmountFields) {
+            defaultValue = get(isEmptyUnmountFields
+                ? defaultValuesRef.current
+                : shallowFieldsStateRef.current, name);
+            isEmptyDefaultValue = isUndefined(defaultValue);
+            if (!isEmptyDefaultValue && !isFieldArray) {
+                setFieldValue(name, defaultValue);
+            }
+        }
+        if (!isEmptyObject(options)) {
+            set(fieldsWithValidationRef.current, name, true);
+            if (!isOnSubmit && readFormStateRef.current.isValid) {
+                validateField(fieldsRef, isValidateAllFieldCriteria, field, shallowFieldsStateRef).then((error) => {
+                    const previousFormIsValid = formStateRef.current.isValid;
+                    isEmptyObject(error)
+                        ? set(validFieldsRef.current, name, true)
+                        : unset(validFieldsRef.current, name);
+                    previousFormIsValid !== isEmptyObject(error) && updateFormState();
+                });
+            }
+        }
+        if (shouldUnregister && !(isFieldArray && isEmptyDefaultValue)) {
+            !isFieldArray && unset(formStateRef.current.dirtyFields, name);
+        }
+        if (type) {
+            attachEventListeners(isRadioOrCheckbox && field.options
+                ? field.options[field.options.length - 1]
+                : field, isRadioOrCheckbox || isSelectInput(ref), handleChangeRef.current);
+        }
+    }
+    function register(refOrRegisterOptions, options) {
+        if (!isWindowUndefined) {
+            if (isString(refOrRegisterOptions)) {
+                registerFieldRef({ name: refOrRegisterOptions }, options);
+            }
+            else if (isObject(refOrRegisterOptions) &&
+                'name' in refOrRegisterOptions) {
+                registerFieldRef(refOrRegisterOptions, options);
+            }
+            else {
+                return (ref) => ref && registerFieldRef(ref, refOrRegisterOptions);
+            }
+        }
+    }
+    const handleSubmit = React.useCallback((onValid, onInvalid) => async (e) => {
+        if (e && e.preventDefault) {
+            e.preventDefault();
+            e.persist();
+        }
+        let fieldErrors = {};
+        let fieldValues = setFieldArrayDefaultValues(getFieldsValues(fieldsRef, cloneObject(shallowFieldsStateRef.current), shouldUnregister, true));
+        readFormStateRef.current.isSubmitting &&
+            updateFormState({
+                isSubmitting: true,
+            });
+        try {
+            if (resolverRef.current) {
+                const { errors, values } = await resolverRef.current(fieldValues, contextRef.current, isValidateAllFieldCriteria);
+                formStateRef.current.errors = fieldErrors = errors;
+                fieldValues = values;
+            }
+            else {
+                for (const field of Object.values(fieldsRef.current)) {
+                    if (field) {
+                        const { name } = field.ref;
+                        const fieldError = await validateField(fieldsRef, isValidateAllFieldCriteria, field, shallowFieldsStateRef);
+                        if (fieldError[name]) {
+                            set(fieldErrors, name, fieldError[name]);
+                            unset(validFieldsRef.current, name);
+                        }
+                        else if (get(fieldsWithValidationRef.current, name)) {
+                            unset(formStateRef.current.errors, name);
+                            set(validFieldsRef.current, name, true);
+                        }
+                    }
+                }
+            }
+            if (isEmptyObject(fieldErrors) &&
+                Object.keys(formStateRef.current.errors).every((name) => name in fieldsRef.current)) {
+                updateFormState({
+                    errors: {},
+                    isSubmitting: true,
+                });
+                await onValid(fieldValues, e);
+            }
+            else {
+                formStateRef.current.errors = Object.assign(Object.assign({}, formStateRef.current.errors), fieldErrors);
+                onInvalid && (await onInvalid(formStateRef.current.errors, e));
+                shouldFocusError &&
+                    focusOnErrorField(fieldsRef.current, formStateRef.current.errors);
+            }
+        }
+        finally {
+            formStateRef.current.isSubmitting = false;
+            updateFormState({
+                isSubmitted: true,
+                isSubmitting: false,
+                isSubmitSuccessful: isEmptyObject(formStateRef.current.errors),
+                submitCount: formStateRef.current.submitCount + 1,
+            });
+        }
+    }, [shouldFocusError, isValidateAllFieldCriteria]);
+    const resetRefs = ({ errors, isDirty, isSubmitted, touched, isValid, submitCount, dirtyFields, }) => {
+        if (!isValid) {
+            validFieldsRef.current = {};
+            fieldsWithValidationRef.current = {};
+        }
+        fieldArrayDefaultValuesRef.current = {};
+        watchFieldsRef.current = new Set();
+        isWatchAllRef.current = false;
+        updateFormState({
+            submitCount: submitCount ? formStateRef.current.submitCount : 0,
+            isDirty: isDirty ? formStateRef.current.isDirty : false,
+            isSubmitted: isSubmitted ? formStateRef.current.isSubmitted : false,
+            isValid: isValid ? formStateRef.current.isValid : false,
+            dirtyFields: dirtyFields ? formStateRef.current.dirtyFields : {},
+            touched: touched ? formStateRef.current.touched : {},
+            errors: errors ? formStateRef.current.errors : {},
+            isSubmitting: false,
+            isSubmitSuccessful: false,
+        });
+    };
+    const reset = (values, omitResetState = {}) => {
+        if (isWeb) {
+            for (const field of Object.values(fieldsRef.current)) {
+                if (field) {
+                    const { ref, options } = field;
+                    const inputRef = isRadioOrCheckboxFunction(ref) && Array.isArray(options)
+                        ? options[0].ref
+                        : ref;
+                    if (isHTMLElement(inputRef)) {
+                        try {
+                            inputRef.closest('form').reset();
+                            break;
+                        }
+                        catch (_a) { }
+                    }
+                }
+            }
+        }
+        fieldsRef.current = {};
+        defaultValuesRef.current = Object.assign({}, (values || defaultValuesRef.current));
+        values && renderWatchedInputs('');
+        Object.values(resetFieldArrayFunctionRef.current).forEach((resetFieldArray) => isFunction(resetFieldArray) && resetFieldArray());
+        shallowFieldsStateRef.current = shouldUnregister
+            ? {}
+            : cloneObject(values || defaultValuesRef.current);
+        resetRefs(omitResetState);
+    };
+    React.useEffect(() => {
+        resolver && readFormStateRef.current.isValid && validateResolver();
+        observerRef.current =
+            observerRef.current || !isWeb
+                ? observerRef.current
+                : onDomRemove(fieldsRef, removeFieldEventListenerAndRef);
+    }, [removeFieldEventListenerAndRef, defaultValuesRef.current]);
+    React.useEffect(() => () => {
+        observerRef.current && observerRef.current.disconnect();
+        isUnMount.current = true;
+        {
+            return;
+        }
+    }, []);
+    if (!resolver && readFormStateRef.current.isValid) {
+        formState.isValid =
+            deepEqual(validFieldsRef.current, fieldsWithValidationRef.current) &&
+                isEmptyObject(formStateRef.current.errors);
+    }
+    const commonProps = {
+        trigger,
+        setValue: React.useCallback(setValue, [setInternalValue, trigger]),
+        getValues: React.useCallback(getValues, []),
+        register: React.useCallback(register, [defaultValuesRef.current]),
+        unregister: React.useCallback(unregister, []),
+        formState: isProxyEnabled
+            ? new Proxy(formState, {
+                get: (obj, prop) => {
+                    {
+                        if (prop === 'isValid' && isOnSubmit) {
+                            console.warn('📋 `formState.isValid` is applicable with `onTouched`, `onChange` or `onBlur` mode. https://react-hook-form.com/api#formState');
+                        }
+                    }
+                    if (prop in obj) {
+                        readFormStateRef.current[prop] = true;
+                        return obj[prop];
+                    }
+                    return undefined;
+                },
+            })
+            : formState,
+    };
+    const control = React.useMemo(() => (Object.assign({ isFormDirty,
+        updateWatchedValue,
+        shouldUnregister,
+        updateFormState,
+        removeFieldEventListener,
+        watchInternal, mode: modeRef.current, reValidateMode: {
+            isReValidateOnBlur,
+            isReValidateOnChange,
+        }, validateResolver: resolver ? validateResolver : undefined, fieldsRef,
+        resetFieldArrayFunctionRef,
+        useWatchFieldsRef,
+        useWatchRenderFunctionsRef,
+        fieldArrayDefaultValuesRef,
+        validFieldsRef,
+        fieldsWithValidationRef,
+        fieldArrayNamesRef,
+        readFormStateRef,
+        formStateRef,
+        defaultValuesRef,
+        shallowFieldsStateRef,
+        fieldArrayValuesRef }, commonProps)), [
+        defaultValuesRef.current,
+        updateWatchedValue,
+        shouldUnregister,
+        removeFieldEventListener,
+        watchInternal,
+    ]);
+    return Object.assign({ watch,
+        control,
+        handleSubmit, reset: React.useCallback(reset, []), clearErrors: React.useCallback(clearErrors, []), setError: React.useCallback(setError, []), errors: formState.errors }, commonProps);
+}
+
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+const FormContext = React.createContext(null);
+FormContext.displayName = 'RHFContext';
+const useFormContext = () => React.useContext(FormContext);
+const FormProvider = (_a) => {
+    var { children } = _a, props = __rest(_a, ["children"]);
+    return (React.createElement(FormContext.Provider, { value: Object.assign({}, props) }, children));
+};
+
+var generateId = () => {
+    const d = typeof performance === UNDEFINED ? Date.now() : performance.now() * 1000;
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16 + d) % 16 | 0;
+        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    });
+};
+
+function removeAtIndexes(data, indexes) {
+    let i = 0;
+    const temp = [...data];
+    for (const index of indexes) {
+        temp.splice(index - i, 1);
+        i++;
+    }
+    return compact(temp).length ? temp : [];
+}
+var removeArrayAt = (data, index) => isUndefined(index)
+    ? []
+    : removeAtIndexes(data, (Array.isArray(index) ? index : [index]).sort((a, b) => a - b));
+
+var moveArrayAt = (data, from, to) => {
+    if (Array.isArray(data)) {
+        if (isUndefined(data[to])) {
+            data[to] = undefined;
+        }
+        data.splice(to, 0, data.splice(from, 1)[0]);
+        return data;
+    }
+    return [];
+};
+
+var swapArrayAt = (data, indexA, indexB) => {
+    const temp = [data[indexB], data[indexA]];
+    data[indexA] = temp[0];
+    data[indexB] = temp[1];
+};
+
+function prepend(data, value) {
+    return [...(Array.isArray(value) ? value : [value || undefined]), ...data];
+}
+
+function insert(data, index, value) {
+    return [
+        ...data.slice(0, index),
+        ...(Array.isArray(value) ? value : [value || undefined]),
+        ...data.slice(index),
+    ];
+}
+
+var fillEmptyArray = (value) => Array.isArray(value) ? Array(value.length).fill(undefined) : undefined;
+
+var fillBooleanArray = (value) => (Array.isArray(value) ? value : [value]).map((data) => {
+    if (isObject(data)) {
+        const object = {};
+        for (const key in data) {
+            object[key] = true;
+        }
+        return object;
+    }
+    return true;
+});
+
+const mapIds = (values = [], keyName, skipWarn) => {
+    {
+        if (!skipWarn) {
+            for (const value of values) {
+                if (typeof value === 'object') {
+                    if (keyName in value) {
+                        console.warn(`📋 useFieldArray fieldValues contain the keyName \`${keyName}\` which is reserved for use by useFieldArray. https://react-hook-form.com/api#useFieldArray`);
+                        break;
+                    }
+                }
+                else {
+                    console.warn(`📋 useFieldArray input's name should be in object shape instead of flat array. https://react-hook-form.com/api#useFieldArray`);
+                    break;
+                }
+            }
+        }
+    }
+    return values.map((value) => (Object.assign({ [keyName]: value[keyName] || generateId() }, value)));
+};
+const useFieldArray = ({ control, name, keyName = 'id', }) => {
+    const methods = useFormContext();
+    {
+        if (!control && !methods) {
+            throw new Error('📋 useFieldArray is missing `control` prop. https://react-hook-form.com/api#useFieldArray');
+        }
+    }
+    const focusIndexRef = React.useRef(-1);
+    const isUnMount = React.useRef(false);
+    const { isFormDirty, updateWatchedValue, resetFieldArrayFunctionRef, fieldArrayNamesRef, fieldsRef, defaultValuesRef, removeFieldEventListener, formStateRef, shallowFieldsStateRef, updateFormState, readFormStateRef, validFieldsRef, fieldsWithValidationRef, fieldArrayDefaultValuesRef, validateResolver, getValues, shouldUnregister, fieldArrayValuesRef, } = control || methods.control;
+    const getDefaultValues = (values) => get(shouldUnregister ? values : shallowFieldsStateRef.current, name, []);
+    const fieldArrayParentName = getFieldArrayParentName(name);
+    const memoizedDefaultValues = React.useRef([
+        ...(get(fieldArrayDefaultValuesRef.current, fieldArrayParentName)
+            ? getDefaultValues(fieldArrayDefaultValuesRef.current)
+            : getDefaultValues(defaultValuesRef.current)),
+    ]);
+    const [fields, setFields] = React.useState(mapIds(memoizedDefaultValues.current, keyName));
+    set(fieldArrayValuesRef.current, name, fields);
+    const omitKey = (fields) => fields.map((_a = {}) => {
+        var _b = keyName, omitted = _a[_b], rest = __rest(_a, [typeof _b === "symbol" ? _b : _b + ""]);
+        return rest;
+    });
+    fieldArrayNamesRef.current.add(name);
+    const getFieldArrayValue = React.useCallback(() => get(fieldArrayValuesRef.current, name, []), [name]);
+    const getCurrentFieldsValues = () => mapIds(get(getValues(), name, getFieldArrayValue()).map((item, index) => (Object.assign(Object.assign({}, getFieldArrayValue()[index]), item))), keyName, true);
+    fieldArrayNamesRef.current.add(name);
+    if (fieldArrayParentName &&
+        !get(fieldArrayDefaultValuesRef.current, fieldArrayParentName)) {
+        set(fieldArrayDefaultValuesRef.current, fieldArrayParentName, cloneObject(get(defaultValuesRef.current, fieldArrayParentName)));
+    }
+    const setFieldAndValidState = (fieldsValues) => {
+        setFields(fieldsValues);
+        set(fieldArrayValuesRef.current, name, fieldsValues);
+        if (readFormStateRef.current.isValid && validateResolver) {
+            const values = getValues();
+            set(values, name, fieldsValues);
+            validateResolver(values);
+        }
+    };
+    const resetFields = () => {
+        for (const key in fieldsRef.current) {
+            if (isMatchFieldArrayName(key, name)) {
+                removeFieldEventListener(fieldsRef.current[key], true);
+                delete fieldsRef.current[key];
+            }
+        }
+    };
+    const cleanup = (ref) => !compact(get(ref, name, [])).length && unset(ref, name);
+    const updateDirtyFieldsWithDefaultValues = (updatedFieldArrayValues) => {
+        if (updatedFieldArrayValues) {
+            set(formStateRef.current.dirtyFields, name, setFieldArrayDirtyFields(omitKey(updatedFieldArrayValues), get(defaultValuesRef.current, name, []), get(formStateRef.current.dirtyFields, name, [])));
+        }
+    };
+    const batchStateUpdate = (method, args, updatedFieldValues, updatedFormValues = [], shouldSet = true, shouldUpdateValid = false) => {
+        if (get(shallowFieldsStateRef.current, name)) {
+            const output = method(get(shallowFieldsStateRef.current, name), args.argA, args.argB);
+            shouldSet && set(shallowFieldsStateRef.current, name, output);
+        }
+        if (get(fieldArrayDefaultValuesRef.current, name)) {
+            const output = method(get(fieldArrayDefaultValuesRef.current, name), args.argA, args.argB);
+            shouldSet && set(fieldArrayDefaultValuesRef.current, name, output);
+        }
+        if (Array.isArray(get(formStateRef.current.errors, name))) {
+            const output = method(get(formStateRef.current.errors, name), args.argA, args.argB);
+            shouldSet && set(formStateRef.current.errors, name, output);
+            cleanup(formStateRef.current.errors);
+        }
+        if (readFormStateRef.current.touched &&
+            get(formStateRef.current.touched, name)) {
+            const output = method(get(formStateRef.current.touched, name), args.argA, args.argB);
+            shouldSet && set(formStateRef.current.touched, name, output);
+            cleanup(formStateRef.current.touched);
+        }
+        if (readFormStateRef.current.dirtyFields ||
+            readFormStateRef.current.isDirty) {
+            set(formStateRef.current.dirtyFields, name, setFieldArrayDirtyFields(omitKey(updatedFormValues), get(defaultValuesRef.current, name, []), get(formStateRef.current.dirtyFields, name, [])));
+            updateDirtyFieldsWithDefaultValues(updatedFieldValues);
+            cleanup(formStateRef.current.dirtyFields);
+        }
+        if (shouldUpdateValid &&
+            readFormStateRef.current.isValid &&
+            !validateResolver) {
+            set(validFieldsRef.current, name, method(get(validFieldsRef.current, name, []), args.argA));
+            cleanup(validFieldsRef.current);
+            set(fieldsWithValidationRef.current, name, method(get(fieldsWithValidationRef.current, name, []), args.argA));
+            cleanup(fieldsWithValidationRef.current);
+        }
+        if (!isUnMount.current && readFormStateRef.current.isDirty) {
+            updateFormState({
+                isDirty: isFormDirty(name, omitKey(updatedFormValues)),
+            });
+        }
+    };
+    const append = (value, shouldFocus = true) => {
+        const appendValue = Array.isArray(value) ? value : [value];
+        const updateFormValues = [
+            ...getCurrentFieldsValues(),
+            ...mapIds(appendValue, keyName),
+        ];
+        setFieldAndValidState(updateFormValues);
+        if (readFormStateRef.current.dirtyFields ||
+            readFormStateRef.current.isDirty) {
+            updateDirtyFieldsWithDefaultValues(updateFormValues);
+            updateFormState({
+                isDirty: true,
+                dirtyFields: formStateRef.current.dirtyFields,
+            });
+        }
+        !shouldUnregister &&
+            set(shallowFieldsStateRef.current, name, [
+                ...(get(shallowFieldsStateRef.current, name) || []),
+                ...cloneObject(appendValue),
+            ]);
+        focusIndexRef.current = shouldFocus
+            ? get(fieldArrayValuesRef.current, name).length - 1
+            : -1;
+    };
+    const prepend$1 = (value, shouldFocus = true) => {
+        const emptyArray = fillEmptyArray(value);
+        const updatedFieldArrayValues = prepend(getCurrentFieldsValues(), mapIds(Array.isArray(value) ? value : [value], keyName));
+        setFieldAndValidState(updatedFieldArrayValues);
+        resetFields();
+        batchStateUpdate(prepend, {
+            argA: emptyArray,
+            argC: fillBooleanArray(value),
+        }, updatedFieldArrayValues);
+        focusIndexRef.current = shouldFocus ? 0 : -1;
+    };
+    const remove = (index) => {
+        const fieldValues = getCurrentFieldsValues();
+        const updatedFieldValues = removeArrayAt(fieldValues, index);
+        setFieldAndValidState(updatedFieldValues);
+        resetFields();
+        batchStateUpdate(removeArrayAt, {
+            argA: index,
+            argC: index,
+        }, updatedFieldValues, removeArrayAt(fieldValues, index), true, true);
+    };
+    const insert$1 = (index, value, shouldFocus = true) => {
+        const emptyArray = fillEmptyArray(value);
+        const fieldValues = getCurrentFieldsValues();
+        const updatedFieldArrayValues = insert(fieldValues, index, mapIds(Array.isArray(value) ? value : [value], keyName));
+        setFieldAndValidState(updatedFieldArrayValues);
+        resetFields();
+        batchStateUpdate(insert, {
+            argA: index,
+            argB: emptyArray,
+            argC: index,
+            argD: fillBooleanArray(value),
+        }, updatedFieldArrayValues, insert(fieldValues, index));
+        focusIndexRef.current = shouldFocus ? index : -1;
+    };
+    const swap = (indexA, indexB) => {
+        const fieldValues = getCurrentFieldsValues();
+        swapArrayAt(fieldValues, indexA, indexB);
+        resetFields();
+        setFieldAndValidState([...fieldValues]);
+        batchStateUpdate(swapArrayAt, {
+            argA: indexA,
+            argB: indexB,
+            argC: indexA,
+            argD: indexB,
+        }, undefined, fieldValues, false);
+    };
+    const move = (from, to) => {
+        const fieldValues = getCurrentFieldsValues();
+        moveArrayAt(fieldValues, from, to);
+        resetFields();
+        setFieldAndValidState([...fieldValues]);
+        batchStateUpdate(moveArrayAt, {
+            argA: from,
+            argB: to,
+            argC: from,
+            argD: to,
+        }, undefined, fieldValues, false);
+    };
+    React.useEffect(() => {
+        {
+            if (!name) {
+                console.warn('📋 useFieldArray is missing `name` attribute. https://react-hook-form.com/api#useFieldArray');
+            }
+        }
+        const defaultValues = get(fieldArrayDefaultValuesRef.current, name);
+        if (defaultValues && fields.length < defaultValues.length) {
+            set(fieldArrayDefaultValuesRef.current, name, defaultValues.slice(1));
+        }
+        updateWatchedValue(name);
+        if (focusIndexRef.current > -1) {
+            for (const key in fieldsRef.current) {
+                const field = fieldsRef.current[key];
+                if (key.startsWith(`${name}[${focusIndexRef.current}]`) &&
+                    field.ref.focus) {
+                    field.ref.focus();
+                    break;
+                }
+            }
+        }
+        focusIndexRef.current = -1;
+    }, [fields, name]);
+    React.useEffect(() => {
+        const resetFunctions = resetFieldArrayFunctionRef.current;
+        const fieldArrayNames = fieldArrayNamesRef.current;
+        if (!getFieldArrayParentName(name)) {
+            resetFunctions[name] = (data) => {
+                resetFields();
+                !data && unset(fieldArrayDefaultValuesRef.current, name);
+                unset(shallowFieldsStateRef.current, name);
+                memoizedDefaultValues.current = get(data || defaultValuesRef.current, name);
+                if (!isUnMount.current) {
+                    setFields(mapIds(memoizedDefaultValues.current, keyName));
+                }
+            };
+        }
+        return () => {
+            isUnMount.current = true;
+            shouldUnregister && remove();
+            resetFields();
+            delete resetFunctions[name];
+            unset(fieldArrayValuesRef.current, name);
+            fieldArrayNames.delete(name);
+        };
+    }, []);
+    return {
+        swap: React.useCallback(swap, [name]),
+        move: React.useCallback(move, [name]),
+        prepend: React.useCallback(prepend$1, [name]),
+        append: React.useCallback(append, [name]),
+        remove: React.useCallback(remove, [name]),
+        insert: React.useCallback(insert$1, [name]),
+        fields,
+    };
+};
+
+var getInputValue = (event) => isPrimitive(event) ||
+    !isObject(event.target) ||
+    (isObject(event.target) && !event.type)
+    ? event
+    : isUndefined(event.target.value)
+        ? event.target.checked
+        : event.target.value;
+
+function useController({ name, rules, defaultValue, control, onFocus, }) {
+    const methods = useFormContext();
+    {
+        if (!control && !methods) {
+            throw new Error('📋 Controller is missing `control` prop. https://react-hook-form.com/api#Controller');
+        }
+    }
+    const { defaultValuesRef, setValue, register, unregister, trigger, mode, reValidateMode: { isReValidateOnBlur, isReValidateOnChange }, formState, formStateRef: { current: { isSubmitted, touched, errors }, }, updateFormState, readFormStateRef, fieldsRef, fieldArrayNamesRef, shallowFieldsStateRef, } = control || methods.control;
+    const isNotFieldArray = !isNameInFieldArray(fieldArrayNamesRef.current, name);
+    const getInitialValue = () => !isUndefined(get(shallowFieldsStateRef.current, name)) && isNotFieldArray
+        ? get(shallowFieldsStateRef.current, name)
+        : isUndefined(defaultValue)
+            ? get(defaultValuesRef.current, name)
+            : defaultValue;
+    const [value, setInputStateValue] = React.useState(getInitialValue());
+    const valueRef = React.useRef(value);
+    const ref = React.useRef({
+        focus: () => null,
+    });
+    const onFocusRef = React.useRef(onFocus ||
+        (() => {
+            if (isFunction(ref.current.focus)) {
+                ref.current.focus();
+            }
+            {
+                if (!isFunction(ref.current.focus)) {
+                    console.warn(`📋 'ref' from Controller render prop must be attached to a React component or a DOM Element whose ref provides a 'focus()' method`);
+                }
+            }
+        }));
+    const shouldValidate = React.useCallback((isBlurEvent) => !skipValidation(Object.assign({ isBlurEvent,
+        isReValidateOnBlur,
+        isReValidateOnChange,
+        isSubmitted, isTouched: !!get(touched, name) }, mode)), [
+        isReValidateOnBlur,
+        isReValidateOnChange,
+        isSubmitted,
+        touched,
+        name,
+        mode,
+    ]);
+    const commonTask = React.useCallback(([event]) => {
+        const data = getInputValue(event);
+        setInputStateValue(data);
+        valueRef.current = data;
+        return data;
+    }, []);
+    const registerField = React.useCallback((shouldUpdateValue) => {
+        {
+            if (!name) {
+                return console.warn('📋 Field is missing `name` prop. https://react-hook-form.com/api#Controller');
+            }
+        }
+        if (fieldsRef.current[name]) {
+            fieldsRef.current[name] = Object.assign({ ref: fieldsRef.current[name].ref }, rules);
+        }
+        else {
+            register(Object.defineProperties({
+                name,
+                focus: onFocusRef.current,
+            }, {
+                value: {
+                    set(data) {
+                        setInputStateValue(data);
+                        valueRef.current = data;
+                    },
+                    get() {
+                        return valueRef.current;
+                    },
+                },
+            }), rules);
+            shouldUpdateValue = isUndefined(get(defaultValuesRef.current, name));
+        }
+        shouldUpdateValue &&
+            isNotFieldArray &&
+            setInputStateValue(getInitialValue());
+    }, [rules, name, register]);
+    React.useEffect(() => () => unregister(name), [name]);
+    React.useEffect(() => {
+        {
+            if (isUndefined(value)) {
+                console.warn(`📋 ${name} is missing in the 'defaultValue' prop of either its Controller (https://react-hook-form.com/api#Controller) or useForm (https://react-hook-form.com/api#useForm)`);
+            }
+            if (!isNotFieldArray && isUndefined(defaultValue)) {
+                console.warn('📋 Controller is missing `defaultValue` prop when using `useFieldArray`. https://react-hook-form.com/api#Controller');
+            }
+        }
+        registerField();
+    }, [registerField]);
+    React.useEffect(() => {
+        !fieldsRef.current[name] && registerField(true);
+    });
+    const onBlur = React.useCallback(() => {
+        if (readFormStateRef.current.touched && !get(touched, name)) {
+            set(touched, name, true);
+            updateFormState({
+                touched,
+            });
+        }
+        shouldValidate(true) && trigger(name);
+    }, [name, updateFormState, shouldValidate, trigger, readFormStateRef]);
+    const onChange = React.useCallback((...event) => setValue(name, commonTask(event), {
+        shouldValidate: shouldValidate(),
+        shouldDirty: true,
+    }), [setValue, name, shouldValidate]);
+    return {
+        field: {
+            onChange,
+            onBlur,
+            name,
+            value,
+            ref,
+        },
+        meta: Object.defineProperties({
+            invalid: !!get(errors, name),
+        }, {
+            isDirty: {
+                get() {
+                    return !!get(formState.dirtyFields, name);
+                },
+            },
+            isTouched: {
+                get() {
+                    return !!get(formState.touched, name);
+                },
+            },
+        }),
+    };
+}
+
+function useWatch({ control, name, defaultValue, }) {
+    const methods = useFormContext();
+    {
+        if (!control && !methods) {
+            throw new Error('📋 useWatch is missing `control` prop. https://react-hook-form.com/api#useWatch');
+        }
+    }
+    const { useWatchFieldsRef, useWatchRenderFunctionsRef, watchInternal, defaultValuesRef, } = control || methods.control;
+    const updateValue = React.useState()[1];
+    const idRef = React.useRef();
+    const defaultValueRef = React.useRef(defaultValue);
+    React.useEffect(() => {
+        {
+            if (name === '') {
+                console.warn('📋 useWatch is missing `name` attribute. https://react-hook-form.com/api#useWatch');
+            }
+        }
+        const id = (idRef.current = generateId());
+        const watchFieldsHookRender = useWatchRenderFunctionsRef.current;
+        const watchFieldsHook = useWatchFieldsRef.current;
+        watchFieldsHook[id] = new Set();
+        watchFieldsHookRender[id] = () => updateValue({});
+        watchInternal(name, defaultValueRef.current, id);
+        return () => {
+            delete watchFieldsHook[id];
+            delete watchFieldsHookRender[id];
+        };
+    }, [
+        name,
+        useWatchRenderFunctionsRef,
+        useWatchFieldsRef,
+        watchInternal,
+        defaultValueRef,
+    ]);
+    return idRef.current
+        ? watchInternal(name, defaultValueRef.current, idRef.current)
+        : isUndefined(defaultValue)
+            ? isString(name)
+                ? get(defaultValuesRef.current, name)
+                : Array.isArray(name)
+                    ? name.reduce((previous, inputName) => (Object.assign(Object.assign({}, previous), { [inputName]: get(defaultValuesRef.current, inputName) })), {})
+                    : defaultValuesRef.current
+            : defaultValue;
+}
+
+const Controller = (props) => {
+    const { rules, as, render, defaultValue, control, onFocus } = props, rest = __rest(props, ["rules", "as", "render", "defaultValue", "control", "onFocus"]);
+    const { field, meta } = useController(props);
+    const componentProps = Object.assign(Object.assign({}, rest), field);
+    return as
+        ? React.isValidElement(as)
+            ? React.cloneElement(as, componentProps)
+            : React.createElement(as, componentProps)
+        : render
+            ? render(field, meta)
+            : null;
+};
+
+exports.Controller = Controller;
+exports.FormProvider = FormProvider;
+exports.appendErrors = appendErrors;
+exports.get = get;
+exports.transformToNestObject = transformToNestObject;
+exports.useController = useController;
+exports.useFieldArray = useFieldArray;
+exports.useForm = useForm;
+exports.useFormContext = useFormContext;
+exports.useWatch = useWatch;
+//# sourceMappingURL=index.cjs.development.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/react-hook-form/dist/index.js":
+/*!****************************************************!*\
+  !*** ./node_modules/react-hook-form/dist/index.js ***!
+  \****************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+
+if (false) {} else {
+  module.exports = __webpack_require__(/*! ./index.cjs.development.js */ "./node_modules/react-hook-form/dist/index.cjs.development.js")
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-images-uploading/dist/constants.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/react-images-uploading/dist/constants.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DEFAULT_DATA_URL_KEY = exports.INIT_MAX_NUMBER = exports.DEFAULT_NULL_INDEX = void 0;
+exports.DEFAULT_NULL_INDEX = -1;
+exports.INIT_MAX_NUMBER = 1000;
+exports.DEFAULT_DATA_URL_KEY = 'dataURL';
+//# sourceMappingURL=constants.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-images-uploading/dist/index.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/react-images-uploading/dist/index.js ***!
+  \***********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var utils_1 = __webpack_require__(/*! ./utils */ "./node_modules/react-images-uploading/dist/utils.js");
+var validation_1 = __webpack_require__(/*! ./validation */ "./node_modules/react-images-uploading/dist/validation.js");
+var constants_1 = __webpack_require__(/*! ./constants */ "./node_modules/react-images-uploading/dist/constants.js");
+var ReactImageUploading = function (_a) {
+    var _b = _a.value, value = _b === void 0 ? [] : _b, onChange = _a.onChange, onError = _a.onError, children = _a.children, _c = _a.dataURLKey, dataURLKey = _c === void 0 ? constants_1.DEFAULT_DATA_URL_KEY : _c, _d = _a.multiple, multiple = _d === void 0 ? false : _d, _e = _a.maxNumber, maxNumber = _e === void 0 ? constants_1.INIT_MAX_NUMBER : _e, acceptType = _a.acceptType, maxFileSize = _a.maxFileSize, resolutionWidth = _a.resolutionWidth, resolutionHeight = _a.resolutionHeight, resolutionType = _a.resolutionType;
+    var inValue = value || [];
+    var inputRef = react_1.useRef(null);
+    var _f = react_1.useState(constants_1.DEFAULT_NULL_INDEX), keyUpdate = _f[0], setKeyUpdate = _f[1];
+    var _g = react_1.useState(null), errors = _g[0], setErrors = _g[1];
+    var _h = react_1.useState(false), isDragging = _h[0], setIsDragging = _h[1];
+    var handleClickInput = react_1.useCallback(function () { return utils_1.openFileDialog(inputRef); }, [
+        inputRef,
+    ]);
+    var onImageUpload = react_1.useCallback(function () {
+        setKeyUpdate(constants_1.DEFAULT_NULL_INDEX);
+        handleClickInput();
+    }, [handleClickInput]);
+    var onImageRemoveAll = react_1.useCallback(function () {
+        onChange && onChange([]);
+    }, [onChange]);
+    var onImageRemove = function (index) {
+        var updatedList = __spreadArrays(inValue);
+        if (Array.isArray(index)) {
+            index.forEach(function (i) {
+                updatedList.splice(i, 1);
+            });
+        }
+        else {
+            updatedList.splice(index, 1);
+        }
+        onChange && onChange(updatedList);
+    };
+    var onImageUpdate = function (index) {
+        setKeyUpdate(index);
+        handleClickInput();
+    };
+    var validate = function (fileList) { return __awaiter(void 0, void 0, void 0, function () {
+        var errorsValidation;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, validation_1.getErrorValidation({
+                        fileList: fileList,
+                        maxFileSize: maxFileSize,
+                        maxNumber: maxNumber,
+                        acceptType: acceptType,
+                        keyUpdate: keyUpdate,
+                        resolutionType: resolutionType,
+                        resolutionWidth: resolutionWidth,
+                        resolutionHeight: resolutionHeight,
+                        value: inValue,
+                    })];
+                case 1:
+                    errorsValidation = _a.sent();
+                    if (errorsValidation) {
+                        setErrors(errorsValidation);
+                        onError && onError(errorsValidation, fileList);
+                        return [2 /*return*/, false];
+                    }
+                    errors && setErrors(null);
+                    return [2 /*return*/, true];
+            }
+        });
+    }); };
+    var handleChange = function (files) { return __awaiter(void 0, void 0, void 0, function () {
+        var fileList, checkValidate, updatedFileList, updatedIndexes, i;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!files)
+                        return [2 /*return*/];
+                    return [4 /*yield*/, utils_1.getListFiles(files, dataURLKey)];
+                case 1:
+                    fileList = _a.sent();
+                    if (!fileList.length)
+                        return [2 /*return*/];
+                    return [4 /*yield*/, validate(fileList)];
+                case 2:
+                    checkValidate = _a.sent();
+                    if (!checkValidate)
+                        return [2 /*return*/];
+                    updatedIndexes = [];
+                    if (keyUpdate > constants_1.DEFAULT_NULL_INDEX) {
+                        updatedFileList = __spreadArrays(inValue);
+                        updatedFileList[keyUpdate] = fileList[0];
+                        updatedIndexes.push(keyUpdate);
+                    }
+                    else {
+                        if (multiple) {
+                            updatedFileList = __spreadArrays(inValue, fileList);
+                            for (i = inValue.length; i < updatedFileList.length; i++) {
+                                updatedIndexes.push(i);
+                            }
+                        }
+                        else {
+                            updatedFileList = [fileList[0]];
+                            updatedIndexes.push(0);
+                        }
+                    }
+                    onChange && onChange(updatedFileList, updatedIndexes);
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    var onInputChange = function (e) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, handleChange(e.target.files)];
+                case 1:
+                    _a.sent();
+                    keyUpdate > constants_1.DEFAULT_NULL_INDEX && setKeyUpdate(constants_1.DEFAULT_NULL_INDEX);
+                    if (inputRef.current)
+                        inputRef.current.value = '';
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    var acceptTypeString = react_1.useMemo(function () { return utils_1.getAcceptTypeString(acceptType); }, [
+        acceptType,
+    ]);
+    var handleDrag = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+    var handleDragIn = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+            setIsDragging(true);
+        }
+    };
+    var handleDragOut = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+    };
+    var handleDrop = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            handleChange(e.dataTransfer.files);
+            e.dataTransfer.clearData();
+        }
+    };
+    return (react_1.default.createElement(react_1.default.Fragment, null,
+        react_1.default.createElement("input", { type: "file", accept: acceptTypeString, ref: inputRef, multiple: multiple && keyUpdate === constants_1.DEFAULT_NULL_INDEX, onChange: onInputChange, style: { display: 'none' } }),
+        children &&
+            children({
+                imageList: inValue,
+                onImageUpload: onImageUpload,
+                onImageRemoveAll: onImageRemoveAll,
+                onImageUpdate: onImageUpdate,
+                onImageRemove: onImageRemove,
+                errors: errors,
+                dragProps: {
+                    onDrop: handleDrop,
+                    onDragEnter: handleDragIn,
+                    onDragLeave: handleDragOut,
+                    onDragOver: handleDrag,
+                },
+                isDragging: isDragging,
+            })));
+};
+exports.default = ReactImageUploading;
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-images-uploading/dist/utils.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/react-images-uploading/dist/utils.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getListFiles = exports.getImage = exports.getBase64 = exports.getAcceptTypeString = exports.openFileDialog = void 0;
+exports.openFileDialog = function (inputRef) {
+    if (inputRef.current)
+        inputRef.current.click();
+};
+exports.getAcceptTypeString = function (acceptType) {
+    return acceptType && acceptType.length > 0
+        ? acceptType.map(function (item) { return "." + item; }).join(', ')
+        : 'image/*';
+};
+exports.getBase64 = function (file) {
+    var reader = new FileReader();
+    return new Promise(function (resolve) {
+        reader.addEventListener('load', function () { return resolve(String(reader.result)); });
+        reader.readAsDataURL(file);
+    });
+};
+exports.getImage = function (file) {
+    var image = new Image();
+    return new Promise(function (resolve) {
+        image.addEventListener('load', function () { return resolve(image); });
+        image.src = URL.createObjectURL(file);
+    });
+};
+exports.getListFiles = function (files, dataURLKey) {
+    var promiseFiles = [];
+    for (var i = 0; i < files.length; i++) {
+        promiseFiles.push(exports.getBase64(files[i]));
+    }
+    return Promise.all(promiseFiles).then(function (fileListBase64) {
+        var fileList = fileListBase64.map(function (base64, index) {
+            var _a;
+            return (_a = {},
+                _a[dataURLKey] = base64,
+                _a.file = files[index],
+                _a);
+        });
+        return fileList;
+    });
+};
+//# sourceMappingURL=utils.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-images-uploading/dist/validation.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/react-images-uploading/dist/validation.js ***!
+  \****************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getErrorValidation = exports.isMaxNumberValid = exports.isAcceptTypeValid = exports.isMaxFileSizeValid = exports.isImageValid = exports.isResolutionValid = void 0;
+var constants_1 = __webpack_require__(/*! ./constants */ "./node_modules/react-images-uploading/dist/constants.js");
+var utils_1 = __webpack_require__(/*! ./utils */ "./node_modules/react-images-uploading/dist/utils.js");
+exports.isResolutionValid = function (image, resolutionType, resolutionWidth, resolutionHeight) {
+    if (resolutionWidth === void 0) { resolutionWidth = 0; }
+    if (resolutionHeight === void 0) { resolutionHeight = 1; }
+    if (!resolutionWidth || !resolutionHeight || !image.width || !image.height)
+        return true;
+    switch (resolutionType) {
+        case 'absolute': {
+            if (image.width === resolutionWidth && image.height === resolutionHeight)
+                return true;
+            break;
+        }
+        case 'ratio': {
+            var ratio = resolutionWidth / resolutionHeight;
+            if (image.width / image.height === ratio)
+                return true;
+            break;
+        }
+        case 'less': {
+            if (image.width <= resolutionWidth && image.height <= resolutionHeight)
+                return true;
+            break;
+        }
+        case 'more': {
+            if (image.width >= resolutionWidth && image.height >= resolutionHeight)
+                return true;
+            break;
+        }
+    }
+    return false;
+};
+exports.isImageValid = function (fileType) {
+    if (fileType.includes('image')) {
+        return true;
+    }
+    return false;
+};
+exports.isMaxFileSizeValid = function (fileSize, maxFileSize) {
+    return maxFileSize ? fileSize <= maxFileSize : true;
+};
+exports.isAcceptTypeValid = function (acceptType, fileName) {
+    if (acceptType && acceptType.length > 0) {
+        var type_1 = fileName.split('.').pop() || '';
+        if (acceptType.findIndex(function (item) { return item.toLowerCase() === type_1.toLowerCase(); }) < 0)
+            return false;
+    }
+    return true;
+};
+exports.isMaxNumberValid = function (totalNumber, maxNumber, keyUpdate) {
+    if (maxNumber !== 0 && !maxNumber)
+        return true;
+    if (keyUpdate === constants_1.DEFAULT_NULL_INDEX) {
+        if (totalNumber <= maxNumber)
+            return true;
+    }
+    else {
+        if (totalNumber <= maxNumber + 1)
+            return true;
+    }
+    return false;
+};
+exports.getErrorValidation = function (_a) {
+    var fileList = _a.fileList, value = _a.value, maxNumber = _a.maxNumber, keyUpdate = _a.keyUpdate, acceptType = _a.acceptType, maxFileSize = _a.maxFileSize, resolutionType = _a.resolutionType, resolutionWidth = _a.resolutionWidth, resolutionHeight = _a.resolutionHeight;
+    return __awaiter(void 0, void 0, void 0, function () {
+        var newErrors, i, file, image, checkRes;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    newErrors = {};
+                    if (!!exports.isMaxNumberValid(fileList.length + value.length, maxNumber, keyUpdate)) return [3 /*break*/, 1];
+                    newErrors.maxNumber = true;
+                    return [3 /*break*/, 5];
+                case 1:
+                    i = 0;
+                    _b.label = 2;
+                case 2:
+                    if (!(i < fileList.length)) return [3 /*break*/, 5];
+                    file = fileList[i].file;
+                    if (!file)
+                        return [3 /*break*/, 4];
+                    if (!exports.isImageValid(file.type)) {
+                        newErrors.acceptType = true;
+                        return [3 /*break*/, 5];
+                    }
+                    if (!exports.isAcceptTypeValid(acceptType, file.name)) {
+                        newErrors.acceptType = true;
+                        return [3 /*break*/, 5];
+                    }
+                    if (!exports.isMaxFileSizeValid(file.size, maxFileSize)) {
+                        newErrors.maxFileSize = true;
+                        return [3 /*break*/, 5];
+                    }
+                    if (!resolutionType) return [3 /*break*/, 4];
+                    return [4 /*yield*/, utils_1.getImage(file)];
+                case 3:
+                    image = _b.sent();
+                    checkRes = exports.isResolutionValid(image, resolutionType, resolutionWidth, resolutionHeight);
+                    if (!checkRes) {
+                        newErrors.resolution = true;
+                        return [3 /*break*/, 5];
+                    }
+                    _b.label = 4;
+                case 4:
+                    i++;
+                    return [3 /*break*/, 2];
+                case 5:
+                    if (Object.values(newErrors).find(Boolean))
+                        return [2 /*return*/, newErrors];
+                    return [2 /*return*/, null];
+            }
+        });
+    });
+};
+//# sourceMappingURL=validation.js.map
+
+/***/ }),
+
 /***/ "./node_modules/react-is/cjs/react-is.development.js":
 /*!***********************************************************!*\
   !*** ./node_modules/react-is/cjs/react-is.development.js ***!
@@ -31685,6 +35442,796 @@ if (false) {} else {
   module.exports = __webpack_require__(/*! ./cjs/react-is.development.js */ "./node_modules/react-is/cjs/react-is.development.js");
 }
 
+
+/***/ }),
+
+/***/ "./node_modules/react-overlays/esm/Modal.js":
+/*!**************************************************!*\
+  !*** ./node_modules/react-overlays/esm/Modal.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/esm/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js");
+/* harmony import */ var dom_helpers_activeElement__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! dom-helpers/activeElement */ "./node_modules/dom-helpers/esm/activeElement.js");
+/* harmony import */ var dom_helpers_contains__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! dom-helpers/contains */ "./node_modules/dom-helpers/esm/contains.js");
+/* harmony import */ var dom_helpers_canUseDOM__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! dom-helpers/canUseDOM */ "./node_modules/dom-helpers/esm/canUseDOM.js");
+/* harmony import */ var dom_helpers_listen__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! dom-helpers/listen */ "./node_modules/dom-helpers/esm/listen.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var _restart_hooks_useMounted__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @restart/hooks/useMounted */ "./node_modules/@restart/hooks/esm/useMounted.js");
+/* harmony import */ var _restart_hooks_useWillUnmount__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @restart/hooks/useWillUnmount */ "./node_modules/@restart/hooks/esm/useWillUnmount.js");
+/* harmony import */ var _restart_hooks_usePrevious__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @restart/hooks/usePrevious */ "./node_modules/@restart/hooks/esm/usePrevious.js");
+/* harmony import */ var _restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @restart/hooks/useEventCallback */ "./node_modules/@restart/hooks/esm/useEventCallback.js");
+/* harmony import */ var _ModalManager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./ModalManager */ "./node_modules/react-overlays/esm/ModalManager.js");
+/* harmony import */ var _useWaitForDOMRef__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./useWaitForDOMRef */ "./node_modules/react-overlays/esm/useWaitForDOMRef.js");
+
+
+
+/* eslint-disable @typescript-eslint/no-use-before-define, react/prop-types */
+
+
+
+
+
+
+
+
+
+
+
+
+
+var manager;
+
+function getManager() {
+  if (!manager) manager = new _ModalManager__WEBPACK_IMPORTED_MODULE_13__.default();
+  return manager;
+}
+
+function useModalManager(provided) {
+  var modalManager = provided || getManager();
+  var modal = (0,react__WEBPACK_IMPORTED_MODULE_7__.useRef)({
+    dialog: null,
+    backdrop: null
+  });
+  return Object.assign(modal.current, {
+    add: function add(container, className) {
+      return modalManager.add(modal.current, container, className);
+    },
+    remove: function remove() {
+      return modalManager.remove(modal.current);
+    },
+    isTopModal: function isTopModal() {
+      return modalManager.isTopModal(modal.current);
+    },
+    setDialogRef: (0,react__WEBPACK_IMPORTED_MODULE_7__.useCallback)(function (ref) {
+      modal.current.dialog = ref;
+    }, []),
+    setBackdropRef: (0,react__WEBPACK_IMPORTED_MODULE_7__.useCallback)(function (ref) {
+      modal.current.backdrop = ref;
+    }, [])
+  });
+}
+
+var Modal = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_7__.forwardRef)(function (_ref, ref) {
+  var _ref$show = _ref.show,
+      show = _ref$show === void 0 ? false : _ref$show,
+      _ref$role = _ref.role,
+      role = _ref$role === void 0 ? 'dialog' : _ref$role,
+      className = _ref.className,
+      style = _ref.style,
+      children = _ref.children,
+      _ref$backdrop = _ref.backdrop,
+      backdrop = _ref$backdrop === void 0 ? true : _ref$backdrop,
+      _ref$keyboard = _ref.keyboard,
+      keyboard = _ref$keyboard === void 0 ? true : _ref$keyboard,
+      onBackdropClick = _ref.onBackdropClick,
+      onEscapeKeyDown = _ref.onEscapeKeyDown,
+      transition = _ref.transition,
+      backdropTransition = _ref.backdropTransition,
+      _ref$autoFocus = _ref.autoFocus,
+      autoFocus = _ref$autoFocus === void 0 ? true : _ref$autoFocus,
+      _ref$enforceFocus = _ref.enforceFocus,
+      enforceFocus = _ref$enforceFocus === void 0 ? true : _ref$enforceFocus,
+      _ref$restoreFocus = _ref.restoreFocus,
+      restoreFocus = _ref$restoreFocus === void 0 ? true : _ref$restoreFocus,
+      restoreFocusOptions = _ref.restoreFocusOptions,
+      renderDialog = _ref.renderDialog,
+      _ref$renderBackdrop = _ref.renderBackdrop,
+      renderBackdrop = _ref$renderBackdrop === void 0 ? function (props) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_7__.createElement("div", props);
+  } : _ref$renderBackdrop,
+      providedManager = _ref.manager,
+      containerRef = _ref.container,
+      containerClassName = _ref.containerClassName,
+      onShow = _ref.onShow,
+      _ref$onHide = _ref.onHide,
+      onHide = _ref$onHide === void 0 ? function () {} : _ref$onHide,
+      onExit = _ref.onExit,
+      onExited = _ref.onExited,
+      onExiting = _ref.onExiting,
+      onEnter = _ref.onEnter,
+      onEntering = _ref.onEntering,
+      onEntered = _ref.onEntered,
+      rest = (0,_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__.default)(_ref, ["show", "role", "className", "style", "children", "backdrop", "keyboard", "onBackdropClick", "onEscapeKeyDown", "transition", "backdropTransition", "autoFocus", "enforceFocus", "restoreFocus", "restoreFocusOptions", "renderDialog", "renderBackdrop", "manager", "container", "containerClassName", "onShow", "onHide", "onExit", "onExited", "onExiting", "onEnter", "onEntering", "onEntered"]);
+
+  var container = (0,_useWaitForDOMRef__WEBPACK_IMPORTED_MODULE_14__.default)(containerRef);
+  var modal = useModalManager(providedManager);
+  var isMounted = (0,_restart_hooks_useMounted__WEBPACK_IMPORTED_MODULE_9__.default)();
+  var prevShow = (0,_restart_hooks_usePrevious__WEBPACK_IMPORTED_MODULE_11__.default)(show);
+
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_7__.useState)(!show),
+      exited = _useState[0],
+      setExited = _useState[1];
+
+  var lastFocusRef = (0,react__WEBPACK_IMPORTED_MODULE_7__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_7__.useImperativeHandle)(ref, function () {
+    return modal;
+  }, [modal]);
+
+  if (dom_helpers_canUseDOM__WEBPACK_IMPORTED_MODULE_4__.default && !prevShow && show) {
+    lastFocusRef.current = (0,dom_helpers_activeElement__WEBPACK_IMPORTED_MODULE_2__.default)();
+  }
+
+  if (!transition && !show && !exited) {
+    setExited(true);
+  } else if (show && exited) {
+    setExited(false);
+  }
+
+  var handleShow = (0,_restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_12__.default)(function () {
+    modal.add(container, containerClassName);
+    removeKeydownListenerRef.current = (0,dom_helpers_listen__WEBPACK_IMPORTED_MODULE_5__.default)(document, 'keydown', handleDocumentKeyDown);
+    removeFocusListenerRef.current = (0,dom_helpers_listen__WEBPACK_IMPORTED_MODULE_5__.default)(document, 'focus', // the timeout is necessary b/c this will run before the new modal is mounted
+    // and so steals focus from it
+    function () {
+      return setTimeout(handleEnforceFocus);
+    }, true);
+
+    if (onShow) {
+      onShow();
+    } // autofocus after onShow to not trigger a focus event for previous
+    // modals before this one is shown.
+
+
+    if (autoFocus) {
+      var currentActiveElement = (0,dom_helpers_activeElement__WEBPACK_IMPORTED_MODULE_2__.default)(document);
+
+      if (modal.dialog && currentActiveElement && !(0,dom_helpers_contains__WEBPACK_IMPORTED_MODULE_3__.default)(modal.dialog, currentActiveElement)) {
+        lastFocusRef.current = currentActiveElement;
+        modal.dialog.focus();
+      }
+    }
+  });
+  var handleHide = (0,_restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_12__.default)(function () {
+    modal.remove();
+    removeKeydownListenerRef.current == null ? void 0 : removeKeydownListenerRef.current();
+    removeFocusListenerRef.current == null ? void 0 : removeFocusListenerRef.current();
+
+    if (restoreFocus) {
+      var _lastFocusRef$current;
+
+      // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
+      (_lastFocusRef$current = lastFocusRef.current) == null ? void 0 : _lastFocusRef$current.focus == null ? void 0 : _lastFocusRef$current.focus(restoreFocusOptions);
+      lastFocusRef.current = null;
+    }
+  }); // TODO: try and combine these effects: https://github.com/react-bootstrap/react-overlays/pull/794#discussion_r409954120
+  // Show logic when:
+  //  - show is `true` _and_ `container` has resolved
+
+  (0,react__WEBPACK_IMPORTED_MODULE_7__.useEffect)(function () {
+    if (!show || !container) return;
+    handleShow();
+  }, [show, container,
+  /* should never change: */
+  handleShow]); // Hide cleanup logic when:
+  //  - `exited` switches to true
+  //  - component unmounts;
+
+  (0,react__WEBPACK_IMPORTED_MODULE_7__.useEffect)(function () {
+    if (!exited) return;
+    handleHide();
+  }, [exited, handleHide]);
+  (0,_restart_hooks_useWillUnmount__WEBPACK_IMPORTED_MODULE_10__.default)(function () {
+    handleHide();
+  }); // --------------------------------
+
+  var handleEnforceFocus = (0,_restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_12__.default)(function () {
+    if (!enforceFocus || !isMounted() || !modal.isTopModal()) {
+      return;
+    }
+
+    var currentActiveElement = (0,dom_helpers_activeElement__WEBPACK_IMPORTED_MODULE_2__.default)();
+
+    if (modal.dialog && currentActiveElement && !(0,dom_helpers_contains__WEBPACK_IMPORTED_MODULE_3__.default)(modal.dialog, currentActiveElement)) {
+      modal.dialog.focus();
+    }
+  });
+  var handleBackdropClick = (0,_restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_12__.default)(function (e) {
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
+    onBackdropClick == null ? void 0 : onBackdropClick(e);
+
+    if (backdrop === true) {
+      onHide();
+    }
+  });
+  var handleDocumentKeyDown = (0,_restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_12__.default)(function (e) {
+    if (keyboard && e.keyCode === 27 && modal.isTopModal()) {
+      onEscapeKeyDown == null ? void 0 : onEscapeKeyDown(e);
+
+      if (!e.defaultPrevented) {
+        onHide();
+      }
+    }
+  });
+  var removeFocusListenerRef = (0,react__WEBPACK_IMPORTED_MODULE_7__.useRef)();
+  var removeKeydownListenerRef = (0,react__WEBPACK_IMPORTED_MODULE_7__.useRef)();
+
+  var handleHidden = function handleHidden() {
+    setExited(true);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    onExited == null ? void 0 : onExited.apply(void 0, args);
+  };
+
+  var Transition = transition;
+
+  if (!container || !(show || Transition && !exited)) {
+    return null;
+  }
+
+  var dialogProps = (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__.default)({
+    role: role,
+    ref: modal.setDialogRef,
+    // apparently only works on the dialog role element
+    'aria-modal': role === 'dialog' ? true : undefined
+  }, rest, {
+    style: style,
+    className: className,
+    tabIndex: -1
+  });
+
+  var dialog = renderDialog ? renderDialog(dialogProps) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_7__.createElement("div", dialogProps, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_7__.cloneElement(children, {
+    role: 'document'
+  }));
+
+  if (Transition) {
+    dialog = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_7__.createElement(Transition, {
+      appear: true,
+      unmountOnExit: true,
+      "in": !!show,
+      onExit: onExit,
+      onExiting: onExiting,
+      onExited: handleHidden,
+      onEnter: onEnter,
+      onEntering: onEntering,
+      onEntered: onEntered
+    }, dialog);
+  }
+
+  var backdropElement = null;
+
+  if (backdrop) {
+    var BackdropTransition = backdropTransition;
+    backdropElement = renderBackdrop({
+      ref: modal.setBackdropRef,
+      onClick: handleBackdropClick
+    });
+
+    if (BackdropTransition) {
+      backdropElement = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_7__.createElement(BackdropTransition, {
+        appear: true,
+        "in": !!show
+      }, backdropElement);
+    }
+  }
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_7__.createElement(react__WEBPACK_IMPORTED_MODULE_7__.Fragment, null, /*#__PURE__*/react_dom__WEBPACK_IMPORTED_MODULE_8__.createPortal( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_7__.createElement(react__WEBPACK_IMPORTED_MODULE_7__.Fragment, null, backdropElement, dialog), container));
+});
+var propTypes = {
+  /**
+   * Set the visibility of the Modal
+   */
+  show: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().bool),
+
+  /**
+   * A DOM element, a `ref` to an element, or function that returns either. The Modal is appended to it's `container` element.
+   *
+   * For the sake of assistive technologies, the container should usually be the document body, so that the rest of the
+   * page content can be placed behind a virtual backdrop as well as a visual one.
+   */
+  container: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().any),
+
+  /**
+   * A callback fired when the Modal is opening.
+   */
+  onShow: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().func),
+
+  /**
+   * A callback fired when either the backdrop is clicked, or the escape key is pressed.
+   *
+   * The `onHide` callback only signals intent from the Modal,
+   * you must actually set the `show` prop to `false` for the Modal to close.
+   */
+  onHide: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().func),
+
+  /**
+   * Include a backdrop component.
+   */
+  backdrop: prop_types__WEBPACK_IMPORTED_MODULE_6___default().oneOfType([(prop_types__WEBPACK_IMPORTED_MODULE_6___default().bool), prop_types__WEBPACK_IMPORTED_MODULE_6___default().oneOf(['static'])]),
+
+  /**
+   * A function that returns the dialog component. Useful for custom
+   * rendering. **Note:** the component should make sure to apply the provided ref.
+   *
+   * ```js static
+   * renderDialog={props => <MyDialog {...props} />}
+   * ```
+   */
+  renderDialog: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().func),
+
+  /**
+   * A function that returns a backdrop component. Useful for custom
+   * backdrop rendering.
+   *
+   * ```js
+   *  renderBackdrop={props => <MyBackdrop {...props} />}
+   * ```
+   */
+  renderBackdrop: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().func),
+
+  /**
+   * A callback fired when the escape key, if specified in `keyboard`, is pressed.
+   *
+   * If preventDefault() is called on the keyboard event, closing the modal will be cancelled.
+   */
+  onEscapeKeyDown: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().func),
+
+  /**
+   * A callback fired when the backdrop, if specified, is clicked.
+   */
+  onBackdropClick: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().func),
+
+  /**
+   * A css class or set of classes applied to the modal container when the modal is open,
+   * and removed when it is closed.
+   */
+  containerClassName: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().string),
+
+  /**
+   * Close the modal when escape key is pressed
+   */
+  keyboard: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().bool),
+
+  /**
+   * A `react-transition-group@2.0.0` `<Transition/>` component used
+   * to control animations for the dialog component.
+   */
+  transition: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().elementType),
+
+  /**
+   * A `react-transition-group@2.0.0` `<Transition/>` component used
+   * to control animations for the backdrop components.
+   */
+  backdropTransition: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().elementType),
+
+  /**
+   * When `true` The modal will automatically shift focus to itself when it opens, and
+   * replace it to the last focused element when it closes. This also
+   * works correctly with any Modal children that have the `autoFocus` prop.
+   *
+   * Generally this should never be set to `false` as it makes the Modal less
+   * accessible to assistive technologies, like screen readers.
+   */
+  autoFocus: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().bool),
+
+  /**
+   * When `true` The modal will prevent focus from leaving the Modal while open.
+   *
+   * Generally this should never be set to `false` as it makes the Modal less
+   * accessible to assistive technologies, like screen readers.
+   */
+  enforceFocus: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().bool),
+
+  /**
+   * When `true` The modal will restore focus to previously focused element once
+   * modal is hidden
+   */
+  restoreFocus: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().bool),
+
+  /**
+   * Options passed to focus function when `restoreFocus` is set to `true`
+   *
+   * @link  https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#Parameters
+   */
+  restoreFocusOptions: prop_types__WEBPACK_IMPORTED_MODULE_6___default().shape({
+    preventScroll: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().bool)
+  }),
+
+  /**
+   * Callback fired before the Modal transitions in
+   */
+  onEnter: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().func),
+
+  /**
+   * Callback fired as the Modal begins to transition in
+   */
+  onEntering: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().func),
+
+  /**
+   * Callback fired after the Modal finishes transitioning in
+   */
+  onEntered: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().func),
+
+  /**
+   * Callback fired right before the Modal transitions out
+   */
+  onExit: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().func),
+
+  /**
+   * Callback fired as the Modal begins to transition out
+   */
+  onExiting: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().func),
+
+  /**
+   * Callback fired after the Modal finishes transitioning out
+   */
+  onExited: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().func),
+
+  /**
+   * A ModalManager instance used to track and manage the state of open
+   * Modals. Useful when customizing how modals interact within a container
+   */
+  manager: prop_types__WEBPACK_IMPORTED_MODULE_6___default().instanceOf(_ModalManager__WEBPACK_IMPORTED_MODULE_13__.default)
+};
+Modal.displayName = 'Modal';
+Modal.propTypes = propTypes;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.assign(Modal, {
+  Manager: _ModalManager__WEBPACK_IMPORTED_MODULE_13__.default
+}));
+
+/***/ }),
+
+/***/ "./node_modules/react-overlays/esm/ModalManager.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/react-overlays/esm/ModalManager.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var dom_helpers_addClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dom-helpers/addClass */ "./node_modules/dom-helpers/esm/addClass.js");
+/* harmony import */ var dom_helpers_removeClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dom-helpers/removeClass */ "./node_modules/dom-helpers/esm/removeClass.js");
+/* harmony import */ var dom_helpers_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! dom-helpers/css */ "./node_modules/dom-helpers/esm/css.js");
+/* harmony import */ var dom_helpers_scrollbarSize__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! dom-helpers/scrollbarSize */ "./node_modules/dom-helpers/esm/scrollbarSize.js");
+/* harmony import */ var _isOverflowing__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./isOverflowing */ "./node_modules/react-overlays/esm/isOverflowing.js");
+/* harmony import */ var _manageAriaHidden__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./manageAriaHidden */ "./node_modules/react-overlays/esm/manageAriaHidden.js");
+
+
+
+
+
+
+
+function findIndexOf(arr, cb) {
+  var idx = -1;
+  arr.some(function (d, i) {
+    if (cb(d, i)) {
+      idx = i;
+      return true;
+    }
+
+    return false;
+  });
+  return idx;
+}
+
+/**
+ * Proper state management for containers and the modals in those containers.
+ *
+ * @internal Used by the Modal to ensure proper styling of containers.
+ */
+var ModalManager = /*#__PURE__*/function () {
+  function ModalManager(_temp) {
+    var _ref = _temp === void 0 ? {} : _temp,
+        _ref$hideSiblingNodes = _ref.hideSiblingNodes,
+        hideSiblingNodes = _ref$hideSiblingNodes === void 0 ? true : _ref$hideSiblingNodes,
+        _ref$handleContainerO = _ref.handleContainerOverflow,
+        handleContainerOverflow = _ref$handleContainerO === void 0 ? true : _ref$handleContainerO;
+
+    this.hideSiblingNodes = void 0;
+    this.handleContainerOverflow = void 0;
+    this.modals = void 0;
+    this.containers = void 0;
+    this.data = void 0;
+    this.scrollbarSize = void 0;
+    this.hideSiblingNodes = hideSiblingNodes;
+    this.handleContainerOverflow = handleContainerOverflow;
+    this.modals = [];
+    this.containers = [];
+    this.data = [];
+    this.scrollbarSize = (0,dom_helpers_scrollbarSize__WEBPACK_IMPORTED_MODULE_3__.default)();
+  }
+
+  var _proto = ModalManager.prototype;
+
+  _proto.isContainerOverflowing = function isContainerOverflowing(modal) {
+    var data = this.data[this.containerIndexFromModal(modal)];
+    return data && data.overflowing;
+  };
+
+  _proto.containerIndexFromModal = function containerIndexFromModal(modal) {
+    return findIndexOf(this.data, function (d) {
+      return d.modals.indexOf(modal) !== -1;
+    });
+  };
+
+  _proto.setContainerStyle = function setContainerStyle(containerState, container) {
+    var style = {
+      overflow: 'hidden'
+    }; // we are only interested in the actual `style` here
+    // because we will override it
+
+    containerState.style = {
+      overflow: container.style.overflow,
+      paddingRight: container.style.paddingRight
+    };
+
+    if (containerState.overflowing) {
+      // use computed style, here to get the real padding
+      // to add our scrollbar width
+      style.paddingRight = parseInt((0,dom_helpers_css__WEBPACK_IMPORTED_MODULE_2__.default)(container, 'paddingRight') || '0', 10) + this.scrollbarSize + "px";
+    }
+
+    (0,dom_helpers_css__WEBPACK_IMPORTED_MODULE_2__.default)(container, style);
+  };
+
+  _proto.removeContainerStyle = function removeContainerStyle(containerState, container) {
+    Object.assign(container.style, containerState.style);
+  };
+
+  _proto.add = function add(modal, container, className) {
+    var modalIdx = this.modals.indexOf(modal);
+    var containerIdx = this.containers.indexOf(container);
+
+    if (modalIdx !== -1) {
+      return modalIdx;
+    }
+
+    modalIdx = this.modals.length;
+    this.modals.push(modal);
+
+    if (this.hideSiblingNodes) {
+      (0,_manageAriaHidden__WEBPACK_IMPORTED_MODULE_4__.hideSiblings)(container, modal);
+    }
+
+    if (containerIdx !== -1) {
+      this.data[containerIdx].modals.push(modal);
+      return modalIdx;
+    }
+
+    var data = {
+      modals: [modal],
+      // right now only the first modal of a container will have its classes applied
+      classes: className ? className.split(/\s+/) : [],
+      overflowing: (0,_isOverflowing__WEBPACK_IMPORTED_MODULE_5__.default)(container)
+    };
+
+    if (this.handleContainerOverflow) {
+      this.setContainerStyle(data, container);
+    }
+
+    data.classes.forEach(dom_helpers_addClass__WEBPACK_IMPORTED_MODULE_0__.default.bind(null, container));
+    this.containers.push(container);
+    this.data.push(data);
+    return modalIdx;
+  };
+
+  _proto.remove = function remove(modal) {
+    var modalIdx = this.modals.indexOf(modal);
+
+    if (modalIdx === -1) {
+      return;
+    }
+
+    var containerIdx = this.containerIndexFromModal(modal);
+    var data = this.data[containerIdx];
+    var container = this.containers[containerIdx];
+    data.modals.splice(data.modals.indexOf(modal), 1);
+    this.modals.splice(modalIdx, 1); // if that was the last modal in a container,
+    // clean up the container
+
+    if (data.modals.length === 0) {
+      data.classes.forEach(dom_helpers_removeClass__WEBPACK_IMPORTED_MODULE_1__.default.bind(null, container));
+
+      if (this.handleContainerOverflow) {
+        this.removeContainerStyle(data, container);
+      }
+
+      if (this.hideSiblingNodes) {
+        (0,_manageAriaHidden__WEBPACK_IMPORTED_MODULE_4__.showSiblings)(container, modal);
+      }
+
+      this.containers.splice(containerIdx, 1);
+      this.data.splice(containerIdx, 1);
+    } else if (this.hideSiblingNodes) {
+      // otherwise make sure the next top modal is visible to a SR
+      var _data$modals = data.modals[data.modals.length - 1],
+          backdrop = _data$modals.backdrop,
+          dialog = _data$modals.dialog;
+      (0,_manageAriaHidden__WEBPACK_IMPORTED_MODULE_4__.ariaHidden)(false, dialog);
+      (0,_manageAriaHidden__WEBPACK_IMPORTED_MODULE_4__.ariaHidden)(false, backdrop);
+    }
+  };
+
+  _proto.isTopModal = function isTopModal(modal) {
+    return !!this.modals.length && this.modals[this.modals.length - 1] === modal;
+  };
+
+  return ModalManager;
+}();
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ModalManager);
+
+/***/ }),
+
+/***/ "./node_modules/react-overlays/esm/isOverflowing.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/react-overlays/esm/isOverflowing.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ isOverflowing)
+/* harmony export */ });
+/* harmony import */ var dom_helpers_isWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dom-helpers/isWindow */ "./node_modules/dom-helpers/esm/isWindow.js");
+/* harmony import */ var dom_helpers_ownerDocument__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dom-helpers/ownerDocument */ "./node_modules/dom-helpers/esm/ownerDocument.js");
+
+
+
+function isBody(node) {
+  return node && node.tagName.toLowerCase() === 'body';
+}
+
+function bodyIsOverflowing(node) {
+  var doc = (0,dom_helpers_isWindow__WEBPACK_IMPORTED_MODULE_0__.default)(node) ? (0,dom_helpers_ownerDocument__WEBPACK_IMPORTED_MODULE_1__.default)() : (0,dom_helpers_ownerDocument__WEBPACK_IMPORTED_MODULE_1__.default)(node);
+  var win = (0,dom_helpers_isWindow__WEBPACK_IMPORTED_MODULE_0__.default)(node) || doc.defaultView;
+  return doc.body.clientWidth < win.innerWidth;
+}
+
+function isOverflowing(container) {
+  var win = (0,dom_helpers_isWindow__WEBPACK_IMPORTED_MODULE_0__.default)(container);
+  return win || isBody(container) ? bodyIsOverflowing(container) : container.scrollHeight > container.clientHeight;
+}
+
+/***/ }),
+
+/***/ "./node_modules/react-overlays/esm/manageAriaHidden.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/react-overlays/esm/manageAriaHidden.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ariaHidden": () => (/* binding */ ariaHidden),
+/* harmony export */   "hideSiblings": () => (/* binding */ hideSiblings),
+/* harmony export */   "showSiblings": () => (/* binding */ showSiblings)
+/* harmony export */ });
+var BLACKLIST = ['template', 'script', 'style'];
+
+var isHidable = function isHidable(_ref) {
+  var nodeType = _ref.nodeType,
+      tagName = _ref.tagName;
+  return nodeType === 1 && BLACKLIST.indexOf(tagName.toLowerCase()) === -1;
+};
+
+var siblings = function siblings(container, exclude, cb) {
+  [].forEach.call(container.children, function (node) {
+    if (exclude.indexOf(node) === -1 && isHidable(node)) {
+      cb(node);
+    }
+  });
+};
+
+function ariaHidden(hide, node) {
+  if (!node) return;
+
+  if (hide) {
+    node.setAttribute('aria-hidden', 'true');
+  } else {
+    node.removeAttribute('aria-hidden');
+  }
+}
+function hideSiblings(container, _ref2) {
+  var dialog = _ref2.dialog,
+      backdrop = _ref2.backdrop;
+  siblings(container, [dialog, backdrop], function (node) {
+    return ariaHidden(true, node);
+  });
+}
+function showSiblings(container, _ref3) {
+  var dialog = _ref3.dialog,
+      backdrop = _ref3.backdrop;
+  siblings(container, [dialog, backdrop], function (node) {
+    return ariaHidden(false, node);
+  });
+}
+
+/***/ }),
+
+/***/ "./node_modules/react-overlays/esm/useWaitForDOMRef.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/react-overlays/esm/useWaitForDOMRef.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "resolveContainerRef": () => (/* binding */ resolveContainerRef),
+/* harmony export */   "default": () => (/* binding */ useWaitForDOMRef)
+/* harmony export */ });
+/* harmony import */ var dom_helpers_ownerDocument__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dom-helpers/ownerDocument */ "./node_modules/dom-helpers/esm/ownerDocument.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+
+var resolveContainerRef = function resolveContainerRef(ref) {
+  var _ref;
+
+  if (typeof document === 'undefined') return null;
+  if (ref == null) return (0,dom_helpers_ownerDocument__WEBPACK_IMPORTED_MODULE_0__.default)().body;
+  if (typeof ref === 'function') ref = ref();
+  if (ref && 'current' in ref) ref = ref.current;
+  if ((_ref = ref) != null && _ref.nodeType) return ref || null;
+  return null;
+};
+function useWaitForDOMRef(ref, onResolved) {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(function () {
+    return resolveContainerRef(ref);
+  }),
+      resolvedRef = _useState[0],
+      setRef = _useState[1];
+
+  if (!resolvedRef) {
+    var earlyRef = resolveContainerRef(ref);
+    if (earlyRef) setRef(earlyRef);
+  }
+
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    if (onResolved && resolvedRef) {
+      onResolved(resolvedRef);
+    }
+  }, [onResolved, resolvedRef]);
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    var nextRef = resolveContainerRef(ref);
+
+    if (nextRef !== resolvedRef) {
+      setRef(nextRef);
+    }
+  }, [ref, resolvedRef]);
+  return resolvedRef;
+}
 
 /***/ }),
 
@@ -38572,6 +43119,79 @@ function symbolObservablePonyfill(root) {
 
 	return result;
 };
+
+
+/***/ }),
+
+/***/ "./node_modules/warning/warning.js":
+/*!*****************************************!*\
+  !*** ./node_modules/warning/warning.js ***!
+  \*****************************************/
+/***/ ((module) => {
+
+"use strict";
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+
+/**
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical
+ * paths. Removing the logging code for production environments will keep the
+ * same logic and follow the same code paths.
+ */
+
+var __DEV__ = "development" !== 'production';
+
+var warning = function() {};
+
+if (__DEV__) {
+  var printWarning = function printWarning(format, args) {
+    var len = arguments.length;
+    args = new Array(len > 1 ? len - 1 : 0);
+    for (var key = 1; key < len; key++) {
+      args[key - 1] = arguments[key];
+    }
+    var argIndex = 0;
+    var message = 'Warning: ' +
+      format.replace(/%s/g, function() {
+        return args[argIndex++];
+      });
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  }
+
+  warning = function(condition, format, args) {
+    var len = arguments.length;
+    args = new Array(len > 2 ? len - 2 : 0);
+    for (var key = 2; key < len; key++) {
+      args[key - 2] = arguments[key];
+    }
+    if (format === undefined) {
+      throw new Error(
+          '`warning(condition, format, ...args)` requires a warning ' +
+          'message argument'
+      );
+    }
+    if (!condition) {
+      printWarning.apply(null, [format].concat(args));
+    }
+  };
+}
+
+module.exports = warning;
 
 
 /***/ })

@@ -1,6 +1,58 @@
 // START general style
 // ----------------------- 
 
+
+//START drop zone style
+.dropzone{
+    position: relative;
+    width: 100%;
+    border: 2px dashed rgba(59, 62, 71, 0.3);
+    background: #fff;
+    border-radius: 6px;
+    padding: 20px;
+    cursor: pointer;
+
+    transition: all .3s ease-in-out;
+
+    .dz-message{
+        text-align: center;
+        //margin: 2em 0;
+
+        i{
+            font-size: 36px;
+        }
+
+        h3{
+            color: #6c757d;
+            font-size: 1.5rem;
+        }
+    }
+
+    .alert{
+        position: absolute;
+        bottom: 3px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        padding: 1px;
+        width: 60%;
+    }
+
+    //define the hover style
+    &:hover{
+        border-color:rgba(59, 62, 71, 0.6);
+
+        .dz-message{
+            i{color: #b7c1c5;}
+        }
+        h3{
+            color: #838d96;
+        }
+    }
+    
+}
+
+
 //TODO
 //override form parsley style
 .parsley-errors-list > li:before{
@@ -85,4 +137,5 @@
 //import customrize style
 @import './cnspro/projects-table';
 @import './cnspro//project-modal';
+@import './cnspro//banner-slider-modal';
 @import './cnspro/toast-box';

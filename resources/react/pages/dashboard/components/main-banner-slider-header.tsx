@@ -1,10 +1,15 @@
 import React from 'react'
+import {useDispatch} from 'react-redux'
+import {show} from '../slice/banner-slider-modal-slice'
+
+
 /**
  * TODO
  * define the main banner image header
  * @returns
  */
  const MainBannerSliderHeader = () : JSX.Element => {
+    const _dispatch = useDispatch()
 
     return(
         <div className="card-header ff-card-header">
@@ -19,7 +24,7 @@ import React from 'react'
 
                 <button className="btn btn-success" 
                     onClick={() => {
-                        alert("clicked")
+                        _dispatch(show(null))
                     }}
                 >
                     <i className="mdi mdi-plus-circle"></i>
