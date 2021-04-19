@@ -53,7 +53,7 @@ class LoginController extends Controller
         ];
         $request->session()->flash('ff-message', $msg);
 
-        return redirect(route('dologin'));
+        return redirect(route('page_login'));
     }
 
 }

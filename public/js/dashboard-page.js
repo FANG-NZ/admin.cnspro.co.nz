@@ -2808,8 +2808,9 @@ var dashboard_store_1 = __webpack_require__(/*! ../store/dashboard-store */ "./r
 
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
-var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts"); //import NoImageIcon from '../../../../images/no-image.png'
+var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts");
 
+var no_image_png_1 = __importDefault(__webpack_require__(/*! ../../../../images/no-image.png */ "./resources/images/no-image.png"));
 /**
  * TODO
  * define the Modal Header
@@ -2883,7 +2884,9 @@ var ModalBody = function ModalBody(_a) {
     className: "form-group row"
   }, react_1["default"].createElement("div", {
     className: "image-box col-md-6"
-  }), react_1["default"].createElement(react_images_uploading_1["default"], {
+  }, react_1["default"].createElement("img", {
+    src: no_image_png_1["default"]
+  })), react_1["default"].createElement(react_images_uploading_1["default"], {
     value: images,
     onChange: onHandleChange,
     dataURLKey: "data_url",
@@ -3946,6 +3949,21 @@ function transitionEnd(element, handler, duration, padding) {
     remove();
   };
 }
+
+/***/ }),
+
+/***/ "./resources/images/no-image.png":
+/*!***************************************!*\
+  !*** ./resources/images/no-image.png ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/no-image.png?a9438b2b740f1b1331c6029e8f5961de");
 
 /***/ }),
 

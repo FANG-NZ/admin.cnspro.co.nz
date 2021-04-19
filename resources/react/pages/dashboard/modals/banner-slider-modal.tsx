@@ -8,7 +8,7 @@ import {RootState, useAppDispatch , useAppSelector} from '../store/dashboard-sto
 import {useDispatch} from 'react-redux'
 import {hide} from '../slice/banner-slider-modal-slice'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
-//import NoImageIcon from '../../../../images/no-image.png'
+import NoImageIcon from '../../../../images/no-image.png'
 
 
 
@@ -80,7 +80,7 @@ const ModalBody:React.FC<{item:BannerSliderItem|null}> = ({item}):JSX.Element =>
             <div id="banner-slider-item-image" className="form-group row">
 
                 <div className="image-box col-md-6">
-                    {/* <img src={NoImageIcon} /> */}
+                    <img src={NoImageIcon} />
                 </div>
 
                 <ImageUploading

@@ -67,5 +67,9 @@
     /* Advanced Options */
     "skipLibCheck": true,                     /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
-  }
+  },
+
+  //Add PNG image module into TS
+  //CHECK https://stackoverflow.com/questions/43638454/webpack-typescript-image-import?rq=1
+  "include": ["resources/react","image.d.ts"]
 }
