@@ -2,6 +2,8 @@ import React from 'react'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
 import {useAppDispatch} from '../store/dashboard-store'
 import {show} from '../slice/banner-slider-modal-slice'
+import PubSub from 'pubsub-js'
+import ConfirmDialog, {EVENT_OPEN_CONFIRM_DIALOG} from '../../../tools/confirm-dialog/confirm-dialog'
 
 /**
  * TODO
@@ -49,7 +51,23 @@ const MainBannerSliderItem : React.FC<{item:BannerSliderItem}> = ({item}):JSX.El
                         <span>Edit</span>
                     </button>
 
-                    <button className="btn btn-danger btn-sm">
+                    <button className="btn btn-danger btn-sm"
+                        onClick={(e) => {
+                            e.preventDefault()
+
+                            //Trigger open confirm dialog
+                            PubSub.publish(
+                                EVENT_OPEN_CONFIRM_DIALOG, 
+                                {
+                                    shown:true,
+                                    confirm_btn_text : "Yes, remove it",
+                                    confirm_callback: () => {
+                                        console.log("Handle delete request")
+                                    }
+                                }
+                            )
+                        }}
+                    >
                         <i className="mdi mdi-delete"></i>
                         <span>Delete</span>
                     </button>

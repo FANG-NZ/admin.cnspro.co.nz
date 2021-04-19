@@ -8,6 +8,7 @@ import ToastBox from '../tools/toast-box/toast-box'
 import MainBannerSlider from './dashboard/components/main-banner-slider'
 import {BannerSliderItem} from '../types/banner-slider-item.type'
 import BannerSliderModal from './dashboard/modals/banner-slider-modal'
+import ConfirmDialog from '../tools/confirm-dialog/confirm-dialog'
 
 
 const banner_list : Array<BannerSliderItem> = [
@@ -36,6 +37,8 @@ ReactDOM.render(
         <ToastBox />
 
         <BannerSliderModal />
+
+        <ConfirmDialog />
     </Provider>,
     document.getElementById("root-dashboard")
 )
