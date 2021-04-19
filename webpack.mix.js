@@ -15,17 +15,14 @@ mix.webpackConfig({
             },
 
             //For image loader
-            {
-                test: /\.(png|jpg|jpeg|gif)$/i,
-                use: [
-                    {
-                        loader: 'url-loader',
-                        options: {
-                            limit: 25000
-                        }
-                    }
-                ]
-            }
+            // {
+            //     test: /\.(png|jpg|jpeg|gif)$/i,
+            //     use: [
+            //         {
+            //             loader: 'url-loader'
+            //         }
+            //     ]
+            // }
         ]
     },
 

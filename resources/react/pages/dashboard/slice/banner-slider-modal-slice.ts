@@ -12,7 +12,7 @@ type BannerSliderModalState = {
 }
 
 const initialState:BannerSliderModalState = {
-    shown: true,
+    shown: false,
     is_adding_new: true,
     item: null
 }
@@ -37,7 +37,7 @@ const BannerSliderModalSlice = createSlice({
 
                 const payload = {
                     item : _item,
-                    is_adding_new : true
+                    is_adding_new : _item?false:true
                 }
                 return {payload}
             }

@@ -3,12 +3,14 @@
 #banner-slider-item-image{
 
     .image-box{
-        height: 100px;
+        position: relative;
+        height: 200px;
 
         img{
+            background-color: #efefef;
+            position: relative;
             width: 100%;
-            height: auto;
-            margin: auto;
+            height: 100%;
             object-fit: contain;
         }
     }
@@ -25,4 +27,14 @@
         }
     }
 
+}
+
+//define the screen size < 575px
+@media (max-width: 575px) {
+
+    #banner-slider-item-image{
+        .image-box{
+            height: 150px;
+        }
+    }
 }

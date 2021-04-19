@@ -1,5 +1,7 @@
 import React from 'react'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
+import {useAppDispatch} from '../store/dashboard-store'
+import {show} from '../slice/banner-slider-modal-slice'
 
 /**
  * TODO
@@ -26,9 +28,10 @@ export const MainBannerSliderEmptyItem:React.FC = ():JSX.Element => {
  * @returns 
  */
 const MainBannerSliderItem : React.FC<{item:BannerSliderItem}> = ({item}):JSX.Element => {
+    const _dispatch = useAppDispatch()
 
     return(
-        <div className="col-md-3">
+        <div className="col-sm-4 col-md-3">
             <div className="card main-banner-slider-item">
                 <img src={item.url} alt="" className="card-img-top img-fluid" />
                 <div className="card-body">
@@ -36,7 +39,12 @@ const MainBannerSliderItem : React.FC<{item:BannerSliderItem}> = ({item}):JSX.El
                 </div>
                 <div className="card-body card-btns">
                     
-                    <button className="btn btn-success btn-sm">
+                    <button className="btn btn-success btn-sm" 
+                        onClick={(e) => {
+                            e.preventDefault()
+                            _dispatch(show(item))
+                        }}
+                    >
                         <i className="mdi mdi-database-plus"></i>
                         <span>Edit</span>
                     </button>

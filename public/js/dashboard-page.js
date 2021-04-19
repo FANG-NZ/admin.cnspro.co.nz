@@ -2571,6 +2571,10 @@ Object.defineProperty(exports, "__esModule", ({
 exports.MainBannerSliderEmptyItem = void 0;
 
 var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var dashboard_store_1 = __webpack_require__(/*! ../store/dashboard-store */ "./resources/react/pages/dashboard/store/dashboard-store.ts");
+
+var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts");
 /**
  * TODO
  * define the empty slider item
@@ -2596,8 +2600,11 @@ exports.MainBannerSliderEmptyItem = MainBannerSliderEmptyItem;
 
 var MainBannerSliderItem = function MainBannerSliderItem(_a) {
   var item = _a.item;
+
+  var _dispatch = dashboard_store_1.useAppDispatch();
+
   return react_1["default"].createElement("div", {
-    className: "col-md-3"
+    className: "col-sm-4 col-md-3"
   }, react_1["default"].createElement("div", {
     className: "card main-banner-slider-item"
   }, react_1["default"].createElement("img", {
@@ -2612,7 +2619,12 @@ var MainBannerSliderItem = function MainBannerSliderItem(_a) {
   }, item.title)), react_1["default"].createElement("div", {
     className: "card-body card-btns"
   }, react_1["default"].createElement("button", {
-    className: "btn btn-success btn-sm"
+    className: "btn btn-success btn-sm",
+    onClick: function onClick(e) {
+      e.preventDefault();
+
+      _dispatch(banner_slider_modal_slice_1.show(item));
+    }
   }, react_1["default"].createElement("i", {
     className: "mdi mdi-database-plus"
   }), react_1["default"].createElement("span", null, "Edit")), react_1["default"].createElement("button", {
@@ -2823,7 +2835,7 @@ var ModalHeader = function ModalHeader(_a) {
   var title = _a.title,
       onHandleClose = _a.onHandleClose;
   return react_1["default"].createElement(Modal_1["default"].Header, null, react_1["default"].createElement(Modal_1["default"].Title, null, react_1["default"].createElement("i", {
-    className: "mdi mdi-home-variant"
+    className: "mdi mdi-camera-image"
   }), react_1["default"].createElement("span", null, title)), react_1["default"].createElement("button", {
     type: "button",
     className: "close",
@@ -2842,8 +2854,8 @@ var ModalHeader = function ModalHeader(_a) {
 
 var ModalFooter = function ModalFooter(_a) {
   var is_adding_new = _a.is_adding_new,
-      onHandleClose = _a.onHandleClose,
-      isDirty = _a.isDirty;
+      onHandleClose = _a.onHandleClose;
+  var formState = react_hook_form_1.useFormContext().formState;
   return react_1["default"].createElement(Modal_1["default"].Footer, null, react_1["default"].createElement("button", {
     type: "button",
     className: "btn btn-light",
@@ -2853,7 +2865,7 @@ var ModalFooter = function ModalFooter(_a) {
   }), react_1["default"].createElement("span", null, "Close")), react_1["default"].createElement("button", {
     type: "submit",
     className: "btn btn-success",
-    disabled: !isDirty
+    disabled: !formState.isDirty
   }, react_1["default"].createElement("i", {
     className: "mdi mdi-database-plus"
   }), react_1["default"].createElement("span", null, is_adding_new ? "Add new project" : "Edit")));
@@ -2867,17 +2879,22 @@ var ModalFooter = function ModalFooter(_a) {
 
 
 var ModalBody = function ModalBody(_a) {
-  var item = _a.item;
+  var item = _a.item,
+      image = _a.image,
+      onHandleImageSelected = _a.onHandleImageSelected;
 
   var _b = react_hook_form_1.useFormContext(),
       errors = _b.errors,
       register = _b.register;
+  /**
+   * Function is to handle image selected
+   * @param images
+   */
 
-  var _c = react_1.useState([]),
-      images = _c[0],
-      setImages = _c[1];
 
-  var onHandleChange = function onHandleChange(images) {};
+  var onHandleChange = function onHandleChange(images) {
+    onHandleImageSelected(images[0]);
+  };
 
   return react_1["default"].createElement(Modal_1["default"].Body, null, react_1["default"].createElement("div", {
     id: "banner-slider-item-image",
@@ -2885,21 +2902,20 @@ var ModalBody = function ModalBody(_a) {
   }, react_1["default"].createElement("div", {
     className: "image-box col-md-6"
   }, react_1["default"].createElement("img", {
-    src: no_image_png_1["default"]
-  })), react_1["default"].createElement(react_images_uploading_1["default"], {
-    value: images,
+    src: image ? image : no_image_png_1["default"]
+  })), react_1["default"].createElement("div", {
+    className: "image-upload-box col-md-6"
+  }, react_1["default"].createElement(react_images_uploading_1["default"], {
+    value: [],
     onChange: onHandleChange,
     dataURLKey: "data_url",
     maxFileSize: 3145728
   }, function (_a) {
     var onImageUpload = _a.onImageUpload,
-        isDragging = _a.isDragging,
         dragProps = _a.dragProps,
         errors = _a.errors;
-    return (// START drop button
-      react_1["default"].createElement("div", {
-        className: "image-upload-box col-md-6"
-      }, react_1["default"].createElement("button", __assign({
+    return (// START drop button             
+      react_1["default"].createElement("button", __assign({
         className: "dropzone",
         onClick: function onClick(e) {
           e.preventDefault();
@@ -2911,9 +2927,17 @@ var ModalBody = function ModalBody(_a) {
         className: "mdi mdi-cloud-upload text-muted"
       }), react_1["default"].createElement("h3", null, "Drop or click")), errors && react_1["default"].createElement("span", {
         className: "alert alert-danger"
-      }, "The file size cannot be greater than 3M")))
+      }, "The file size cannot be greater than 3M"))
     );
-  })), react_1["default"].createElement("div", {
+  }), react_1["default"].createElement("input", {
+    type: "hidden",
+    name: "image_status",
+    ref: register({
+      required: true
+    })
+  }), errors.image_status && react_1["default"].createElement("span", {
+    className: "error text-danger"
+  }, "Please select one image"))), react_1["default"].createElement("div", {
     className: "form-group"
   }, react_1["default"].createElement("label", {
     htmlFor: "title"
@@ -2932,6 +2956,17 @@ var ModalBody = function ModalBody(_a) {
   }, "Please enter title")));
 };
 /**
+ * define the ImageSelectedStatus ENUM
+ */
+
+
+var ImageSelectedStatue;
+
+(function (ImageSelectedStatue) {
+  ImageSelectedStatue["NOT_CHANGED"] = "NOT_CHANGED";
+  ImageSelectedStatue["CHANGED"] = "CHANGED";
+})(ImageSelectedStatue || (ImageSelectedStatue = {}));
+/**
  * TODO
  * define the main banner slider modal
  * @returns
@@ -2944,22 +2979,53 @@ var BannerSliderModal = function BannerSliderModal() {
     return state.BannerSliderModal;
   });
 
-  var _dispatch = react_redux_1.useDispatch();
+  var _dispatch = react_redux_1.useDispatch(); //define the modal title
+
+
+  var _title = _modal_data.is_adding_new ? "Add new item" : "Update item";
 
   var _form = react_hook_form_1.useForm();
 
-  var register = _form.register,
-      handleSubmit = _form.handleSubmit,
-      errors = _form.errors,
+  var handleSubmit = _form.handleSubmit,
       reset = _form.reset,
-      formState = _form.formState,
-      control = _form.control;
-  var isDirty = formState.isDirty;
+      setValue = _form.setValue,
+      dirtyFields = _form.formState.dirtyFields; //define the slected image
+
+  var _a = react_1.useState(null),
+      selectedImage = _a[0],
+      setSelectedImage = _a[1]; //To hold image to display
+
+
+  var _displayImage;
+
+  if (selectedImage) {
+    _displayImage = selectedImage['data_url'];
+  } else {
+    _displayImage = _modal_data.item ? _modal_data.item.url : null;
+  }
+  /**
+   * Function is to handle update selected image
+   * @param _image
+   */
+
+
+  var onHandleImageSelected = function onHandleImageSelected(_image) {
+    setSelectedImage(_image); //To update image selected status
+
+    setValue('image_status', ImageSelectedStatue.CHANGED, {
+      shouldValidate: true,
+      shouldDirty: true
+    });
+  };
   /**
    * Function is to handle close modal
    */
 
+
   var onHandleClose = function onHandleClose() {
+    //To clean up selected image
+    setSelectedImage(null);
+
     _dispatch(banner_slider_modal_slice_1.hide());
   };
   /**
@@ -2968,7 +3034,10 @@ var BannerSliderModal = function BannerSliderModal() {
 
 
   var onHandleEnter = function onHandleEnter() {
-    console.log("ON ENTER CALLED");
+    reset({
+      title: _modal_data.item ? _modal_data.item.title : "",
+      image_status: _modal_data.item ? ImageSelectedStatue.NOT_CHANGED : null
+    });
   };
   /**
    * Function is to handle form submit
@@ -2977,7 +3046,11 @@ var BannerSliderModal = function BannerSliderModal() {
 
 
   var onHandleSubmitted = function onHandleSubmitted(data) {
-    console.log(data);
+    if (data.image_status === ImageSelectedStatue.CHANGED) {
+      data.image = selectedImage ? selectedImage['file'] : null;
+    }
+
+    delete data.image_status;
   };
 
   return react_dom_1.createPortal(react_1["default"].createElement(Modal_1["default"], {
@@ -2988,14 +3061,15 @@ var BannerSliderModal = function BannerSliderModal() {
   }, react_1["default"].createElement(react_hook_form_1.FormProvider, __assign({}, _form), react_1["default"].createElement("form", {
     onSubmit: handleSubmit(onHandleSubmitted)
   }, react_1["default"].createElement(ModalHeader, {
-    title: 'Test Header',
+    title: _title,
     onHandleClose: onHandleClose
   }), react_1["default"].createElement(ModalBody, {
-    item: _modal_data.item
+    item: _modal_data.item,
+    image: _displayImage,
+    onHandleImageSelected: onHandleImageSelected
   }), react_1["default"].createElement(ModalFooter, {
     is_adding_new: _modal_data.is_adding_new,
-    onHandleClose: onHandleClose,
-    isDirty: isDirty
+    onHandleClose: onHandleClose
   })))), document.getElementById("portal-box"));
 };
 
@@ -3022,7 +3096,7 @@ exports.hide = exports.show = void 0;
 var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 
 var initialState = {
-  shown: true,
+  shown: false,
   is_adding_new: true,
   item: null
 };
@@ -3043,7 +3117,7 @@ var BannerSliderModalSlice = toolkit_1.createSlice({
       prepare: function prepare(_item) {
         var payload = {
           item: _item,
-          is_adding_new: true
+          is_adding_new: _item ? false : true
         };
         return {
           payload: payload
@@ -3963,7 +4037,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/no-image.png?a9438b2b740f1b1331c6029e8f5961de");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/no-image.png?2de5c17060f18e65bf2c6a2592fdacaa");
 
 /***/ }),
 

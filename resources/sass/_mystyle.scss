@@ -128,6 +128,18 @@
     }
 }
 
+//define the screen size < 575px
+@media (max-width: 575px) {
+
+    .main-banner-slider-item{
+        margin-bottom: 1.5rem;
+
+        img{
+            height: 150px;
+        }
+    }
+}
+
 
 
 // START 

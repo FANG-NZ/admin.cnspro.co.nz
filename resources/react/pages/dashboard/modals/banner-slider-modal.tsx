@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { createPortal } from 'react-dom'
 import {useForm, SubmitHandler, useFormContext, FormProvider} from 'react-hook-form'
-import ImageUploading, { ImageListType } from 'react-images-uploading'
+import ImageUploading, { ImageListType, ImageType } from 'react-images-uploading'
 
 import Modal from 'react-bootstrap/Modal'
 import {RootState, useAppDispatch , useAppSelector} from '../store/dashboard-store'
@@ -24,7 +24,7 @@ const ModalHeader : React.FC<{title:string, onHandleClose:() => void}>
     return(
         <Modal.Header>
             <Modal.Title>
-                <i className="mdi mdi-home-variant"></i>
+                <i className="mdi mdi-camera-image"></i>
                 <span>{title}</span>
             </Modal.Title>
 
@@ -42,8 +42,11 @@ const ModalHeader : React.FC<{title:string, onHandleClose:() => void}>
  * @param param0 
  * @returns 
  */
-const ModalFooter:React.FC<{is_adding_new:boolean, onHandleClose:()=>void, isDirty:boolean }> 
-        = ({is_adding_new, onHandleClose, isDirty}):JSX.Element => {
+const ModalFooter:React.FC<{is_adding_new:boolean, onHandleClose:()=>void}> 
+        = ({is_adding_new, onHandleClose}):JSX.Element => {
+
+    const {formState} = useFormContext()
+    
 
     return(
         <Modal.Footer>
@@ -52,7 +55,7 @@ const ModalFooter:React.FC<{is_adding_new:boolean, onHandleClose:()=>void, isDir
                     <span>Close</span>
                 </button>
 
-                <button type="submit" className="btn btn-success" disabled={!isDirty}>
+                <button type="submit" className="btn btn-success" disabled={!formState.isDirty}>
                     <i className="mdi mdi-database-plus"></i>
                     <span>{is_adding_new ? "Add new project" : "Edit"}</span>
                 </button>
@@ -66,12 +69,16 @@ const ModalFooter:React.FC<{is_adding_new:boolean, onHandleClose:()=>void, isDir
  * @param param0 
  * @returns 
  */
-const ModalBody:React.FC<{item:BannerSliderItem|null}> = ({item}):JSX.Element => {
+const ModalBody:React.FC<{item:BannerSliderItem|null, image: string|null, onHandleImageSelected:(selected:ImageType) => void}> 
+    = ({item, image, onHandleImageSelected}):JSX.Element => {
     const {errors, register} = useFormContext()
-    const [images, setImages] = useState([])
 
+    /**
+     * Function is to handle image selected
+     * @param images 
+     */
     const onHandleChange = (images : ImageListType):void => {
-
+        onHandleImageSelected(images[0])
     }
 
     return(
@@ -80,23 +87,22 @@ const ModalBody:React.FC<{item:BannerSliderItem|null}> = ({item}):JSX.Element =>
             <div id="banner-slider-item-image" className="form-group row">
 
                 <div className="image-box col-md-6">
-                    <img src={NoImageIcon} />
+                    <img src={image? image : NoImageIcon} />
                 </div>
 
-                <ImageUploading
-                    value={images}
-                    onChange={onHandleChange}
-                    dataURLKey="data_url"
-                    maxFileSize={3145728}
-                >     
-                {({  
-                    onImageUpload,
-                    isDragging,
-                    dragProps,
-                    errors
-                }) => (
-                    // START drop button
-                    <div className="image-upload-box col-md-6">
+                <div className="image-upload-box col-md-6">
+                    <ImageUploading
+                        value={[]}
+                        onChange={onHandleChange}
+                        dataURLKey="data_url"
+                        maxFileSize={3145728}
+                    >     
+                    {({  
+                        onImageUpload,
+                        dragProps,
+                        errors
+                    }) => (
+                        // START drop button             
                         <button
                             className="dropzone"
                             onClick={(e) => {
@@ -115,10 +121,20 @@ const ModalBody:React.FC<{item:BannerSliderItem|null}> = ({item}):JSX.Element =>
                                     The file size cannot be greater than 3M
                                 </span>
                             }       
-                        </button>
-                    </div>
-                )}
-                </ImageUploading>
+                        </button>                
+                    )}
+                    </ImageUploading>
+
+                    <input 
+                        type="hidden" 
+                        name="image_status"
+                        ref={register({required:true})}
+                    />
+                    {errors.image_status && 
+                        <span className="error text-danger">Please select one image</span>
+                    }
+                </div>
+
             </div>
 
             {/* Title field */}
@@ -142,6 +158,24 @@ const ModalBody:React.FC<{item:BannerSliderItem|null}> = ({item}):JSX.Element =>
 }
 
 
+/**
+ * define the ImageSelectedStatus ENUM
+ */
+enum ImageSelectedStatue {
+    NOT_CHANGED = "NOT_CHANGED",
+    CHANGED = "CHANGED"
+}
+
+/**
+ * TODO
+ * define the FormValue
+ */
+type FormValue = {
+    title: string,
+    image_status?: ImageSelectedStatue|null,
+    image?: ImageType|null
+}
+
 
 /**
  * TODO
@@ -154,15 +188,49 @@ const BannerSliderModal = ():JSX.Element => {
     const _modal_data = useAppSelector((state:RootState) => state.BannerSliderModal)
     const _dispatch = useDispatch()
 
-    const _form = useForm()
-    const {register, handleSubmit, errors, reset, formState, control} = _form
-    const { isDirty } = formState
+    //define the modal title
+    const _title = _modal_data.is_adding_new? "Add new item" : "Update item"
+
+    const _form = useForm<FormValue>()
+    const {handleSubmit, reset, setValue, formState:{dirtyFields}} = _form
     
+    //define the slected image
+    const [selectedImage, setSelectedImage] = useState<ImageType|null>(null)
+
+    //To hold image to display
+    let _displayImage;
+    if(selectedImage){
+        _displayImage = selectedImage['data_url']
+    }
+    else{
+        _displayImage = _modal_data.item?_modal_data.item.url:null
+    }
+    
+    /**
+     * Function is to handle update selected image
+     * @param _image 
+     */
+    const onHandleImageSelected = (_image:ImageType) => {
+
+        setSelectedImage(_image)
+        //To update image selected status
+        setValue(
+            'image_status', 
+            ImageSelectedStatue.CHANGED, 
+            {
+                shouldValidate:true,
+                shouldDirty: true
+            }
+        )
+    }
 
     /**
      * Function is to handle close modal
      */
     const onHandleClose = () => {
+        //To clean up selected image
+        setSelectedImage(null)
+
         _dispatch(hide())
     }
 
@@ -170,15 +238,26 @@ const BannerSliderModal = ():JSX.Element => {
      * Function is to define on handle enter
      */
     const onHandleEnter = () => {
-        console.log("ON ENTER CALLED");
+
+        reset({
+            title: _modal_data.item? _modal_data.item.title:"",
+            image_status: _modal_data.item?ImageSelectedStatue.NOT_CHANGED:null
+        })
+
     }
 
     /**
      * Function is to handle form submit
      * @param data 
      */
-    const onHandleSubmitted:SubmitHandler<{}> = (data) => {
-        console.log(data)
+    const onHandleSubmitted:SubmitHandler<FormValue> = (data) => {
+        
+        if(data.image_status === ImageSelectedStatue.CHANGED){
+            data.image = selectedImage? selectedImage['file']:null
+        }
+        delete data.image_status
+
+        
     }
 
     return createPortal(
@@ -191,14 +270,17 @@ const BannerSliderModal = ():JSX.Element => {
             <FormProvider {..._form} >
                 <form onSubmit={handleSubmit(onHandleSubmitted)}>
 
-                    <ModalHeader title={'Test Header'} onHandleClose={onHandleClose} />
+                    <ModalHeader title={_title} onHandleClose={onHandleClose} />
 
-                    <ModalBody item={_modal_data.item} />
+                    <ModalBody 
+                        item={_modal_data.item} 
+                        image={_displayImage} 
+                        onHandleImageSelected={onHandleImageSelected}    
+                    />
 
                     <ModalFooter 
                         is_adding_new={_modal_data.is_adding_new} 
                         onHandleClose={onHandleClose} 
-                        isDirty={isDirty} 
                     />
 
                 </form>
