@@ -54,31 +54,26 @@ describe('Slider item actions', () => {
 
     //Test edit button clicked
     test('Edit button clicked to show item modal', async() => {
-        render(
-            <>
-                <Provider store={store}>
-                    <MainBannerSliderItem item={_item} />      
 
-                    <BannerSliderModal />   
-                </Provider>
+        //Append portal box
+        document.body.innerHTML = "<div id='portal-box'></div>"
 
-                <div id="portal-box"></div>
-            </>
+        render(  
+            <Provider store={store}>
+                <MainBannerSliderItem item={_item} />      
+
+                <BannerSliderModal />   
+            </Provider>
         )
 
         const _container = document.body
+        expect(_container.querySelector('#main-banner-slider-modal')).toBeNull()
+
         const _button = screen.getByRole('button', {name: /edit/i})
         fireEvent.click(_button)
 
-        
-        //screen.debug()
-
-        await waitFor(() => {
-            //_container.querySelector('#main-banner-slider-modal')
-            const _modal = _container.querySelector('#main-banner-slider-modal')
-            console.log(_modal)
-        })
-
+        await waitFor(() => {})
+        expect(_container.querySelector('#main-banner-slider-modal')).toBeInTheDocument()
     })
 
     //Test delete button clicked

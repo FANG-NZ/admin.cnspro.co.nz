@@ -8,7 +8,7 @@ import Modal from 'react-bootstrap/Modal'
 import {RootState, useAppDispatch , useAppSelector} from '../store/dashboard-store'
 import {hide} from '../slice/banner-slider-modal-slice'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
-//import NoImageIcon from '../../../../images/no-image.png'
+import NoImageIcon from '../../../../images/no-image.png'
 
 /**
  * TODO
@@ -91,7 +91,7 @@ const ModalBody:React.FC<{item:BannerSliderItem|null, image: string|null, onHand
             <div id="banner-slider-item-image" className="form-group row">
 
                 <div className="image-box col-md-6">
-                    <img src={image? image : 'NoImageIcon'} />
+                    <img src={image? image : NoImageIcon} />
                 </div>
 
                 <div className="image-upload-box col-md-6">
