@@ -41,7 +41,7 @@ const MainBannerSliderItem : React.FC<{item:BannerSliderItem}> = ({item}):JSX.El
                 </div>
                 <div className="card-body card-btns">
                     
-                    <button className="btn btn-success btn-sm" 
+                    <button aria-label='edit' className="btn btn-success btn-sm" 
                         onClick={(e) => {
                             e.preventDefault()
                             _dispatch(show(item))
@@ -51,7 +51,7 @@ const MainBannerSliderItem : React.FC<{item:BannerSliderItem}> = ({item}):JSX.El
                         <span>Edit</span>
                     </button>
 
-                    <button className="btn btn-danger btn-sm"
+                    <button aria-label='delete' className="btn btn-danger btn-sm"
                         onClick={(e) => {
                             e.preventDefault()
 
@@ -60,6 +60,7 @@ const MainBannerSliderItem : React.FC<{item:BannerSliderItem}> = ({item}):JSX.El
                                 EVENT_OPEN_CONFIRM_DIALOG, 
                                 {
                                     shown:true,
+                                    title: "Are you sure to REMOVE?",
                                     confirm_btn_text : "Yes, remove it",
                                     confirm_callback: () => {
                                         console.log("Handle delete request")

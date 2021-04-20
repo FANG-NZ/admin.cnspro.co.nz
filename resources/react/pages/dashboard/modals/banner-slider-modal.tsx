@@ -2,15 +2,13 @@ import React, {useState} from 'react'
 import { createPortal } from 'react-dom'
 import {useForm, SubmitHandler, useFormContext, FormProvider} from 'react-hook-form'
 import ImageUploading, { ImageListType, ImageType } from 'react-images-uploading'
-
+import PubSub from 'pubsub-js'
+import {EVENT_OPEN_CONFIRM_DIALOG} from '../../../tools/confirm-dialog/confirm-dialog'
 import Modal from 'react-bootstrap/Modal'
 import {RootState, useAppDispatch , useAppSelector} from '../store/dashboard-store'
-import {useDispatch} from 'react-redux'
 import {hide} from '../slice/banner-slider-modal-slice'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
-import NoImageIcon from '../../../../images/no-image.png'
-
-
+//import NoImageIcon from '../../../../images/no-image.png'
 
 /**
  * TODO
@@ -42,23 +40,29 @@ const ModalHeader : React.FC<{title:string, onHandleClose:() => void}>
  * @param param0 
  * @returns 
  */
-const ModalFooter:React.FC<{is_adding_new:boolean, onHandleClose:()=>void}> 
-        = ({is_adding_new, onHandleClose}):JSX.Element => {
+const ModalFooter:React.FC<{is_adding_new:boolean, onHandleClose:()=>void, onHandleDelete:()=>void}> 
+        = ({is_adding_new, onHandleClose, onHandleDelete}):JSX.Element => {
 
     const {formState} = useFormContext()
     
-
     return(
         <Modal.Footer>
-            <button type="button" className="btn btn-light" onClick={onHandleClose}>
-                    <i className="mdi mdi-cancel"></i>
-                    <span>Close</span>
+            {!is_adding_new && 
+                <button type="button" className="btn btn-danger" onClick={onHandleDelete}>
+                    <i className="mdi mdi-delete"></i>
+                    <span>Delete</span>
                 </button>
+            }
 
-                <button type="submit" className="btn btn-success" disabled={!formState.isDirty}>
-                    <i className="mdi mdi-database-plus"></i>
-                    <span>{is_adding_new ? "Add new project" : "Edit"}</span>
-                </button>
+            <button type="button" className="btn btn-light" onClick={onHandleClose}>
+                <i className="mdi mdi-cancel"></i>
+                <span>Close</span>
+            </button>
+
+            <button type="submit" className="btn btn-success" disabled={!formState.isDirty}>
+                <i className="mdi mdi-database-plus"></i>
+                <span>{is_adding_new ? "Add new project" : "Edit"}</span>
+            </button>
         </Modal.Footer>
     )
 }
@@ -87,7 +91,7 @@ const ModalBody:React.FC<{item:BannerSliderItem|null, image: string|null, onHand
             <div id="banner-slider-item-image" className="form-group row">
 
                 <div className="image-box col-md-6">
-                    <img src={image? image : NoImageIcon} />
+                    <img src={image? image : 'NoImageIcon'} />
                 </div>
 
                 <div className="image-upload-box col-md-6">
@@ -186,7 +190,7 @@ const BannerSliderModal = ():JSX.Element => {
 
     //To get modal data from MODAL STORE
     const _modal_data = useAppSelector((state:RootState) => state.BannerSliderModal)
-    const _dispatch = useDispatch()
+    const _dispatch = useAppDispatch()
 
     //define the modal title
     const _title = _modal_data.is_adding_new? "Add new item" : "Update item"
@@ -260,6 +264,27 @@ const BannerSliderModal = ():JSX.Element => {
         
     }
 
+
+    /**
+     * Function is to handle delete
+     */
+    const onHandleDlete = ():void => {
+
+        //Trigger open confirm dialog
+        PubSub.publish(
+            EVENT_OPEN_CONFIRM_DIALOG, 
+            {
+                shown:true,
+                title: "Are you sure to REMOVE?",
+                confirm_btn_text : "Yes, remove it",
+                confirm_callback: () => {
+                    console.log("DELETE ITEM " + _modal_data.item?.id);
+                }
+            }
+        )
+        
+    }
+
     return createPortal(
         <Modal
             id="main-banner-slider-modal" 
@@ -268,7 +293,7 @@ const BannerSliderModal = ():JSX.Element => {
             onEnter={onHandleEnter}
         >
             <FormProvider {..._form} >
-                <form onSubmit={handleSubmit(onHandleSubmitted)}>
+                <form aria-label='slider-item-form' onSubmit={handleSubmit(onHandleSubmitted)}>
 
                     <ModalHeader title={_title} onHandleClose={onHandleClose} />
 
@@ -281,6 +306,7 @@ const BannerSliderModal = ():JSX.Element => {
                     <ModalFooter 
                         is_adding_new={_modal_data.is_adding_new} 
                         onHandleClose={onHandleClose} 
+                        onHandleDelete={onHandleDlete}
                     />
 
                 </form>

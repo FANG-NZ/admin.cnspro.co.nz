@@ -2625,6 +2625,7 @@ var MainBannerSliderItem = function MainBannerSliderItem(_a) {
   }, item.title)), react_1["default"].createElement("div", {
     className: "card-body card-btns"
   }, react_1["default"].createElement("button", {
+    "aria-label": 'edit',
     className: "btn btn-success btn-sm",
     onClick: function onClick(e) {
       e.preventDefault();
@@ -2634,12 +2635,14 @@ var MainBannerSliderItem = function MainBannerSliderItem(_a) {
   }, react_1["default"].createElement("i", {
     className: "mdi mdi-database-plus"
   }), react_1["default"].createElement("span", null, "Edit")), react_1["default"].createElement("button", {
+    "aria-label": 'delete',
     className: "btn btn-danger btn-sm",
     onClick: function onClick(e) {
       e.preventDefault(); //Trigger open confirm dialog
 
       pubsub_js_1["default"].publish(confirm_dialog_1.EVENT_OPEN_CONFIRM_DIALOG, {
         shown: true,
+        title: "Are you sure to REMOVE?",
         confirm_btn_text: "Yes, remove it",
         confirm_callback: function confirm_callback() {
           console.log("Handle delete request");
@@ -2831,15 +2834,16 @@ var react_hook_form_1 = __webpack_require__(/*! react-hook-form */ "./node_modul
 
 var react_images_uploading_1 = __importDefault(__webpack_require__(/*! react-images-uploading */ "./node_modules/react-images-uploading/dist/index.js"));
 
+var pubsub_js_1 = __importDefault(__webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js"));
+
+var confirm_dialog_1 = __webpack_require__(/*! ../../../tools/confirm-dialog/confirm-dialog */ "./resources/react/tools/confirm-dialog/confirm-dialog.tsx");
+
 var Modal_1 = __importDefault(__webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js"));
 
 var dashboard_store_1 = __webpack_require__(/*! ../store/dashboard-store */ "./resources/react/pages/dashboard/store/dashboard-store.ts");
 
-var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts"); //import NoImageIcon from '../../../../images/no-image.png'
 
-var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts");
-
-var no_image_png_1 = __importDefault(__webpack_require__(/*! ../../../../images/no-image.png */ "./resources/images/no-image.png"));
 /**
  * TODO
  * define the Modal Header
@@ -2871,9 +2875,16 @@ var ModalHeader = function ModalHeader(_a) {
 
 var ModalFooter = function ModalFooter(_a) {
   var is_adding_new = _a.is_adding_new,
-      onHandleClose = _a.onHandleClose;
+      onHandleClose = _a.onHandleClose,
+      onHandleDelete = _a.onHandleDelete;
   var formState = react_hook_form_1.useFormContext().formState;
-  return react_1["default"].createElement(Modal_1["default"].Footer, null, react_1["default"].createElement("button", {
+  return react_1["default"].createElement(Modal_1["default"].Footer, null, !is_adding_new && react_1["default"].createElement("button", {
+    type: "button",
+    className: "btn btn-danger",
+    onClick: onHandleDelete
+  }, react_1["default"].createElement("i", {
+    className: "mdi mdi-delete"
+  }), react_1["default"].createElement("span", null, "Delete")), react_1["default"].createElement("button", {
     type: "button",
     className: "btn btn-light",
     onClick: onHandleClose
@@ -2919,7 +2930,7 @@ var ModalBody = function ModalBody(_a) {
   }, react_1["default"].createElement("div", {
     className: "image-box col-md-6"
   }, react_1["default"].createElement("img", {
-    src: image ? image : no_image_png_1["default"]
+    src: image ? image : 'NoImageIcon'
   })), react_1["default"].createElement("div", {
     className: "image-upload-box col-md-6"
   }, react_1["default"].createElement(react_images_uploading_1["default"], {
@@ -2996,7 +3007,7 @@ var BannerSliderModal = function BannerSliderModal() {
     return state.BannerSliderModal;
   });
 
-  var _dispatch = react_redux_1.useDispatch(); //define the modal title
+  var _dispatch = dashboard_store_1.useAppDispatch(); //define the modal title
 
 
   var _title = _modal_data.is_adding_new ? "Add new item" : "Update item";
@@ -3069,6 +3080,24 @@ var BannerSliderModal = function BannerSliderModal() {
 
     delete data.image_status;
   };
+  /**
+   * Function is to handle delete
+   */
+
+
+  var onHandleDlete = function onHandleDlete() {
+    //Trigger open confirm dialog
+    pubsub_js_1["default"].publish(confirm_dialog_1.EVENT_OPEN_CONFIRM_DIALOG, {
+      shown: true,
+      title: "Are you sure to REMOVE?",
+      confirm_btn_text: "Yes, remove it",
+      confirm_callback: function confirm_callback() {
+        var _a;
+
+        console.log("DELETE ITEM " + ((_a = _modal_data.item) === null || _a === void 0 ? void 0 : _a.id));
+      }
+    });
+  };
 
   return react_dom_1.createPortal(react_1["default"].createElement(Modal_1["default"], {
     id: "main-banner-slider-modal",
@@ -3076,6 +3105,7 @@ var BannerSliderModal = function BannerSliderModal() {
     onHide: onHandleClose,
     onEnter: onHandleEnter
   }, react_1["default"].createElement(react_hook_form_1.FormProvider, __assign({}, _form), react_1["default"].createElement("form", {
+    "aria-label": 'slider-item-form',
     onSubmit: handleSubmit(onHandleSubmitted)
   }, react_1["default"].createElement(ModalHeader, {
     title: _title,
@@ -3086,7 +3116,8 @@ var BannerSliderModal = function BannerSliderModal() {
     onHandleImageSelected: onHandleImageSelected
   }), react_1["default"].createElement(ModalFooter, {
     is_adding_new: _modal_data.is_adding_new,
-    onHandleClose: onHandleClose
+    onHandleClose: onHandleClose,
+    onHandleDelete: onHandleDlete
   })))), document.getElementById("portal-box"));
 };
 
@@ -4184,21 +4215,6 @@ function transitionEnd(element, handler, duration, padding) {
     remove();
   };
 }
-
-/***/ }),
-
-/***/ "./resources/images/no-image.png":
-/*!***************************************!*\
-  !*** ./resources/images/no-image.png ***!
-  \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/no-image.png?2de5c17060f18e65bf2c6a2592fdacaa");
 
 /***/ }),
 

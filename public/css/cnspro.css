@@ -13576,6 +13576,10 @@ input[type=range]::-moz-range-thumb {
     height: 150px;
   }
 }
+#main-banner-slider-modal .modal-footer .btn-danger {
+  margin-right: auto;
+}
+
 .toast {
   max-width: 350px;
   font-size: 0.875rem;
