@@ -1,11 +1,12 @@
 import React from 'react'
-import {cleanup, render, screen, fireEvent, waitFor, waitForElement} from '@testing-library/react'
+import {render, screen, fireEvent, waitFor, cleanup} from '@testing-library/react'
 import {Provider} from 'react-redux'
 import store from '../store/dashboard-store'
-import BannerSliderModal from '../modals/banner-slider-modal'
 import "regenerator-runtime/runtime";
 
 import MainBannerSliderItem, {MainBannerSliderEmptyItem} from './main-banner-slider-item'
+import BannerSliderModal from '../modals/banner-slider-modal'
+import ConfirmDialog from '../../../tools/confirm-dialog/confirm-dialog'
 
 const _item = {
     id: 1,
@@ -13,7 +14,7 @@ const _item = {
     title : "Canadian lake house features dark wood" 
 }
 
-afterEach(cleanup)
+
 
 //Rendering Slider Item/Empty
 describe('Slider item rendering', () => {
@@ -44,7 +45,7 @@ describe('Slider item rendering', () => {
                 <MainBannerSliderItem item={_item} />
             </Provider>
         )
-        expect(screen.getByRole('button', {name: 'edit'})).toBeInTheDocument()
+        expect(screen.getByRole('button', {name: /edit/i})).toBeInTheDocument()
     })
 
 })
@@ -67,29 +68,43 @@ describe('Slider item actions', () => {
         )
 
         const _container = document.body
-        expect(_container.querySelector('#main-banner-slider-modal')).toBeNull()
+        //Test before btn clicked
+        let _modal = _container.querySelector('#main-banner-slider-modal')
+        expect(_modal).toBeNull()
 
         const _button = screen.getByRole('button', {name: /edit/i})
         fireEvent.click(_button)
 
-        await waitFor(() => {})
-        expect(_container.querySelector('#main-banner-slider-modal')).toBeInTheDocument()
+        //waitFor and then re-check 
+        await waitFor(() => _modal = _container.querySelector('#main-banner-slider-modal'))
+        expect(_modal).toBeInTheDocument()
+
     })
 
+
+
     //Test delete button clicked
-    // test('Delete button clicked to show confirm dialog', () => {
-    //     render(
-    //         <Provider store={store}>
-    //             <MainBannerSliderItem item={_item} />
-    //         </Provider>
-    //     )
+    test('Delete button clicked to show confirm dialog', async() => {
 
-    //     const _button = screen.getByRole('button', {name: 'delete'})
-    //     //fireEvent.click(_button)
+        //Append portal box
+        document.body.innerHTML = "<div id='portal-box'></div>"
 
-    //     // waitFor(() => {
-    //     //     expect(screen.getByText('RE')).toBeInTheDocument()
-    //     // })
-    // })
+        render(
+            <Provider store={store}>
+                <MainBannerSliderItem item={_item} />
+
+                <ConfirmDialog />
+            </Provider>
+        )
+
+        expect(screen.queryByText(/Are you sure to REMOVE?/i)).toBeNull()
+
+        const _button = screen.getByRole('button', {name: /delete/i})
+        fireEvent.click(_button)
+
+        let _text
+        await waitFor(() => _text = screen.getByText('Are you sure to REMOVE?'))
+        expect(_text).toBeInTheDocument()
+    })
 
 })

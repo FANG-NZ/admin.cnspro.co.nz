@@ -71,5 +71,5 @@
 
   //Add PNG image module into TS
   //CHECK https://stackoverflow.com/questions/43638454/webpack-typescript-image-import?rq=1
-  "include": ["resources/react","image.d.ts"]
+  "include": ["resources/react","mocks/image.d.ts"]
 }

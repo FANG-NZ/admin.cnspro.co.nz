@@ -59,7 +59,7 @@ const ConfirmDialog = ():JSX.Element => {
     return createPortal(
         <React.Fragment>
             {data.shown &&
-                <SweetAlert
+                <SweetAlert              
                     type={data.type}
                     
                     title={data.title}

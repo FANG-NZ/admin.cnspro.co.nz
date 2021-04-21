@@ -2842,9 +2842,8 @@ var Modal_1 = __importDefault(__webpack_require__(/*! react-bootstrap/Modal */ "
 
 var dashboard_store_1 = __webpack_require__(/*! ../store/dashboard-store */ "./resources/react/pages/dashboard/store/dashboard-store.ts");
 
-var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts");
+var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts"); //import NoImageIcon from '../../../../images/no-image.png'
 
-var no_image_png_1 = __importDefault(__webpack_require__(/*! ../../../../images/no-image.png */ "./resources/images/no-image.png"));
 /**
  * TODO
  * define the Modal Header
@@ -2931,7 +2930,7 @@ var ModalBody = function ModalBody(_a) {
   }, react_1["default"].createElement("div", {
     className: "image-box col-md-6"
   }, react_1["default"].createElement("img", {
-    src: image ? image : no_image_png_1["default"]
+    src: image ? image : 'NoImageIcon'
   })), react_1["default"].createElement("div", {
     className: "image-upload-box col-md-6"
   }, react_1["default"].createElement(react_images_uploading_1["default"], {
@@ -3106,7 +3105,6 @@ var BannerSliderModal = function BannerSliderModal() {
     onHide: onHandleClose,
     onEnter: onHandleEnter
   }, react_1["default"].createElement(react_hook_form_1.FormProvider, __assign({}, _form), react_1["default"].createElement("form", {
-    "aria-label": 'slider-item-form',
     onSubmit: handleSubmit(onHandleSubmitted)
   }, react_1["default"].createElement(ModalHeader, {
     title: _title,
@@ -4216,21 +4214,6 @@ function transitionEnd(element, handler, duration, padding) {
     remove();
   };
 }
-
-/***/ }),
-
-/***/ "./resources/images/no-image.png":
-/*!***************************************!*\
-  !*** ./resources/images/no-image.png ***!
-  \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/no-image.png?2de5c17060f18e65bf2c6a2592fdacaa");
 
 /***/ }),
 

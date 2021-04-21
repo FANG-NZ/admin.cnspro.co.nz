@@ -2,8 +2,11 @@
   "private": true,
   "jest": {
     "setupFilesAfterEnv": [
-      "./jest-setup.js"
-    ]
+      "./mocks/jest-setup.js"
+    ],
+    "moduleNameMapper":{
+      "\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "./mocks/jest-file-mock.js"
+    }
   },
   "scripts": {
     "dev": "npm run development",
