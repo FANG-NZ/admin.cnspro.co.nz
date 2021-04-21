@@ -67,16 +67,15 @@ describe('Slider item actions', () => {
             </Provider>
         )
 
-        const _container = document.body
         //Test before btn clicked
-        let _modal = _container.querySelector('#main-banner-slider-modal')
+        let _modal = screen.queryByRole('dialog')
         expect(_modal).toBeNull()
 
         const _button = screen.getByRole('button', {name: /edit/i})
         fireEvent.click(_button)
 
         //waitFor and then re-check 
-        await waitFor(() => _modal = _container.querySelector('#main-banner-slider-modal'))
+        await waitFor(() => _modal = screen.getByRole('dialog'))
         expect(_modal).toBeInTheDocument()
 
     })
