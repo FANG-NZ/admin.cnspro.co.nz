@@ -36,11 +36,28 @@ Route::middleware(['auth:admin'])->group(function(){
     //To setup json response middleware
     Route::middleware(['json.response'])->group(function(){
 
+        //For Dashboard
+        Route::post(
+            '/dashboard/banner-slider/add', 
+            [DashboardController::class, 'doAddBannerSlider']
+        )->name("page_dashboard.add_banner_slider");
+
+        Route::put(
+            '/dashboard/banner-slider/update/{id}', 
+            [DashboardController::class, 'doUpdateBannerSlider']
+        )->name("page_dashboard.update_banner_slider");
+
+        Route::delete(
+            '/dashboard/banner-slider/delete/{id}', 
+            [DashboardController::class, 'doDeleteBannerSlider']
+        )->name("page_dashboard.delete_banner_slider");
+
+
         Route::post('/projects/add', [ProjectController::class, "doAdd"]);
         Route::delete('/projects/delete/{id}', [ProjectController::class, "doDelete"]);
         Route::put('/projects/update/{id}', [ProjectController::class, "doUpdate"]);
-        Route::post('/projects/upload/{id}', [ProjectController::class, "doUploadImage"]);
-        Route::delete('/projects/delete/{id}', [ProjectController::class, "doDeleteImage"]);
+        Route::post('/projects/image/upload/{id}', [ProjectController::class, "doUploadImage"]);
+        Route::delete('/projects/image/delete/{id}', [ProjectController::class, "doDeleteImage"]);
     });
 });
 

@@ -68,7 +68,7 @@ export const uploadProjectImage = createAsyncThunk(
         const _id = data.id
         
         const response = await Client.post(
-            `/projects/upload/${data.id}`, 
+            `/projects/image/upload/${data.id}`, 
             data.image,
             {
                 is_upload_file : true, 
@@ -88,7 +88,7 @@ export const deleteProjectImage = createAsyncThunk(
     (data) => {
         const _id = data.project_id
 
-        const response = Client.delete('/projects/delete/' + _id, {'image_id' : data.id})
+        const response = Client.delete('/projects/image/delete/' + _id, {'image_id' : data.id})
         return response
     }
 )

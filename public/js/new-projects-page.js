@@ -3346,7 +3346,7 @@ var uploadProjectImage = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.create
           case 0:
             _id = data.id;
             _context2.next = 3;
-            return _tools_client__WEBPACK_IMPORTED_MODULE_1__.Client.post("/projects/upload/".concat(data.id), data.image, {
+            return _tools_client__WEBPACK_IMPORTED_MODULE_1__.Client.post("/projects/image/upload/".concat(data.id), data.image, {
               is_upload_file: true //is_show_loading: false
 
             });
@@ -3374,7 +3374,7 @@ var uploadProjectImage = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.create
 
 var deleteProjectImage = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.createAsyncThunk)('Projects/deleteProjectImage', function (data) {
   var _id = data.project_id;
-  var response = _tools_client__WEBPACK_IMPORTED_MODULE_1__.Client.delete('/projects/delete/' + _id, {
+  var response = _tools_client__WEBPACK_IMPORTED_MODULE_1__.Client.delete('/projects/image/delete/' + _id, {
     'image_id': data.id
   });
   return response;
