@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use App\Models\AdminUser;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class PageSettingsTest extends TestCase
 {
+    use DatabaseTransactions;
     
     /**
      * A basic feature test example.

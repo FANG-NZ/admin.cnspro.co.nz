@@ -3,12 +3,13 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use App\Models\SiteConfig;
 
 class SiteConfigTest extends TestCase
 {
-    //use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * Test if there is only one record into database

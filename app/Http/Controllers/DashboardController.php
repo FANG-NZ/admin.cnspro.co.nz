@@ -29,10 +29,51 @@ class DashboardController extends Controller
         $banner_slider->title = $request->input('title');
         $banner_slider->save();
 
+        //To handle image upload
+        $banner_slider->uploadImage($request->file('image'));
+
         return response($banner_slider->toJson(), 201);
     }
 
 
+    /**
+     * Function is to handle update banner slider item
+     */
+    public function doUpdateBannerSlider(Request $request, $id)
+    {
+        $banner = BannerSlider::findOrFail($id);
 
+        $request->validate([
+            'title' => "required_without_all:image|nullable|max:255",
+            'image' => 'required_without_all:title|nullable|image|mimes:jpeg,png,jpg,gif|max:3072'
+        ]);
+
+        //To update title
+        if($request->filled("title")){
+            $banner->title = $request->input('title');
+            $banner->save();
+        }
+
+        //To update new image
+        if($request->hasFile("image")){
+            $banner->uploadImage($request->file('image'));
+        }
+
+        return response($banner->toJson(), 201);
+    }
+
+
+    /**
+     * Function is to handle delete banner slider
+     */
+    public function doDeleteBannerSlider(Request $request, $id)
+    {
+        $banner = BannerSlider::findOrFail($id);
+
+        //call delete method
+        $banner->delete();
+
+        return response($banner->toJson(), 200);
+    }
 
 }
