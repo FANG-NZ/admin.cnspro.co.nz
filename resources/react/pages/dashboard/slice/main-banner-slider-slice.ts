@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
-import {RootState} from '../store/dashboard-store'
+import type {RootState} from '../store/dashboard-store'
 
 /**
  * define the MainBannerSlider state

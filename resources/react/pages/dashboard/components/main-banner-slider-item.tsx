@@ -1,6 +1,6 @@
 import React from 'react'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
-import {useAppDispatch} from '../store/dashboard-store'
+import {useAppDispatch} from '../store/store-hook'
 import {show} from '../slice/banner-slider-modal-slice'
 import PubSub from 'pubsub-js'
 import ConfirmDialog, {EVENT_OPEN_CONFIRM_DIALOG} from '../../../tools/confirm-dialog/confirm-dialog'

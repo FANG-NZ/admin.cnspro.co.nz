@@ -2541,7 +2541,7 @@ var MainBannerSliderHeader = function MainBannerSliderHeader() {
   }, react_1["default"].createElement("button", {
     className: "btn btn-success",
     onClick: function onClick() {
-      _dispatch(banner_slider_modal_slice_1.show(null));
+      _dispatch(banner_slider_modal_slice_1.show());
     }
   }, react_1["default"].createElement("i", {
     className: "mdi mdi-plus-circle"
@@ -2574,7 +2574,7 @@ exports.MainBannerSliderEmptyItem = void 0;
 
 var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
-var dashboard_store_1 = __webpack_require__(/*! ../store/dashboard-store */ "./resources/react/pages/dashboard/store/dashboard-store.ts");
+var store_hook_1 = __webpack_require__(/*! ../store/store-hook */ "./resources/react/pages/dashboard/store/store-hook.ts");
 
 var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts");
 
@@ -2607,7 +2607,7 @@ exports.MainBannerSliderEmptyItem = MainBannerSliderEmptyItem;
 var MainBannerSliderItem = function MainBannerSliderItem(_a) {
   var item = _a.item;
 
-  var _dispatch = dashboard_store_1.useAppDispatch();
+  var _dispatch = store_hook_1.useAppDispatch();
 
   return react_1["default"].createElement("div", {
     className: "col-sm-4 col-md-3"
@@ -2719,7 +2719,7 @@ var main_banner_slider_item_1 = __importStar(__webpack_require__(/*! ./main-bann
 
 var main_banner_slider_slice_1 = __webpack_require__(/*! ../slice/main-banner-slider-slice */ "./resources/react/pages/dashboard/slice/main-banner-slider-slice.ts");
 
-var dashboard_store_1 = __webpack_require__(/*! ../store/dashboard-store */ "./resources/react/pages/dashboard/store/dashboard-store.ts");
+var store_hook_1 = __webpack_require__(/*! ../store/store-hook */ "./resources/react/pages/dashboard/store/store-hook.ts");
 
 var MainBannerSliderList = function MainBannerSliderList(_a) {
   var sliders = _a.sliders;
@@ -2743,7 +2743,7 @@ var MainBannerSliderList = function MainBannerSliderList(_a) {
 
 var MainBannerSlider = function MainBannerSlider() {
   //To load sliders from STORE
-  var _sliders = dashboard_store_1.useAppSelector(main_banner_slider_slice_1.allSliders);
+  var _sliders = store_hook_1.useAppSelector(main_banner_slider_slice_1.allSliders);
 
   return react_1["default"].createElement("div", {
     id: "main-banner-slider",
@@ -2840,7 +2840,7 @@ var confirm_dialog_1 = __webpack_require__(/*! ../../../tools/confirm-dialog/con
 
 var Modal_1 = __importDefault(__webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js"));
 
-var dashboard_store_1 = __webpack_require__(/*! ../store/dashboard-store */ "./resources/react/pages/dashboard/store/dashboard-store.ts");
+var store_hook_1 = __webpack_require__(/*! ../store/store-hook */ "./resources/react/pages/dashboard/store/store-hook.ts");
 
 var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts");
 
@@ -3004,11 +3004,11 @@ var ImageSelectedStatue;
 
 var BannerSliderModal = function BannerSliderModal() {
   //To get modal data from MODAL STORE
-  var _modal_data = dashboard_store_1.useAppSelector(function (state) {
+  var _modal_data = store_hook_1.useAppSelector(function (state) {
     return state.BannerSliderModal;
   });
 
-  var _dispatch = dashboard_store_1.useAppDispatch(); //define the modal title
+  var _dispatch = store_hook_1.useAppDispatch(); //define the modal title
 
 
   var _title = _modal_data.is_adding_new ? "Add new item" : "Update item";
@@ -3017,8 +3017,7 @@ var BannerSliderModal = function BannerSliderModal() {
 
   var handleSubmit = _form.handleSubmit,
       reset = _form.reset,
-      setValue = _form.setValue,
-      dirtyFields = _form.formState.dirtyFields; //define the slected image
+      setValue = _form.setValue; //define the slected image
 
   var _a = react_1.useState(null),
       selectedImage = _a[0],
@@ -3159,7 +3158,7 @@ var BannerSliderModalSlice = toolkit_1.createSlice({
     show: {
       reducer: function reducer(state, action) {
         state.shown = true;
-        state.item = action.payload.item;
+        state.item = action.payload.item ? action.payload.item : null;
         state.is_adding_new = action.payload.is_adding_new;
       },
       prepare: function prepare(_item) {
@@ -3254,11 +3253,8 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.useAppSelector = exports.useAppDispatch = void 0;
 
 var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-
-var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
 var main_banner_slider_slice_1 = __importDefault(__webpack_require__(/*! ../slice/main-banner-slider-slice */ "./resources/react/pages/dashboard/slice/main-banner-slider-slice.ts"));
 
@@ -3269,8 +3265,28 @@ var store = toolkit_1.configureStore({
     MainBannerSlider: main_banner_slider_slice_1["default"],
     BannerSliderModal: banner_slider_modal_slice_1["default"]
   }
-}); //Hook
+});
+exports.default = store;
+
+/***/ }),
+
+/***/ "./resources/react/pages/dashboard/store/store-hook.ts":
+/*!*************************************************************!*\
+  !*** ./resources/react/pages/dashboard/store/store-hook.ts ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useAppSelector = exports.useAppDispatch = void 0;
+
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js"); //Hook
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
+
 
 var useAppDispatch = function useAppDispatch() {
   return react_redux_1.useDispatch();
@@ -3278,7 +3294,6 @@ var useAppDispatch = function useAppDispatch() {
 
 exports.useAppDispatch = useAppDispatch;
 exports.useAppSelector = react_redux_1.useSelector;
-exports.default = store;
 
 /***/ }),
 

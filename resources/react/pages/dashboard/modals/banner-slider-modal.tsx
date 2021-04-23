@@ -5,7 +5,7 @@ import ImageUploading, { ImageListType, ImageType } from 'react-images-uploading
 import PubSub from 'pubsub-js'
 import {EVENT_OPEN_CONFIRM_DIALOG} from '../../../tools/confirm-dialog/confirm-dialog'
 import Modal from 'react-bootstrap/Modal'
-import {RootState, useAppDispatch , useAppSelector} from '../store/dashboard-store'
+import {useAppDispatch , useAppSelector} from '../store/store-hook'
 import {hide} from '../slice/banner-slider-modal-slice'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
 import NoImageIcon from '../../../../images/no-image.png'
@@ -189,14 +189,14 @@ type FormValue = {
 const BannerSliderModal = ():JSX.Element => {
 
     //To get modal data from MODAL STORE
-    const _modal_data = useAppSelector((state:RootState) => state.BannerSliderModal)
+    const _modal_data = useAppSelector((state) => state.BannerSliderModal)
     const _dispatch = useAppDispatch()
 
     //define the modal title
     const _title = _modal_data.is_adding_new? "Add new item" : "Update item"
 
     const _form = useForm<FormValue>()
-    const {handleSubmit, reset, setValue, formState:{dirtyFields}} = _form
+    const {handleSubmit, reset, setValue} = _form
     
     //define the slected image
     const [selectedImage, setSelectedImage] = useState<ImageType|null>(null)

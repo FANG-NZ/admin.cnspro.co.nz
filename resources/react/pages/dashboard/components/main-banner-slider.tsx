@@ -3,7 +3,7 @@ import MainBannerSliderHeader from './main-banner-slider-header'
 import MainBannerSliderItem, {MainBannerSliderEmptyItem} from './main-banner-slider-item'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
 import {allSliders} from '../slice/main-banner-slider-slice'
-import {useAppDispatch , useAppSelector} from '../store/dashboard-store'
+import {useAppDispatch , useAppSelector} from '../store/store-hook'
 
 
 type BannerSliderListProps = {

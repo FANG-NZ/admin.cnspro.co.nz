@@ -28,12 +28,12 @@ const BannerSliderModalSlice = createSlice({
          * define the function to open the modal
          */
         show: {
-            reducer(state, action:PayloadAction<{item:BannerSliderItem|null, is_adding_new : boolean}>){
+            reducer(state, action:PayloadAction<{item?:BannerSliderItem|null, is_adding_new : boolean}>){
                 state.shown = true
-                state.item = action.payload.item
+                state.item = action.payload.item? action.payload.item: null
                 state.is_adding_new = action.payload.is_adding_new
             },
-            prepare(_item:BannerSliderItem|null){
+            prepare(_item?:BannerSliderItem){
 
                 const payload = {
                     item : _item,

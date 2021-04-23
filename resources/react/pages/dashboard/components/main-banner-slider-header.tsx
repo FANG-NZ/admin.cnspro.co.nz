@@ -24,7 +24,7 @@ import {show} from '../slice/banner-slider-modal-slice'
 
                 <button className="btn btn-success" 
                     onClick={() => {
-                        _dispatch(show(null))
+                        _dispatch(show())
                     }}
                 >
                     <i className="mdi mdi-plus-circle"></i>
