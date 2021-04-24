@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
 import type {RootState} from '../store/dashboard-store'
 
@@ -16,6 +16,20 @@ const initialState : MainBannerSliderState = {
     sliders: []
 }
 
+
+export const addNewItem = createAsyncThunk(
+    'MainBannerSlider/addNewItem',
+    (data:string) => {
+        return "TEST"
+    }
+)
+
+
+
+/**
+ * TODO
+ * define the MainBannerSliderSlice
+ */
 const MainBannerSliderSlice = createSlice({
     name: 'MainBannerSlider',
     initialState,

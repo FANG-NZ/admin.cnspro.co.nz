@@ -2471,11 +2471,15 @@ var main_banner_slider_slice_1 = __webpack_require__(/*! ./dashboard/slice/main-
 
 var toast_box_1 = __importDefault(__webpack_require__(/*! ../tools/toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.tsx"));
 
+var loading_spinner_1 = __importDefault(__webpack_require__(/*! ../tools/loading-spinner/loading-spinner */ "./resources/react/tools/loading-spinner/loading-spinner.tsx"));
+
 var main_banner_slider_1 = __importDefault(__webpack_require__(/*! ./dashboard/components/main-banner-slider */ "./resources/react/pages/dashboard/components/main-banner-slider.tsx"));
 
 var banner_slider_modal_1 = __importDefault(__webpack_require__(/*! ./dashboard/modals/banner-slider-modal */ "./resources/react/pages/dashboard/modals/banner-slider-modal.tsx"));
 
 var confirm_dialog_1 = __importDefault(__webpack_require__(/*! ../tools/confirm-dialog/confirm-dialog */ "./resources/react/tools/confirm-dialog/confirm-dialog.tsx"));
+
+var fetch_client_1 = __webpack_require__(/*! ../tools/fetch-client */ "./resources/react/tools/fetch-client.ts");
 
 var banner_list = [{
   id: 1,
@@ -2487,10 +2491,27 @@ var banner_list = [{
   title: "Future housein the Barvikha forest"
 }]; //call set sliders
 
-dashboard_store_1["default"].dispatch(main_banner_slider_slice_1.setSliders(banner_list));
+dashboard_store_1["default"].dispatch(main_banner_slider_slice_1.setSliders(banner_list)); //Test line
+// Client.get("/dashboard/banner-slider/load").then(
+//     (data)=>{
+//         console.log(data)
+//     },
+//     (error) => {
+//         console.log(error.message)
+//     }
+// )
+
 react_dom_1["default"].render(react_1["default"].createElement(react_redux_1.Provider, {
   store: dashboard_store_1["default"]
-}, react_1["default"].createElement(main_banner_slider_1["default"], null), react_1["default"].createElement(toast_box_1["default"], null), react_1["default"].createElement(banner_slider_modal_1["default"], null), react_1["default"].createElement(confirm_dialog_1["default"], null)), document.getElementById("root-dashboard"));
+}, react_1["default"].createElement(main_banner_slider_1["default"], null), react_1["default"].createElement(toast_box_1["default"], null), react_1["default"].createElement(banner_slider_modal_1["default"], null), react_1["default"].createElement(confirm_dialog_1["default"], null), react_1["default"].createElement(loading_spinner_1["default"], null)), document.getElementById("root-dashboard"));
+fetch_client_1.Client.post("/dashboard/test-post/11", {
+  id: 1,
+  name: "FANG"
+}).then(function (data) {
+  console.log(data.id + " === " + data.name);
+}, function (error) {
+  console.log(error.message);
+});
 
 /***/ }),
 
@@ -3201,7 +3222,7 @@ exports.default = BannerSliderModalSlice.reducer;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.allSliders = exports.setSliders = void 0;
+exports.allSliders = exports.setSliders = exports.addNewItem = void 0;
 
 var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js"); //define the initial state here
 
@@ -3209,6 +3230,14 @@ var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@red
 var initialState = {
   sliders: []
 };
+exports.addNewItem = toolkit_1.createAsyncThunk('MainBannerSlider/addNewItem', function (data) {
+  return "TEST";
+});
+/**
+ * TODO
+ * define the MainBannerSliderSlice
+ */
+
 var MainBannerSliderSlice = toolkit_1.createSlice({
   name: 'MainBannerSlider',
   initialState: initialState,
@@ -3438,6 +3467,426 @@ var ConfirmDialog = function ConfirmDialog() {
 };
 
 exports.default = ConfirmDialog;
+
+/***/ }),
+
+/***/ "./resources/react/tools/fetch-client.ts":
+/*!***********************************************!*\
+  !*** ./resources/react/tools/fetch-client.ts ***!
+  \***********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.Client = void 0;
+
+var pubsub_js_1 = __importDefault(__webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js"));
+
+var loading_spinner_1 = __webpack_require__(/*! ./loading-spinner/loading-spinner */ "./resources/react/tools/loading-spinner/loading-spinner.tsx");
+/**
+ * TODO
+ * deifne the client
+ * @param endpoint
+ * @param config
+ * @param body
+ * @returns
+ */
+
+
+function Client(endpoint, config, //Flag to indicate if there is file attached 
+attached_file, show_loading) {
+  if (attached_file === void 0) {
+    attached_file = false;
+  }
+
+  if (show_loading === void 0) {
+    show_loading = true;
+  }
+
+  return __awaiter(this, void 0, void 0, function () {
+    var headers, _config, data, response, error_1;
+
+    return __generator(this, function (_a) {
+      switch (_a.label) {
+        case 0:
+          headers = {
+            'Content-Type': 'application/json'
+          };
+
+          if (attached_file) {
+            headers = {
+              'Content-Type': 'multipart/form-data'
+            };
+          } else {
+            config.body = JSON.stringify(config.body);
+          }
+
+          _config = __assign(__assign({}, config), {
+            headers: __assign(__assign({}, headers), config.headers)
+          }); //To trigger show loading icon event
+
+          if (show_loading) {
+            pubsub_js_1["default"].publish(loading_spinner_1.EVENT_LOADING_SPINNER, true);
+          }
+
+          _a.label = 1;
+
+        case 1:
+          _a.trys.push([1, 4, 5, 6]);
+
+          return [4
+          /*yield*/
+          , window.fetch(endpoint, _config)];
+
+        case 2:
+          response = _a.sent();
+          return [4
+          /*yield*/
+          , response.json()];
+
+        case 3:
+          data = _a.sent();
+
+          if (response.ok) {
+            return [2
+            /*return*/
+            , data];
+          }
+
+          throw new Error(response.statusText);
+
+        case 4:
+          error_1 = _a.sent();
+          return [2
+          /*return*/
+          , Promise.reject({
+            message: data.message
+          })];
+
+        case 5:
+          if (show_loading) {
+            pubsub_js_1["default"].publish(loading_spinner_1.EVENT_LOADING_SPINNER, false);
+          }
+
+          return [7
+          /*endfinally*/
+          ];
+
+        case 6:
+          return [2
+          /*return*/
+          ];
+      }
+    });
+  });
+}
+
+exports.Client = Client;
+/**
+ * define the GET method
+ * @param endpoint
+ * @returns
+ */
+
+Client.get = function (endpoint, customConfig) {
+  if (customConfig === void 0) {
+    customConfig = {};
+  }
+
+  return Client(endpoint, __assign(__assign({}, customConfig), {
+    method: 'GET'
+  }));
+};
+/**
+ * define the POST method
+ * @param endpoint
+ * @param body
+ * @param customConfig
+ * @returns
+ */
+
+
+Client.post = function (endpoint, body, attached_file, customConfig) {
+  if (attached_file === void 0) {
+    attached_file = false;
+  }
+
+  if (customConfig === void 0) {
+    customConfig = {};
+  }
+
+  return Client(endpoint, __assign(__assign({}, customConfig), {
+    method: "POST",
+    body: body
+  }), attached_file);
+};
+
+/***/ }),
+
+/***/ "./resources/react/tools/loading-spinner/loading-spinner.tsx":
+/*!*******************************************************************!*\
+  !*** ./resources/react/tools/loading-spinner/loading-spinner.tsx ***!
+  \*******************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.EVENT_LOADING_SPINNER = void 0;
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_dom_1 = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+
+var pubsub_js_1 = __importDefault(__webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js"));
+
+exports.EVENT_LOADING_SPINNER = "Loading_Spinner"; //define the loading spinner
+
+var LoadingSpinner = function LoadingSpinner() {
+  var _portalBox = document.getElementById("portal-box");
+
+  var _a = react_1.useState(false),
+      show = _a[0],
+      setShow = _a[1];
+  /**
+   * Function is to handle subscribe
+   * @param msg
+   * @param data
+   */
+
+
+  var onHandleSubscriber = function onHandleSubscriber(msg, data) {
+    setShow(data);
+  };
+
+  react_1.useEffect(function () {
+    var _token = pubsub_js_1["default"].subscribe(exports.EVENT_LOADING_SPINNER, onHandleSubscriber);
+
+    return function () {
+      pubsub_js_1["default"].unsubscribe(_token);
+    };
+  }, []);
+  return react_dom_1.createPortal(show && react_1["default"].createElement("div", {
+    id: "main-loader",
+    className: "ff-loader-container"
+  }, react_1["default"].createElement("div", {
+    className: "ff-loader"
+  })), _portalBox);
+};
+
+exports.default = LoadingSpinner;
 
 /***/ }),
 

@@ -14,6 +14,49 @@ class DashboardController extends Controller
 
 
     /**
+     * Function is to load all banner sliders
+     */
+    public function doLoadBannerSliders()
+    {
+        $banner_sliders = BannerSlider::all();
+
+        return response($banner_sliders->toJson(), 200);
+    }
+
+
+    /**
+     * TEST
+     * POST METHOD
+     */
+    public function testPostMethod(Request $request, $id)
+    {
+        $data = $request->all();
+sleep(2);
+        return response($data, 200);
+    }
+
+    /**
+     * TEST
+     * PUT METHOD
+     */
+    public function testPutMethod(Request $request, $id)
+    {
+
+    }
+
+    /**
+     * TEST
+     * DELETE METHOD
+     */
+    public function testDeleteMethod(Request $request, $id)
+    {
+
+    }
+
+    
+
+
+    /**
      * Function is to handle adding new banner slider 
      * item
      */

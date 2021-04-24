@@ -28,6 +28,7 @@ Route::middleware(['auth:admin'])->group(function(){
         return redirect('/dashboard');
     });
 
+    
     Route::get('/dashboard', [DashboardController::class, "index"])->name("page_dashboard");
     Route::get('/projects', [ProjectController::class, "index"])->name("page_projects");
     Route::get('/settings', [SettingsController::class, "index"])->name("page_settings");
@@ -35,6 +36,25 @@ Route::middleware(['auth:admin'])->group(function(){
 
     //To setup json response middleware
     Route::middleware(['json.response'])->group(function(){
+
+        Route::get(
+            '/dashboard/banner-slider/load', 
+            [DashboardController::class, 'doLoadBannerSliders']
+        );
+
+        //TEST ROUTE
+        Route::post(
+            '/dashboard/test-post/{id}', 
+            [DashboardController::class, 'testPostMethod']
+        );
+        Route::put(
+            '/dashboard/test-post/{id}', 
+            [DashboardController::class, 'testPutMethod']
+        );
+        Route::delete(
+            '/dashboard/test-delete/{id}', 
+            [DashboardController::class, 'testDeleteMethod']
+        );
 
         //For Dashboard
         Route::post(
