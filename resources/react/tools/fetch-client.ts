@@ -1,4 +1,5 @@
 import PubSub from 'pubsub-js'
+import { getCombinedModifierFlags } from 'typescript';
 import {EVENT_LOADING_SPINNER} from './loading-spinner/loading-spinner'
 /**
  * TODO
@@ -16,12 +17,26 @@ export async function Client<T>(
     show_loading:boolean = true
 ):Promise<T> {
     
-    let headers = { 'Content-Type': 'application/json' };
+    let headers;
 
     //If attached file, we just need to update Content-Type
     if(attached_file){
-        headers = { 'Content-Type': 'multipart/form-data' }
+        //headers = { 'Content-Type': 'multipart/form-data' }
+        //headers = {'Content-Type': "application/x-www-form-urlencoded"}
+
+        //To rebuild formdata
+        if(config.body){
+            const _formdata = new FormData()
+
+            for (const [key, value] of Object.entries(config.body)) {
+                _formdata.append(key, value)
+            }
+            
+            config.body = _formdata
+        }
+
     }else{
+        headers = { 'Content-Type': 'application/json' };
         config.body = JSON.stringify(config.body)
     }
 
@@ -34,7 +49,7 @@ export async function Client<T>(
         }
     }
 
-
+    
     //To trigger show loading icon event
     if(show_loading){
         PubSub.publish(EVENT_LOADING_SPINNER, true)

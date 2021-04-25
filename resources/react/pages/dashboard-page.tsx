@@ -12,7 +12,6 @@ import BannerSliderModal from './dashboard/modals/banner-slider-modal'
 import ConfirmDialog from '../tools/confirm-dialog/confirm-dialog'
 import {Client} from '../tools/fetch-client'
 
-
 const banner_list : Array<BannerSliderItem> = [
     {
         id : 1,
@@ -29,6 +28,7 @@ const banner_list : Array<BannerSliderItem> = [
 
 //call set sliders
 store.dispatch(setSliders(banner_list))
+
 
 //Test line
 // Client.get("/dashboard/banner-slider/load").then(

@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
 import type {RootState} from '../store/dashboard-store'
+import {Client} from '../../../tools/fetch-client'
 
 /**
  * define the MainBannerSlider state
@@ -17,10 +18,18 @@ const initialState : MainBannerSliderState = {
 }
 
 
+/**
+ * TODO
+ * define the function is to handle add new slider item
+ */
 export const addNewItem = createAsyncThunk(
     'MainBannerSlider/addNewItem',
-    (data:string) => {
-        return "TEST"
+
+    (data:any) => {
+        const _url = process.env.REACT_APP_REQUEST_URL
+
+        const response = Client.post(`${_url}dashboard/banner-slider/add`, data, true)
+        return response
     }
 )
 

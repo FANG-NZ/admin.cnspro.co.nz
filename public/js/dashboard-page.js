@@ -2853,9 +2853,13 @@ var Modal_1 = __importDefault(__webpack_require__(/*! react-bootstrap/Modal */ "
 
 var store_hook_1 = __webpack_require__(/*! ../store/store-hook */ "./resources/react/pages/dashboard/store/store-hook.ts");
 
+var main_banner_slider_slice_1 = __webpack_require__(/*! ../slice/main-banner-slider-slice */ "./resources/react/pages/dashboard/slice/main-banner-slider-slice.ts");
+
 var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider-modal-slice */ "./resources/react/pages/dashboard/slice/banner-slider-modal-slice.ts");
 
 var no_image_png_1 = __importDefault(__webpack_require__(/*! ../../../../images/no-image.png */ "./resources/images/no-image.png"));
+
+var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 /**
  * TODO
  * define the Modal Header
@@ -3086,10 +3090,17 @@ var BannerSliderModal = function BannerSliderModal() {
 
   var onHandleSubmitted = function onHandleSubmitted(data) {
     if (data.image_status === ImageSelectedStatue.CHANGED) {
-      data.image = selectedImage ? selectedImage['file'] : null;
+      if (selectedImage) data.image = selectedImage['file'];
     }
 
-    delete data.image_status;
+    delete data.image_status; // const _formdata = new FormData()
+    // _formdata.append('title', data.title)
+    // if(data.image)
+    //     _formdata.append('image', data.image)
+
+    _dispatch(main_banner_slider_slice_1.addNewItem(data)).then(toolkit_1.unwrapResult).then(function (result) {
+      console.log(result);
+    });
   };
   /**
    * Function is to handle delete
@@ -3214,14 +3225,23 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.allSliders = exports.setSliders = exports.addNewItem = void 0;
 
-var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js"); //define the initial state here
+var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+
+var fetch_client_1 = __webpack_require__(/*! ../../../tools/fetch-client */ "./resources/react/tools/fetch-client.ts"); //define the initial state here
 
 
 var initialState = {
   sliders: []
 };
+/**
+ * TODO
+ * define the function is to handle add new slider item
+ */
+
 exports.addNewItem = toolkit_1.createAsyncThunk('MainBannerSlider/addNewItem', function (data) {
-  return "TEST";
+  var _url = "http://localhost/";
+  var response = fetch_client_1.Client.post(_url + "dashboard/banner-slider/add", data, true);
+  return response;
 });
 /**
  * TODO
@@ -3457,6 +3477,399 @@ var ConfirmDialog = function ConfirmDialog() {
 };
 
 exports.default = ConfirmDialog;
+
+/***/ }),
+
+/***/ "./resources/react/tools/fetch-client.ts":
+/*!***********************************************!*\
+  !*** ./resources/react/tools/fetch-client.ts ***!
+  \***********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.Client = void 0;
+
+var pubsub_js_1 = __importDefault(__webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js"));
+
+var loading_spinner_1 = __webpack_require__(/*! ./loading-spinner/loading-spinner */ "./resources/react/tools/loading-spinner/loading-spinner.tsx");
+/**
+ * TODO
+ * deifne the client
+ * @param endpoint
+ * @param config
+ * @param body
+ * @returns
+ */
+
+
+function Client(endpoint, config, //Flag to indicate if there is file attached 
+attached_file, show_loading) {
+  if (attached_file === void 0) {
+    attached_file = false;
+  }
+
+  if (show_loading === void 0) {
+    show_loading = true;
+  }
+
+  return __awaiter(this, void 0, void 0, function () {
+    var headers, _formdata, _i, _a, _b, key, value, _config, data, response, error_1;
+
+    return __generator(this, function (_c) {
+      switch (_c.label) {
+        case 0:
+          //If attached file, we just need to update Content-Type
+          if (attached_file) {
+            //headers = { 'Content-Type': 'multipart/form-data' }
+            //headers = {'Content-Type': "application/x-www-form-urlencoded"}
+            //To rebuild formdata
+            if (config.body) {
+              _formdata = new FormData();
+
+              for (_i = 0, _a = Object.entries(config.body); _i < _a.length; _i++) {
+                _b = _a[_i], key = _b[0], value = _b[1];
+
+                _formdata.append(key, value);
+              }
+
+              config.body = _formdata;
+            }
+          } else {
+            headers = {
+              'Content-Type': 'application/json'
+            };
+            config.body = JSON.stringify(config.body);
+          }
+
+          _config = __assign(__assign({}, config), {
+            headers: __assign(__assign({}, headers), config.headers)
+          }); //To trigger show loading icon event
+
+          if (show_loading) {
+            pubsub_js_1["default"].publish(loading_spinner_1.EVENT_LOADING_SPINNER, true);
+          }
+
+          _c.label = 1;
+
+        case 1:
+          _c.trys.push([1, 4, 5, 6]);
+
+          return [4
+          /*yield*/
+          , window.fetch(endpoint, _config)];
+
+        case 2:
+          response = _c.sent();
+          return [4
+          /*yield*/
+          , response.json()];
+
+        case 3:
+          data = _c.sent();
+
+          if (response.ok) {
+            return [2
+            /*return*/
+            , data];
+          }
+
+          throw new Error(response.statusText);
+
+        case 4:
+          error_1 = _c.sent();
+          return [2
+          /*return*/
+          , Promise.reject({
+            message: data.message
+          })];
+
+        case 5:
+          if (show_loading) {
+            pubsub_js_1["default"].publish(loading_spinner_1.EVENT_LOADING_SPINNER, false);
+          }
+
+          return [7
+          /*endfinally*/
+          ];
+
+        case 6:
+          return [2
+          /*return*/
+          ];
+      }
+    });
+  });
+}
+
+exports.Client = Client;
+/**
+ * define the GET method
+ * @param endpoint
+ * @returns
+ */
+
+Client.get = function (endpoint, customConfig, show_loading) {
+  if (customConfig === void 0) {
+    customConfig = {};
+  }
+
+  if (show_loading === void 0) {
+    show_loading = true;
+  }
+
+  return Client(endpoint, __assign(__assign({}, customConfig), {
+    method: 'GET'
+  }), false, show_loading);
+};
+/**
+ * define the POST method
+ * @param endpoint
+ * @param body
+ * @param customConfig
+ * @returns
+ */
+
+
+Client.post = function (endpoint, body, attached_file, customConfig, show_loading) {
+  if (attached_file === void 0) {
+    attached_file = false;
+  }
+
+  if (customConfig === void 0) {
+    customConfig = {};
+  }
+
+  if (show_loading === void 0) {
+    show_loading = true;
+  }
+
+  return Client(endpoint, __assign(__assign({}, customConfig), {
+    method: "POST",
+    body: body
+  }), attached_file, show_loading);
+};
+/**
+ * define the PUT method
+ * @param endpoint
+ * @param body
+ * @param attached_file
+ * @param customConfig
+ * @param show_loading
+ */
+
+
+Client.put = function (endpoint, body, attached_file, customConfig, show_loading) {
+  if (attached_file === void 0) {
+    attached_file = false;
+  }
+
+  if (customConfig === void 0) {
+    customConfig = {};
+  }
+
+  if (show_loading === void 0) {
+    show_loading = true;
+  }
+
+  return Client(endpoint, __assign(__assign({}, customConfig), {
+    method: "PUT",
+    body: body
+  }), attached_file, show_loading);
+};
+/**
+ * define the PUT method
+ * @param endpoint
+ * @param body
+ * @param attached_file
+ * @param customConfig
+ * @param show_loading
+ */
+
+
+Client["delete"] = function (endpoint, body, customConfig, show_loading) {
+  if (customConfig === void 0) {
+    customConfig = {};
+  }
+
+  if (show_loading === void 0) {
+    show_loading = true;
+  }
+
+  return Client(endpoint, __assign(__assign({}, customConfig), {
+    method: "DELETE",
+    body: body
+  }), false, show_loading);
+};
 
 /***/ }),
 

@@ -1,6 +1,7 @@
 const mix = require('laravel-mix');
 const path = require('path');
-
+// require('dotenv').config()
+let webpack = require('webpack')
 
 //Import jquery lib locally
 mix.webpackConfig({
@@ -12,17 +13,7 @@ mix.webpackConfig({
                 test: /\.tsx?$/,
                 loader: "ts-loader",
                 exclude: /node_modules/
-            },
-
-            //For image loader
-            // {
-            //     test: /\.(png|jpg|jpeg|gif)$/i,
-            //     use: [
-            //         {
-            //             loader: 'url-loader'
-            //         }
-            //     ]
-            // }
+            }
         ]
     },
 
@@ -31,7 +22,16 @@ mix.webpackConfig({
         alias:{
             'jquery': path.resolve(__dirname, 'resources/libs/jquery/jquery.min.js')
         }
-    }
+    },
+
+    plugins: [
+
+        new webpack.DefinePlugin({
+            'process.env': {
+                REACT_APP_REQUEST_URL: JSON.stringify(process.env.REACT_APP_REQUEST_URL),
+            }
+        })
+    ]
 
 });
 

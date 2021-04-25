@@ -6,9 +6,11 @@ import PubSub from 'pubsub-js'
 import {EVENT_OPEN_CONFIRM_DIALOG} from '../../../tools/confirm-dialog/confirm-dialog'
 import Modal from 'react-bootstrap/Modal'
 import {useAppDispatch , useAppSelector} from '../store/store-hook'
+import {addNewItem} from '../slice/main-banner-slider-slice'
 import {hide} from '../slice/banner-slider-modal-slice'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
 import NoImageIcon from '../../../../images/no-image.png'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 /**
  * TODO
@@ -177,7 +179,7 @@ enum ImageSelectedStatue {
 type FormValue = {
     title: string,
     image_status?: ImageSelectedStatue|null,
-    image?: ImageType|null
+    image?: File|null
 }
 
 
@@ -257,10 +259,23 @@ const BannerSliderModal = ():JSX.Element => {
     const onHandleSubmitted:SubmitHandler<FormValue> = (data) => {
         
         if(data.image_status === ImageSelectedStatue.CHANGED){
-            data.image = selectedImage? selectedImage['file']:null
+
+            if(selectedImage)
+                data.image = selectedImage['file']
         }
         delete data.image_status
 
+        
+        // const _formdata = new FormData()
+        // _formdata.append('title', data.title)
+        // if(data.image)
+        //     _formdata.append('image', data.image)
+        
+        _dispatch(addNewItem(data))
+                .then(unwrapResult)
+                .then((result)=> {
+                    console.log(result)
+                })
         
     }
 
