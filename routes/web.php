@@ -37,26 +37,12 @@ Route::middleware(['auth:admin'])->group(function(){
     //To setup json response middleware
     Route::middleware(['json.response'])->group(function(){
 
+        //For Dashboard
+        //Load all banner slider items
         Route::get(
             '/dashboard/banner-slider/load', 
             [DashboardController::class, 'doLoadBannerSliders']
         );
-
-        //TEST ROUTE
-        Route::post(
-            '/dashboard/test-post/{id}', 
-            [DashboardController::class, 'testPostMethod']
-        );
-        Route::put(
-            '/dashboard/test-post/{id}', 
-            [DashboardController::class, 'testPutMethod']
-        );
-        Route::delete(
-            '/dashboard/test-delete/{id}', 
-            [DashboardController::class, 'testDeleteMethod']
-        );
-
-        //For Dashboard
         Route::post(
             '/dashboard/banner-slider/add', 
             [DashboardController::class, 'doAddBannerSlider']

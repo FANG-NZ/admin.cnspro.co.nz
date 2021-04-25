@@ -18,6 +18,7 @@ export async function Client<T>(
     
     let headers = { 'Content-Type': 'application/json' };
 
+    //If attached file, we just need to update Content-Type
     if(attached_file){
         headers = { 'Content-Type': 'multipart/form-data' }
     }else{
@@ -69,8 +70,8 @@ export async function Client<T>(
  * @param endpoint 
  * @returns 
  */
-Client.get = (endpoint:string, customConfig:RequestInit = {}) => {
-    return Client(endpoint, {...customConfig, method:'GET'})
+Client.get = (endpoint:string, customConfig:RequestInit = {}, show_loading:boolean = true) => {
+    return Client(endpoint, {...customConfig, method:'GET'}, false, show_loading)
 }
 
 /**
@@ -84,7 +85,44 @@ Client.post = (
     endpoint:string, 
     body:any, 
     attached_file:boolean = false, 
-    customConfig:RequestInit = {}
+    customConfig:RequestInit = {},
+    show_loading:boolean = true
 ) => {
-    return Client(endpoint, {...customConfig, method: "POST", body:body}, attached_file);
+    return Client(endpoint, {...customConfig, method: "POST", body:body}, attached_file, show_loading);
+}
+
+/**
+ * define the PUT method
+ * @param endpoint 
+ * @param body 
+ * @param attached_file 
+ * @param customConfig 
+ * @param show_loading 
+ */
+Client.put = (
+    endpoint:string, 
+    body:any, 
+    attached_file:boolean = false, 
+    customConfig:RequestInit = {},
+    show_loading:boolean = true
+) => {
+    return Client(endpoint, {...customConfig, method: "PUT", body:body}, attached_file, show_loading)
+}
+
+
+/**
+ * define the PUT method
+ * @param endpoint 
+ * @param body 
+ * @param attached_file 
+ * @param customConfig 
+ * @param show_loading 
+ */
+ Client.delete = (
+    endpoint:string, 
+    body?:any, 
+    customConfig:RequestInit = {},
+    show_loading:boolean = true
+) => {
+    return Client(endpoint, {...customConfig, method: "DELETE", body:body}, false, show_loading)
 }

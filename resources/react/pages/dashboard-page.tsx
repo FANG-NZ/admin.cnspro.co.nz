@@ -46,26 +46,15 @@ ReactDOM.render(
     <Provider store={store}>
         <MainBannerSlider/>
 
-        <ToastBox />
-
         <BannerSliderModal />
 
         <ConfirmDialog />
+
+        <ToastBox />
 
         {/* Loading Spinner */}
         <LoadingSpinner />
 
     </Provider>,
     document.getElementById("root-dashboard")
-)
-
-
-Client.post("/dashboard/test-post/11", {id: 1, name: "FANG"}).then(
-    (data:any)=>{
-        console.log(data.id + " === " + data.name)
-    },
-    (error) => {
-        console.log(error.message)
-    }
-    
 )
