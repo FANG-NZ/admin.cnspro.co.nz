@@ -2996,6 +2996,7 @@ var ModalBody = function ModalBody(_a) {
       }, "The file size cannot be greater than 3M"))
     );
   }), react_1["default"].createElement("input", {
+    "data-testid": "image_status",
     type: "hidden",
     name: "image_status",
     ref: register({
@@ -3008,6 +3009,7 @@ var ModalBody = function ModalBody(_a) {
   }, react_1["default"].createElement("label", {
     htmlFor: "title"
   }, "Title"), react_1["default"].createElement("input", {
+    "aria-label": "title",
     type: "text",
     id: "title",
     name: "title",

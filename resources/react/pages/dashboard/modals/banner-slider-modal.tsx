@@ -133,6 +133,7 @@ const ModalBody:React.FC<{item:BannerSliderItem|null, image: string|null, onHand
                     </ImageUploading>
 
                     <input 
+                        data-testid="image_status"
                         type="hidden" 
                         name="image_status"
                         ref={register({required:true})}
@@ -148,6 +149,7 @@ const ModalBody:React.FC<{item:BannerSliderItem|null, image: string|null, onHand
             <div className="form-group">
                 <label htmlFor="title">Title</label>
                 <input 
+                    aria-label="title"
                     type="text"
                     id="title"
                     name="title" 
