@@ -6,7 +6,7 @@ import PubSub from 'pubsub-js'
 import {EVENT_OPEN_CONFIRM_DIALOG} from '../../../tools/confirm-dialog/confirm-dialog'
 import Modal from 'react-bootstrap/Modal'
 import {useAppDispatch , useAppSelector} from '../store/store-hook'
-import {addNewItem, updateItem} from '../slice/main-banner-slider-slice'
+import {addNewItem, updateItem, deleteItem} from '../slice/main-banner-slider-slice'
 import {hide} from '../slice/banner-slider-modal-slice'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
 import NoImageIcon from '../../../../images/no-image.png'
@@ -304,6 +304,32 @@ const BannerSliderModal = ():JSX.Element => {
     }
 
 
+
+    /**
+     * Function is to handle confirm delete item 
+     * request
+     * @param id 
+     */
+    const confirmHandleDelete = (id:number):void => {
+
+        _dispatch(deleteItem(id))
+            .then(unwrapResult)
+            .then((result) => {
+                //call close model
+                _dispatch(hide())
+
+                //Trigger ToastBox
+                PubSub.publish(EVENT_TOAST_BOX, {
+                    'title' : "Item deleted",
+                    'message' : "The slider item has been deleted successfully",
+                    'state' : ToastState.SUCCESS
+                })
+
+            })
+
+    }
+
+
     /**
      * Function is to handle delete
      */
@@ -317,7 +343,9 @@ const BannerSliderModal = ():JSX.Element => {
                 title: "Are you sure to REMOVE?",
                 confirm_btn_text : "Yes, remove it",
                 confirm_callback: () => {
-                    console.log("DELETE ITEM " + _modal_data.item?.id);
+                    const _id = _modal_data.item?.id
+                    if(_id)
+                        confirmHandleDelete(_id)
                 }
             }
         )

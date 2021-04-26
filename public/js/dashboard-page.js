@@ -3143,6 +3143,26 @@ var BannerSliderModal = function BannerSliderModal() {
       }
   };
   /**
+   * Function is to handle confirm delete item
+   * request
+   * @param id
+   */
+
+
+  var confirmHandleDelete = function confirmHandleDelete(id) {
+    _dispatch(main_banner_slider_slice_1.deleteItem(id)).then(toolkit_1.unwrapResult).then(function (result) {
+      //call close model
+      _dispatch(banner_slider_modal_slice_1.hide()); //Trigger ToastBox
+
+
+      pubsub_js_1["default"].publish(toast_box_1.EVENT_TOAST_BOX, {
+        'title': "Item deleted",
+        'message': "The slider item has been deleted successfully",
+        'state': toast_box_1.ToastState.SUCCESS
+      });
+    });
+  };
+  /**
    * Function is to handle delete
    */
 
@@ -3156,7 +3176,9 @@ var BannerSliderModal = function BannerSliderModal() {
       confirm_callback: function confirm_callback() {
         var _a;
 
-        console.log("DELETE ITEM " + ((_a = _modal_data.item) === null || _a === void 0 ? void 0 : _a.id));
+        var _id = (_a = _modal_data.item) === null || _a === void 0 ? void 0 : _a.id;
+
+        if (_id) confirmHandleDelete(_id);
       }
     });
   };
