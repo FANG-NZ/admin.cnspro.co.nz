@@ -13321,6 +13321,10 @@ input[type=range]::-moz-range-thumb {
     transform: rotate(360deg);
   }
 }
+.nav-second-level a.active {
+  font-weight: bold;
+}
+
 .dropzone {
   position: relative;
   width: 100%;

@@ -16,7 +16,8 @@ class ProjectController extends Controller
         //To load all NEW project
         $projects = Project::get()->sortByDesc("created_at")->values();
 
-        return view("newprojects")->with(['projects' => $projects->toJson()]);
+        //return view("newprojects")->with(['projects' => $projects->toJson()]);
+        return view("projects")->with(['projects' => $projects->toJson()]);
     }
 
 
@@ -44,10 +45,6 @@ class ProjectController extends Controller
     public function doUpdate(Request $request, $id){
         $project = Project::findOrFail($id);
 
-        if(!$project){
-            return response(['message' => "Project not found"], 404);
-        }
-
         $request->validate([
             'street' => "required | max:255",
             'city' => "required | max:255"
@@ -66,10 +63,6 @@ class ProjectController extends Controller
     public function doDelete(Request $request, $id){
         $project = Project::findOrFail($id);
 
-        if(!$project){
-            return response(['message' => "Project not found"], 404);
-        }
-
         $project->delete();
 
         return response(['id' => $project->id], 200);
@@ -80,12 +73,8 @@ class ProjectController extends Controller
      * Function is to handle uplaod image for PROJECT
      */
     public function doUploadImage(Request $request, $id){
-
         $project = Project::findOrFail($id);
 
-        if(!$project){
-            return response(['message' => "Project not found"], 404);
-        }
 
         $request->validate([
             'image'     =>  'required|image|mimes:jpeg,png,jpg,gif|max:3072'
@@ -103,10 +92,6 @@ class ProjectController extends Controller
      */
     public function doDeleteImage(Request $request, $id){
         $project = Project::findOrFail($id);
-
-        if(!$project){
-            return response(['message' => "Project not found"], 404);
-        }
 
         $request->validate([
             'image_id'     =>  'required|numeric'
