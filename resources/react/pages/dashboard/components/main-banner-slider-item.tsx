@@ -3,8 +3,10 @@ import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
 import {useAppDispatch} from '../store/store-hook'
 import {show} from '../slice/banner-slider-modal-slice'
 import PubSub from 'pubsub-js'
-import ConfirmDialog, {EVENT_OPEN_CONFIRM_DIALOG} from '../../../tools/confirm-dialog/confirm-dialog'
-import {Client} from '../../../tools/fetch-client'
+import {EVENT_OPEN_CONFIRM_DIALOG} from '../../../tools/confirm-dialog/confirm-dialog'
+import {deleteItem} from '../slice/main-banner-slider-slice'
+import { unwrapResult } from '@reduxjs/toolkit'
+import {ToastState, EVENT_TOAST_BOX} from '../../../tools/toast-box/toast-box'
 
 /**
  * TODO
@@ -32,6 +34,27 @@ export const MainBannerSliderEmptyItem:React.FC = ():JSX.Element => {
  */
 const MainBannerSliderItem : React.FC<{item:BannerSliderItem}> = ({item}):JSX.Element => {
     const _dispatch = useAppDispatch()
+
+
+    /**
+     * Function is to handle delete item request
+     */
+    const handleDelete = (id:number):void => {
+
+        _dispatch(deleteItem(id))
+            .then(unwrapResult)
+            .then((result)=>{
+
+                PubSub.publish(EVENT_TOAST_BOX, {
+                    'title' : "Item deleted",
+                    'message' : "The slider item has been deleted successfully",
+                    'state' : ToastState.SUCCESS
+                })
+
+            })
+
+    }
+
 
     return(
         <div className="col-sm-4 col-md-3">
@@ -64,7 +87,9 @@ const MainBannerSliderItem : React.FC<{item:BannerSliderItem}> = ({item}):JSX.El
                                     title: "Are you sure to REMOVE?",
                                     confirm_btn_text : "Yes, remove it",
                                     confirm_callback: () => {
-                                        console.log("Handle delete request")
+                                        
+                                        handleDelete(item.id)
+
                                     }
                                 }
                             )

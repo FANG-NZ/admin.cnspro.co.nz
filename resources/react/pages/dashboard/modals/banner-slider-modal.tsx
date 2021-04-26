@@ -6,11 +6,12 @@ import PubSub from 'pubsub-js'
 import {EVENT_OPEN_CONFIRM_DIALOG} from '../../../tools/confirm-dialog/confirm-dialog'
 import Modal from 'react-bootstrap/Modal'
 import {useAppDispatch , useAppSelector} from '../store/store-hook'
-import {addNewItem} from '../slice/main-banner-slider-slice'
+import {addNewItem, updateItem} from '../slice/main-banner-slider-slice'
 import {hide} from '../slice/banner-slider-modal-slice'
 import type {BannerSliderItem} from '../../../types/banner-slider-item.type'
 import NoImageIcon from '../../../../images/no-image.png'
 import { unwrapResult } from '@reduxjs/toolkit'
+import {ToastState, EVENT_TOAST_BOX} from '../../../tools/toast-box/toast-box'
 
 /**
  * TODO
@@ -258,6 +259,7 @@ const BannerSliderModal = ():JSX.Element => {
      */
     const onHandleSubmitted:SubmitHandler<FormValue> = (data) => {
         
+        //we need to re-strucutr data for image
         if(data.image_status === ImageSelectedStatue.CHANGED){
 
             if(selectedImage)
@@ -265,17 +267,39 @@ const BannerSliderModal = ():JSX.Element => {
         }
         delete data.image_status
 
-        
-        // const _formdata = new FormData()
-        // _formdata.append('title', data.title)
-        // if(data.image)
-        //     _formdata.append('image', data.image)
-        
-        _dispatch(addNewItem(data))
-                .then(unwrapResult)
-                .then((result)=> {
-                    console.log(result)
-                })
+        //call add new
+        if(_modal_data.is_adding_new){
+            _dispatch(addNewItem(data))
+                    .then(unwrapResult)
+                    .then((result)=> {
+                        
+                        PubSub.publish(EVENT_TOAST_BOX, {
+                            'title' : "New item added",
+                            'message' : "New slider item has been added successfully",
+                            'state' : ToastState.SUCCESS
+                        })
+
+                    })
+        }
+        //call update
+        else
+        {
+
+            if(_modal_data.item){
+                _dispatch(updateItem({id: _modal_data.item.id, data:data}))
+                    .then(unwrapResult)
+                    .then((result)=> {
+                        
+                        PubSub.publish(EVENT_TOAST_BOX, {
+                            'title' : "Item updated",
+                            'message' : "The slider item has been updated successfully",
+                            'state' : ToastState.SUCCESS
+                        })
+
+                    })
+            }
+
+        }
         
     }
 

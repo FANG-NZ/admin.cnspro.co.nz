@@ -73,6 +73,8 @@ class DashboardController extends Controller
             $banner->uploadImage($request->file('image'));
         }
 
+        $banner = $banner->refresh();
+
         return response($banner->toJson(), 201);
     }
 

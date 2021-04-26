@@ -13387,8 +13387,9 @@ input[type=range]::-moz-range-thumb {
 }
 
 .main-banner-slider-item {
-  box-shadow: none;
+  box-shadow: 3px 5px 10px #98a6ad;
   border: 1px solid rgba(152, 166, 173, 0.2) !important;
+  margin-bottom: 30px;
 }
 .main-banner-slider-item img {
   height: 115px;

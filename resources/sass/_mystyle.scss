@@ -101,8 +101,9 @@
 // START page dashboard 
 // ---------------------------------
 .main-banner-slider-item{
-    box-shadow: none;
+    box-shadow: 3px 5px 10px rgb(152, 166, 173);
     border: 1px solid rgba(152, 166, 173, 0.2) !important;
+    margin-bottom: 30px;
 
     img{
         height: 115px;

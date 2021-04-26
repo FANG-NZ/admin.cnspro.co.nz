@@ -1,5 +1,4 @@
 import PubSub from 'pubsub-js'
-import { getCombinedModifierFlags } from 'typescript';
 import {EVENT_LOADING_SPINNER} from './loading-spinner/loading-spinner'
 /**
  * TODO
@@ -121,7 +120,12 @@ Client.put = (
     customConfig:RequestInit = {},
     show_loading:boolean = true
 ) => {
-    return Client(endpoint, {...customConfig, method: "PUT", body:body}, attached_file, show_loading)
+
+    //Laravel can't handle PUT method with FormData
+    //Check https://stackoverflow.com/questions/50691938/patch-and-put-request-does-not-working-with-form-data
+    body._method = "PUT";
+
+    return Client(endpoint, {...customConfig, method: "POST", body:body}, attached_file, show_loading)
 }
 
 

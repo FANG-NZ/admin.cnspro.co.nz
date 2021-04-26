@@ -2479,19 +2479,7 @@ var main_banner_slider_1 = __importDefault(__webpack_require__(/*! ./dashboard/c
 
 var banner_slider_modal_1 = __importDefault(__webpack_require__(/*! ./dashboard/modals/banner-slider-modal */ "./resources/react/pages/dashboard/modals/banner-slider-modal.tsx"));
 
-var confirm_dialog_1 = __importDefault(__webpack_require__(/*! ../tools/confirm-dialog/confirm-dialog */ "./resources/react/tools/confirm-dialog/confirm-dialog.tsx")); // const banner_list : Array<BannerSliderItem> = [
-//     {
-//         id : 1,
-//         url : "https://freebw.com/templates/tatee/images/slide-01.jpg",
-//         title : "Canadian lake house features dark wood" 
-//     },
-//     {
-//         id : 2,
-//         url : "https://freebw.com/templates/tatee/images/slide-02.jpg",
-//         title : "Future housein the Barvikha forest" 
-//     }
-// ];
-//To get json string from DOM
+var confirm_dialog_1 = __importDefault(__webpack_require__(/*! ../tools/confirm-dialog/confirm-dialog */ "./resources/react/tools/confirm-dialog/confirm-dialog.tsx")); //To get json string from DOM
 
 
 try {
@@ -2509,16 +2497,7 @@ try {
   dashboard_store_1["default"].dispatch(main_banner_slider_slice_1.setSliders(_data));
 } catch (err) {
   console.error("Init default banner sliders data ERROR");
-} //Test line
-// Client.get("/dashboard/banner-slider/load").then(
-//     (data)=>{
-//         console.log(data)
-//     },
-//     (error) => {
-//         console.log(error.message)
-//     }
-// )
-
+}
 
 react_dom_1["default"].render(react_1["default"].createElement(react_redux_1.Provider, {
   store: dashboard_store_1["default"]
@@ -2613,6 +2592,12 @@ var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider
 var pubsub_js_1 = __importDefault(__webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js"));
 
 var confirm_dialog_1 = __webpack_require__(/*! ../../../tools/confirm-dialog/confirm-dialog */ "./resources/react/tools/confirm-dialog/confirm-dialog.tsx");
+
+var main_banner_slider_slice_1 = __webpack_require__(/*! ../slice/main-banner-slider-slice */ "./resources/react/pages/dashboard/slice/main-banner-slider-slice.ts");
+
+var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+
+var toast_box_1 = __webpack_require__(/*! ../../../tools/toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.tsx");
 /**
  * TODO
  * define the empty slider item
@@ -2640,6 +2625,20 @@ var MainBannerSliderItem = function MainBannerSliderItem(_a) {
   var item = _a.item;
 
   var _dispatch = store_hook_1.useAppDispatch();
+  /**
+   * Function is to handle delete item request
+   */
+
+
+  var handleDelete = function handleDelete(id) {
+    _dispatch(main_banner_slider_slice_1.deleteItem(id)).then(toolkit_1.unwrapResult).then(function (result) {
+      pubsub_js_1["default"].publish(toast_box_1.EVENT_TOAST_BOX, {
+        'title': "Item deleted",
+        'message': "The slider item has been deleted successfully",
+        'state': toast_box_1.ToastState.SUCCESS
+      });
+    });
+  };
 
   return react_1["default"].createElement("div", {
     className: "col-sm-4 col-md-3"
@@ -2677,7 +2676,7 @@ var MainBannerSliderItem = function MainBannerSliderItem(_a) {
         title: "Are you sure to REMOVE?",
         confirm_btn_text: "Yes, remove it",
         confirm_callback: function confirm_callback() {
-          console.log("Handle delete request");
+          handleDelete(item.id);
         }
       });
     }
@@ -2881,6 +2880,8 @@ var banner_slider_modal_slice_1 = __webpack_require__(/*! ../slice/banner-slider
 var no_image_png_1 = __importDefault(__webpack_require__(/*! ../../../../images/no-image.png */ "./resources/images/no-image.png"));
 
 var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+
+var toast_box_1 = __webpack_require__(/*! ../../../tools/toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.tsx");
 /**
  * TODO
  * define the Modal Header
@@ -3110,18 +3111,36 @@ var BannerSliderModal = function BannerSliderModal() {
 
 
   var onHandleSubmitted = function onHandleSubmitted(data) {
+    //we need to re-strucutr data for image
     if (data.image_status === ImageSelectedStatue.CHANGED) {
       if (selectedImage) data.image = selectedImage['file'];
     }
 
-    delete data.image_status; // const _formdata = new FormData()
-    // _formdata.append('title', data.title)
-    // if(data.image)
-    //     _formdata.append('image', data.image)
+    delete data.image_status; //call add new
 
-    _dispatch(main_banner_slider_slice_1.addNewItem(data)).then(toolkit_1.unwrapResult).then(function (result) {
-      console.log(result);
-    });
+    if (_modal_data.is_adding_new) {
+      _dispatch(main_banner_slider_slice_1.addNewItem(data)).then(toolkit_1.unwrapResult).then(function (result) {
+        pubsub_js_1["default"].publish(toast_box_1.EVENT_TOAST_BOX, {
+          'title': "New item added",
+          'message': "New slider item has been added successfully",
+          'state': toast_box_1.ToastState.SUCCESS
+        });
+      });
+    } //call update
+    else {
+        if (_modal_data.item) {
+          _dispatch(main_banner_slider_slice_1.updateItem({
+            id: _modal_data.item.id,
+            data: data
+          })).then(toolkit_1.unwrapResult).then(function (result) {
+            pubsub_js_1["default"].publish(toast_box_1.EVENT_TOAST_BOX, {
+              'title': "Item updated",
+              'message': "The slider item has been updated successfully",
+              'state': toast_box_1.ToastState.SUCCESS
+            });
+          });
+        }
+      }
   };
   /**
    * Function is to handle delete
@@ -3244,7 +3263,7 @@ exports.default = BannerSliderModalSlice.reducer;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.allSliders = exports.setSliders = exports.addNewItem = void 0;
+exports.allSliders = exports.setSliders = exports.deleteItem = exports.updateItem = exports.addNewItem = void 0;
 
 var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 
@@ -3266,6 +3285,26 @@ exports.addNewItem = toolkit_1.createAsyncThunk('MainBannerSlider/addNewItem', f
 });
 /**
  * TODO
+ * define the function is to handle update slider item
+ */
+
+exports.updateItem = toolkit_1.createAsyncThunk('MainBannerSlider/updateItem', function (input) {
+  var _url = "http://localhost/";
+  var response = fetch_client_1.Client.put(_url + "dashboard/banner-slider/update/" + input.id, input.data, true);
+  return response;
+});
+/**
+ * TODO
+ * define the function to handle delete item
+ */
+
+exports.deleteItem = toolkit_1.createAsyncThunk('MainBannerSlider/deleteItem', function (id) {
+  var _url = "http://localhost/";
+  var response = fetch_client_1.Client["delete"](_url + "dashboard/banner-slider/delete/" + id);
+  return response;
+});
+/**
+ * TODO
  * define the MainBannerSliderSlice
  */
 
@@ -3282,6 +3321,33 @@ var MainBannerSliderSlice = toolkit_1.createSlice({
     setSliders: function setSliders(state, action) {
       state.sliders = action.payload;
     }
+  },
+  //START extra reducers
+  extraReducers: function extraReducers(builder) {
+    //addNewItem
+    builder.addCase(exports.addNewItem.fulfilled, function (state, action) {
+      state.sliders.push(action.payload);
+    }); //updateItem
+
+    builder.addCase(exports.updateItem.fulfilled, function (state, action) {
+      var _updated_item = action.payload;
+
+      var _index = state.sliders.findIndex(function (item) {
+        return item.id === _updated_item.id;
+      });
+
+      state.sliders[_index] = _updated_item;
+    }); //deleteItem
+
+    builder.addCase(exports.deleteItem.fulfilled, function (state, action) {
+      var _deleted_item = action.payload;
+
+      var _new_list = state.sliders.filter(function (item) {
+        return item.id !== _deleted_item.id;
+      });
+
+      state.sliders = _new_list;
+    });
   }
 });
 exports.setSliders = MainBannerSliderSlice.actions.setSliders;
@@ -3860,10 +3926,13 @@ Client.put = function (endpoint, body, attached_file, customConfig, show_loading
 
   if (show_loading === void 0) {
     show_loading = true;
-  }
+  } //Laravel can't handle PUT method with FormData
+  //Check https://stackoverflow.com/questions/50691938/patch-and-put-request-does-not-working-with-form-data
 
+
+  body._method = "PUT";
   return Client(endpoint, __assign(__assign({}, customConfig), {
-    method: "PUT",
+    method: "POST",
     body: body
   }), attached_file, show_loading);
 };

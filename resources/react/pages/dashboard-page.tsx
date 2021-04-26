@@ -10,21 +10,6 @@ import MainBannerSlider from './dashboard/components/main-banner-slider'
 import {BannerSliderItem} from '../types/banner-slider-item.type'
 import BannerSliderModal from './dashboard/modals/banner-slider-modal'
 import ConfirmDialog from '../tools/confirm-dialog/confirm-dialog'
-import {Client} from '../tools/fetch-client'
-
-// const banner_list : Array<BannerSliderItem> = [
-//     {
-//         id : 1,
-//         url : "https://freebw.com/templates/tatee/images/slide-01.jpg",
-//         title : "Canadian lake house features dark wood" 
-//     },
-
-//     {
-//         id : 2,
-//         url : "https://freebw.com/templates/tatee/images/slide-02.jpg",
-//         title : "Future housein the Barvikha forest" 
-//     }
-// ];
 
 //To get json string from DOM
 try{
@@ -44,17 +29,6 @@ try{
     console.error("Init default banner sliders data ERROR")
 }
 
-
-//Test line
-// Client.get("/dashboard/banner-slider/load").then(
-//     (data)=>{
-//         console.log(data)
-//     },
-//     (error) => {
-//         console.log(error.message)
-//     }
-    
-// )
 
 
 ReactDOM.render(
