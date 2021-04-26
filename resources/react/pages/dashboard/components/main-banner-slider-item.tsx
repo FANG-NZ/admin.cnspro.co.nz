@@ -36,7 +36,7 @@ const MainBannerSliderItem : React.FC<{item:BannerSliderItem}> = ({item}):JSX.El
     return(
         <div className="col-sm-4 col-md-3">
             <div className="card main-banner-slider-item">
-                <img src={item.url} alt="" className="card-img-top img-fluid" />
+                <img src={item.image.url} alt="" className="card-img-top img-fluid" />
                 <div className="card-body">
                     <div className="card-title" aria-label="title">{item.title}</div>
                 </div>

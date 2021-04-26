@@ -2455,6 +2455,8 @@ var __importDefault = this && this.__importDefault || function (mod) {
   };
 };
 
+var _a;
+
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -2477,19 +2479,37 @@ var main_banner_slider_1 = __importDefault(__webpack_require__(/*! ./dashboard/c
 
 var banner_slider_modal_1 = __importDefault(__webpack_require__(/*! ./dashboard/modals/banner-slider-modal */ "./resources/react/pages/dashboard/modals/banner-slider-modal.tsx"));
 
-var confirm_dialog_1 = __importDefault(__webpack_require__(/*! ../tools/confirm-dialog/confirm-dialog */ "./resources/react/tools/confirm-dialog/confirm-dialog.tsx"));
+var confirm_dialog_1 = __importDefault(__webpack_require__(/*! ../tools/confirm-dialog/confirm-dialog */ "./resources/react/tools/confirm-dialog/confirm-dialog.tsx")); // const banner_list : Array<BannerSliderItem> = [
+//     {
+//         id : 1,
+//         url : "https://freebw.com/templates/tatee/images/slide-01.jpg",
+//         title : "Canadian lake house features dark wood" 
+//     },
+//     {
+//         id : 2,
+//         url : "https://freebw.com/templates/tatee/images/slide-02.jpg",
+//         title : "Future housein the Barvikha forest" 
+//     }
+// ];
+//To get json string from DOM
 
-var banner_list = [{
-  id: 1,
-  url: "https://freebw.com/templates/tatee/images/slide-01.jpg",
-  title: "Canadian lake house features dark wood"
-}, {
-  id: 2,
-  url: "https://freebw.com/templates/tatee/images/slide-02.jpg",
-  title: "Future housein the Barvikha forest"
-}]; //call set sliders
 
-dashboard_store_1["default"].dispatch(main_banner_slider_slice_1.setSliders(banner_list)); //Test line
+try {
+  var json_string = (_a = document.getElementById("root-dashboard")) === null || _a === void 0 ? void 0 : _a.getAttribute("banner-sliders-data");
+
+  if (!json_string) {
+    throw new Error("NOT FOUND JSON STRING");
+  } //Try to load data from DOM attribute,
+  //if there is NO data, we just send AJAX request to fetch from server
+
+
+  var _data = JSON.parse(json_string); //call set sliders
+
+
+  dashboard_store_1["default"].dispatch(main_banner_slider_slice_1.setSliders(_data));
+} catch (err) {
+  console.error("Init default banner sliders data ERROR");
+} //Test line
 // Client.get("/dashboard/banner-slider/load").then(
 //     (data)=>{
 //         console.log(data)
@@ -2498,6 +2518,7 @@ dashboard_store_1["default"].dispatch(main_banner_slider_slice_1.setSliders(bann
 //         console.log(error.message)
 //     }
 // )
+
 
 react_dom_1["default"].render(react_1["default"].createElement(react_redux_1.Provider, {
   store: dashboard_store_1["default"]
@@ -2625,7 +2646,7 @@ var MainBannerSliderItem = function MainBannerSliderItem(_a) {
   }, react_1["default"].createElement("div", {
     className: "card main-banner-slider-item"
   }, react_1["default"].createElement("img", {
-    src: item.url,
+    src: item.image.url,
     alt: "",
     className: "card-img-top img-fluid"
   }), react_1["default"].createElement("div", {
@@ -3044,7 +3065,7 @@ var BannerSliderModal = function BannerSliderModal() {
   if (selectedImage) {
     _displayImage = selectedImage['data_url'];
   } else {
-    _displayImage = _modal_data.item ? _modal_data.item.url : null;
+    _displayImage = _modal_data.item ? _modal_data.item.image.url : null;
   }
   /**
    * Function is to handle update selected image

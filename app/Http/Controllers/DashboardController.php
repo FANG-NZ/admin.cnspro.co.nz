@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     
-    public function index(){
-        return view('dashboard');
+    public function index()
+    {
+        $banner_sliders = BannerSlider::all();
+        return view('dashboard')->with(['banner_sliders' => $banner_sliders->toJson()]);
     }
 
 

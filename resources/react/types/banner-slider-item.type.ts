@@ -4,6 +4,6 @@
 */
 export type BannerSliderItem = {
    id: number,
-   url: string,
-   title: string
+   title: string,
+   image: {id: number, name: string, parent_id:number, url: string}
 }

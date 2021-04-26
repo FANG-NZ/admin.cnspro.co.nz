@@ -209,7 +209,7 @@ const BannerSliderModal = ():JSX.Element => {
         _displayImage = selectedImage['data_url']
     }
     else{
-        _displayImage = _modal_data.item?_modal_data.item.url:null
+        _displayImage = _modal_data.item?_modal_data.item.image.url:null
     }
     
     /**

@@ -10,8 +10,13 @@ import ConfirmDialog from '../../../tools/confirm-dialog/confirm-dialog'
 
 const _item = {
     id: 1,
-    url : "https://freebw.com/templates/tatee/images/slide-01.jpg",
-    title : "Canadian lake house features dark wood" 
+    title : "Canadian lake house features dark wood" ,
+    image: {
+        id: 11,
+        name: 'slide-01.jpg',
+        parent_id: 1,
+        url: 'https://freebw.com/templates/tatee/images/slide-01.jpg'
+    }
 }
 
 
