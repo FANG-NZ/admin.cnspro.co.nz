@@ -1,13 +1,27 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
+import {SUB_NAV_LINK} from './sub-nav'
 
-const ProjectsBodyHeader = ():JSX.Element => {
+const ProjectsBodyHeader:React.FC<{is_4_new:boolean}> = ({is_4_new}):JSX.Element => {
+
+    //To resetup vars
+    let _header = "All project(s)"
+    let _btnText = "Add project"
+
+    if(is_4_new){
+        _header = "New projects(s)"
+        _btnText = "New project"
+    }
 
     return(
         <div className="card-header ff-card-header">
             <div className="card-header-content">
-                <h4 className="m-t-0 header-title">Projects Header</h4>
+                <h4 className="m-t-0 header-title">{_header}</h4>
                 <p className="text-muted font-13">
-                    Anything could be go here
+                    {is_4_new
+                        ? <>There are ONLY for all NEW PROJECTS, if you want to see all projects click <Link to={SUB_NAV_LINK.ALL_PROJECTS}>ALL PROJECTS</Link></>
+                        : <>There are ALL PROJECTS listed</>
+                    }
                 </p>
             </div>
             
@@ -19,7 +33,7 @@ const ProjectsBodyHeader = ():JSX.Element => {
                     }}
                 >
                     <i className="mdi mdi-plus-circle"></i>
-                    <span>New project</span>
+                    <span>{_btnText}</span>
                 </button>   
 
             </div>

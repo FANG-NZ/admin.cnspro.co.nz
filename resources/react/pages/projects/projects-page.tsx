@@ -6,6 +6,7 @@ import {HashRouter, Switch, Route, Redirect} from 'react-router-dom'
 import PageHeader from './components/page-header'
 import SubNav, {SUB_NAV_LINK} from './components/sub-nav'
 import NewProjectsBody from './components/new-projects-body'
+import AllProjectsBody from './components/all-projects-body'
 import store from './store/projects-store'
 import {setProjects} from './slice/projects-slice'
 
@@ -41,9 +42,7 @@ ReactDOM.render(
                 </Route>
 
                 {/* Show all projects */}
-                <Route path={SUB_NAV_LINK.ALL_PROJECTS}>
-                    <h1>ALL projects</h1>
-                </Route>
+                <Route path={SUB_NAV_LINK.ALL_PROJECTS} component={AllProjectsBody} />
 
                 <Route>
                     <Redirect to={SUB_NAV_LINK.NEW_PROJECTS} />

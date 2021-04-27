@@ -3,19 +3,19 @@ import React from 'react'
 import ProjectsBodyHeader from './projects-body-header'
 import ProjectsTable from './projects-table'
 import {useAppSelector} from '../store/store-hook'
-import {getNewProjects} from '../slice/projects-slice'
+import {getNotNewProjects} from '../slice/projects-slice'
 import type {TProjectItem} from '../../../types/project-item.type'
 
 
-const NewProjectsBody = ():JSX.Element => {
-    const newProjects:Array<TProjectItem> = useAppSelector(getNewProjects)
+const AllProjectsBody = ():JSX.Element => {
+    const projects:Array<TProjectItem> = useAppSelector(getNotNewProjects)
 
     return(
         <div className="card m-b-30">
-            <ProjectsBodyHeader is_4_new={true} />
+            <ProjectsBodyHeader is_4_new={false} />
 
-            <ProjectsTable projects={newProjects} />
+            <ProjectsTable projects={projects} />
         </div>
     )
 }
-export default NewProjectsBody
+export default AllProjectsBody

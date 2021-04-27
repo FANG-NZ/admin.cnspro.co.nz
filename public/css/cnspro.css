@@ -13456,7 +13456,6 @@ input[type=range]::-moz-range-thumb {
 .projects-table .td-btns {
   padding-left: 0;
   padding-right: 0;
-  text-align: right;
 }
 
 .modal-update_project #project-modal {

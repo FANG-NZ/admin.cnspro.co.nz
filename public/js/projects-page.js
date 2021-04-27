@@ -2095,6 +2095,50 @@ function isAsyncThunkAction() {
 
 /***/ }),
 
+/***/ "./resources/react/pages/projects/components/all-projects-body.tsx":
+/*!*************************************************************************!*\
+  !*** ./resources/react/pages/projects/components/all-projects-body.tsx ***!
+  \*************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var projects_body_header_1 = __importDefault(__webpack_require__(/*! ./projects-body-header */ "./resources/react/pages/projects/components/projects-body-header.tsx"));
+
+var projects_table_1 = __importDefault(__webpack_require__(/*! ./projects-table */ "./resources/react/pages/projects/components/projects-table.tsx"));
+
+var store_hook_1 = __webpack_require__(/*! ../store/store-hook */ "./resources/react/pages/projects/store/store-hook.ts");
+
+var projects_slice_1 = __webpack_require__(/*! ../slice/projects-slice */ "./resources/react/pages/projects/slice/projects-slice.ts");
+
+var AllProjectsBody = function AllProjectsBody() {
+  var projects = store_hook_1.useAppSelector(projects_slice_1.getNotNewProjects);
+  return react_1["default"].createElement("div", {
+    className: "card m-b-30"
+  }, react_1["default"].createElement(projects_body_header_1["default"], {
+    is_4_new: false
+  }), react_1["default"].createElement(projects_table_1["default"], {
+    projects: projects
+  }));
+};
+
+exports.default = AllProjectsBody;
+
+/***/ }),
+
 /***/ "./resources/react/pages/projects/components/new-projects-body.tsx":
 /*!*************************************************************************!*\
   !*** ./resources/react/pages/projects/components/new-projects-body.tsx ***!
@@ -2128,7 +2172,9 @@ var NewProjectsBody = function NewProjectsBody() {
   var newProjects = store_hook_1.useAppSelector(projects_slice_1.getNewProjects);
   return react_1["default"].createElement("div", {
     className: "card m-b-30"
-  }, react_1["default"].createElement(projects_body_header_1["default"], null), react_1["default"].createElement(projects_table_1["default"], {
+  }, react_1["default"].createElement(projects_body_header_1["default"], {
+    is_4_new: true
+  }), react_1["default"].createElement(projects_table_1["default"], {
     projects: newProjects
   }));
 };
@@ -2167,7 +2213,7 @@ var PageHeader = function PageHeader() {
     className: "breadcrumb-item"
   }, "CMS.CNSPRO")), react_1["default"].createElement("h4", {
     className: "page-title"
-  }, "Project"));
+  }, "Project(s)"));
 };
 
 exports.default = PageHeader;
@@ -2195,16 +2241,32 @@ Object.defineProperty(exports, "__esModule", ({
 
 var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
-var ProjectsBodyHeader = function ProjectsBodyHeader() {
+var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
+var sub_nav_1 = __webpack_require__(/*! ./sub-nav */ "./resources/react/pages/projects/components/sub-nav.tsx");
+
+var ProjectsBodyHeader = function ProjectsBodyHeader(_a) {
+  var is_4_new = _a.is_4_new; //To resetup vars
+
+  var _header = "All project(s)";
+  var _btnText = "Add project";
+
+  if (is_4_new) {
+    _header = "New projects(s)";
+    _btnText = "New project";
+  }
+
   return react_1["default"].createElement("div", {
     className: "card-header ff-card-header"
   }, react_1["default"].createElement("div", {
     className: "card-header-content"
   }, react_1["default"].createElement("h4", {
     className: "m-t-0 header-title"
-  }, "Projects Header"), react_1["default"].createElement("p", {
+  }, _header), react_1["default"].createElement("p", {
     className: "text-muted font-13"
-  }, "Anything could be go here")), react_1["default"].createElement("div", {
+  }, is_4_new ? react_1["default"].createElement(react_1["default"].Fragment, null, "There are ONLY for all NEW PROJECTS, if you want to see all projects click ", react_1["default"].createElement(react_router_dom_1.Link, {
+    to: sub_nav_1.SUB_NAV_LINK.ALL_PROJECTS
+  }, "ALL PROJECTS")) : react_1["default"].createElement(react_1["default"].Fragment, null, "There are ALL PROJECTS listed"))), react_1["default"].createElement("div", {
     className: "card-header-tools"
   }, react_1["default"].createElement("button", {
     className: "btn btn-success",
@@ -2213,7 +2275,7 @@ var ProjectsBodyHeader = function ProjectsBodyHeader() {
     }
   }, react_1["default"].createElement("i", {
     className: "mdi mdi-plus-circle"
-  }), react_1["default"].createElement("span", null, "New project"))));
+  }), react_1["default"].createElement("span", null, _btnText))));
 };
 
 exports.default = ProjectsBodyHeader;
@@ -2487,6 +2549,8 @@ var sub_nav_1 = __importStar(__webpack_require__(/*! ./components/sub-nav */ "./
 
 var new_projects_body_1 = __importDefault(__webpack_require__(/*! ./components/new-projects-body */ "./resources/react/pages/projects/components/new-projects-body.tsx"));
 
+var all_projects_body_1 = __importDefault(__webpack_require__(/*! ./components/all-projects-body */ "./resources/react/pages/projects/components/all-projects-body.tsx"));
+
 var projects_store_1 = __importDefault(__webpack_require__(/*! ./store/projects-store */ "./resources/react/pages/projects/store/projects-store.ts"));
 
 var projects_slice_1 = __webpack_require__(/*! ./slice/projects-slice */ "./resources/react/pages/projects/slice/projects-slice.ts"); //To get json string from DOM
@@ -2514,8 +2578,9 @@ react_dom_1["default"].render(react_1["default"].createElement(react_redux_1.Pro
 }, react_1["default"].createElement(react_router_dom_1.HashRouter, null, react_1["default"].createElement(sub_nav_1["default"], null), react_1["default"].createElement(page_header_1["default"], null), react_1["default"].createElement(react_router_dom_1.Switch, null, react_1["default"].createElement(react_router_dom_1.Route, {
   path: sub_nav_1.SUB_NAV_LINK.NEW_PROJECTS
 }, react_1["default"].createElement(new_projects_body_1["default"], null)), react_1["default"].createElement(react_router_dom_1.Route, {
-  path: sub_nav_1.SUB_NAV_LINK.ALL_PROJECTS
-}, react_1["default"].createElement("h1", null, "ALL projects")), react_1["default"].createElement(react_router_dom_1.Route, null, react_1["default"].createElement(react_router_dom_1.Redirect, {
+  path: sub_nav_1.SUB_NAV_LINK.ALL_PROJECTS,
+  component: all_projects_body_1["default"]
+}), react_1["default"].createElement(react_router_dom_1.Route, null, react_1["default"].createElement(react_router_dom_1.Redirect, {
   to: sub_nav_1.SUB_NAV_LINK.NEW_PROJECTS
 }))))), document.getElementById('root-projects'));
 
