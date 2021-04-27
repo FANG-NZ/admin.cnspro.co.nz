@@ -7,6 +7,7 @@ import PageHeader from './components/page-header'
 import SubNav, {SUB_NAV_LINK} from './components/sub-nav'
 import NewProjectsBody from './components/new-projects-body'
 import store from './store/projects-store'
+import {setProjects} from './slice/projects-slice'
 
 
 //To get json string from DOM
@@ -19,7 +20,8 @@ try{
     //Try to load data from DOM attribute,
     //if there is NO data, we just send AJAX request to fetch from server
     const _data = JSON.parse(json_string)
-    console.log(_data)
+    //console.log(_data)
+    store.dispatch(setProjects(_data))
 
 }catch(err){
     console.error("Init default projects data ERROR")
