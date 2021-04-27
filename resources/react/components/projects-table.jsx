@@ -155,11 +155,11 @@ const EmptyProjectItem = (props) => {
     
     return(
         <tr>
-        <td colSpan="5">
-            <div className="alert alert-warning mb-0">
-                {props.message}
-            </div>
-        </td>
+            <td colSpan="5">
+                <div className="alert alert-warning mb-0">
+                    {props.message}
+                </div>
+            </td>
         </tr>
     )
 }

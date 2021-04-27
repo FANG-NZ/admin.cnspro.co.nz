@@ -1,31 +1,53 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {Provider} from 'react-redux'
 import {HashRouter, Switch, Route, Redirect} from 'react-router-dom'
 
 import PageHeader from './components/page-header'
 import SubNav, {SUB_NAV_LINK} from './components/sub-nav'
+import NewProjectsBody from './components/new-projects-body'
+import store from './store/projects-store'
 
+
+//To get json string from DOM
+try{
+    const json_string = document.getElementById("root-projects")?.getAttribute("projects-data");
+    if(!json_string){
+        throw new Error("NOT FOUND JSON STRING")
+    }
+
+    //Try to load data from DOM attribute,
+    //if there is NO data, we just send AJAX request to fetch from server
+    const _data = JSON.parse(json_string)
+    console.log(_data)
+
+}catch(err){
+    console.error("Init default projects data ERROR")
+}
 
 
 ReactDOM.render(
-    <HashRouter>
-        <SubNav />
-        <PageHeader />
+    <Provider store={store}>
+        <HashRouter>
+            <SubNav />
+            <PageHeader />
 
-        <Switch>
-            <Route exact path={SUB_NAV_LINK.NEW_PROJECTS}>
-                <h1>NEW PROJECTS</h1>
-            </Route>
+            <Switch>
+                {/* Show new projects */}
+                <Route path={SUB_NAV_LINK.NEW_PROJECTS}>
+                    <NewProjectsBody />
+                </Route>
 
-            <Route path={SUB_NAV_LINK.ALL_PROJECTS}>
-                <h1>ALL projects</h1>
-            </Route>
+                {/* Show all projects */}
+                <Route path={SUB_NAV_LINK.ALL_PROJECTS}>
+                    <h1>ALL projects</h1>
+                </Route>
 
-            <Route path="">
-                <Redirect to={SUB_NAV_LINK.NEW_PROJECTS} />
-            </Route>
-        </Switch>
-
-    </HashRouter>,
+                <Route>
+                    <Redirect to={SUB_NAV_LINK.NEW_PROJECTS} />
+                </Route>
+            </Switch>
+        </HashRouter>
+    </Provider>,
     document.getElementById('root-projects') as HTMLElement
 )

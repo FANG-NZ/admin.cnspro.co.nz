@@ -23,12 +23,7 @@
 
                     @if (Request::is('projects'))
                         <ul id='projects-page-sub-nav' class="nav-second-level">
-                            {{-- <li>
-                                <a href="#new">New projects</a>
-                            </li>
-                            <li>
-                                <a href="#new">All projects</a>
-                            </li> --}}
+                            {{-- Insert sub nav here --}}
                         </ul>
                     @endif     
                 </li>
