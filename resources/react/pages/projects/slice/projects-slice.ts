@@ -21,10 +21,41 @@ const initialState:TProjectsState = {
  */
 export const addNewProject = createAsyncThunk(
     'Projects/addNewProject',
+
     (data:Array<any>) => {
         const _url = process.env.REACT_APP_REQUEST_URL
 
         const response = Client.post(`${_url}projects/add`, data)
+        return response
+    }
+)
+
+/**
+ * TODO
+ * Request for updating project
+ */
+export const updateProject = createAsyncThunk(
+    'Projects/updateProject',
+
+    (data:{id:number, values:Array<any>}) => {
+        const _url = process.env.REACT_APP_REQUEST_URL
+
+        const response = Client.put(`${_url}projects/update/${data.id}`, data.values)
+        return response
+    }
+)
+
+/**
+ * TODO
+ * Rewquest for deleting project
+ */
+export const deleteProject = createAsyncThunk(
+    'Projects/deleteProject',
+
+    (id:number) => {
+        const _url = process.env.REACT_APP_REQUEST_URL
+
+        const response = Client.delete(`${_url}projects/delete/${id}`)
         return response
     }
 )
@@ -58,13 +89,30 @@ const ProjectsSlice = createSlice({
         //addNewProject
         builder.addCase(addNewProject.fulfilled, (state, action) => {
 
-            const project = <TProjectItem>action.payload
-            const _index = state.list.findIndex((item) => item.id === project.id)
+            const _project = <TProjectItem>action.payload
+            const _index = state.list.findIndex((item) => item.id === _project.id)
 
             //Check if project not existed, and then
             //add item into beginning of list
             if(_index === -1)
-                state.list.unshift(project)
+                state.list.unshift(_project)
+        })
+
+        //updateProject
+        builder.addCase(updateProject.fulfilled, (state, action)=>{
+            const _project = <TProjectItem>action.payload
+
+            const _index = state.list.findIndex((item) => item.id === _project.id)
+            if(_index > -1)
+                state.list[_index] = _project
+        })
+
+        //deleteProject
+        builder.addCase(deleteProject.fulfilled, (state, action)=>{
+            const _project = <TProjectItem>action.payload
+
+            const _newlist = state.list.filter((item) => item.id !== _project.id)
+            state.list = _newlist
         })
 
     }

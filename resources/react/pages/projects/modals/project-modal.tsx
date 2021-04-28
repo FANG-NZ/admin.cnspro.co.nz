@@ -12,7 +12,7 @@ import {useAppDispatch , useAppSelector} from '../store/store-hook'
 import {hide, setProject} from '../slice/project-modal-slice'
 import {TProjectItem} from '../../../types/project-item.type'
 import ProjectImageField from './project-image-field'
-import {addNewProject} from '../slice/projects-slice'
+import {addNewProject, updateProject, deleteProject} from '../slice/projects-slice'
 import { unwrapResult } from '@reduxjs/toolkit'
 
 
@@ -57,13 +57,6 @@ import { unwrapResult } from '@reduxjs/toolkit'
     
     return(
         <Modal.Footer>
-            {!is_adding_new && 
-                <button type="button" className="btn btn-danger" onClick={onHandleDelete}>
-                    <i className="mdi mdi-delete"></i>
-                    <span>Delete</span>
-                </button>
-            }
-
             <button type="button" className="btn btn-light" onClick={onHandleClose}>
                 <i className="mdi mdi-cancel"></i>
                 <span>Close</span>
@@ -73,6 +66,31 @@ import { unwrapResult } from '@reduxjs/toolkit'
                 <i className="mdi mdi-database-plus"></i>
                 <span>{is_adding_new ? "Add new project" : "Edit"}</span>
             </button>
+
+            {!is_adding_new && 
+                <button type="button" className="btn btn-danger"
+                    style={{marginLeft:'auto'}}
+                    onClick={()=>{
+
+                        //Trigger open confirm dialog
+                        PubSub.publish(
+                            EVENT_OPEN_CONFIRM_DIALOG, 
+                            {
+                                shown:true,
+                                title: "Are you sure to REMOVE?",
+                                confirm_btn_text : "Yes, remove it",
+                                confirm_callback: () => {
+                                    onHandleDelete()
+                                }
+                            }
+                        )
+
+                    }}
+                >
+                    <i className="mdi mdi-delete"></i>
+                    <span>Delete</span>
+                </button>
+            }
         </Modal.Footer>
     )
 }
@@ -362,15 +380,15 @@ const ProjectModal = ():JSX.Element => {
             'is_new': data.is_new?true:false,
             'street': data.street,
             'city': data.city,
-            'completed_on': data.completed_on,
-            'bedrooms': data.bedrooms,
-            'bathrooms': data.bathrooms,
-            'carpark': data.carpark,
-            'livingrooms': data.livingrooms,
-            'land_area': data.land_area,
-            'floor_area': data.floor_area,
-            'short_description': data.short_description,
-            'description': data.description 
+            'completed_on': data.completed_on || "",
+            'bedrooms': data.bedrooms || "",
+            'bathrooms': data.bathrooms || "",
+            'carpark': data.carpark || "",
+            'livingrooms': data.livingrooms || "",
+            'land_area': data.land_area || "",
+            'floor_area': data.floor_area || "",
+            'short_description': data.short_description || "",
+            'description': data.description || "" 
         })
     }
 
@@ -392,8 +410,24 @@ const ProjectModal = ():JSX.Element => {
     /**
      * Function is to handle delete
      */
-    const onHandleDelete = ():void => {
-        console.log("Handle delete request")
+    const onHandleDelete = (id:number):void => {
+        
+        _dispatch(deleteProject(id))
+            .then(unwrapResult)
+            .then(() => {
+
+                //call close model
+                _dispatch(hide())
+
+                //Trigger ToastBox
+                PubSub.publish(EVENT_TOAST_BOX, {
+                    'title' : "Project removed",
+                    'message' : "The project has been removed successfully",
+                    'state' : ToastState.SUCCESS
+                })
+
+            })
+
     }
 
     /**
@@ -433,7 +467,24 @@ const ProjectModal = ():JSX.Element => {
         }
         //For update project
         else{
-            alert("handle project updated")
+            
+            _dispatch(updateProject({id: _modal_data.item.id, values: data}))
+                .then(unwrapResult)
+                .then(result => {
+                    const _project = result as TProjectItem
+                    //To update project of modal
+                    _dispatch(setProject(_project))
+
+                    //To reset form 
+                    resetForm(_project)
+
+                    PubSub.publish(EVENT_TOAST_BOX, {
+                        'title' : "Project updated",
+                        'message' : 'The project item has been updated successfully',
+                        'state' : ToastState.SUCCESS
+                    })
+                })
+
         }
 
         
@@ -473,7 +524,10 @@ const ProjectModal = ():JSX.Element => {
                 is_adding_new={_modal_data.is_adding_new} 
                 is_dirty={isDirty} 
                 onHandleClose={onHandleClose} 
-                onHandleDelete={onHandleDelete}
+                onHandleDelete={()=>{
+                    //call delete function
+                    onHandleDelete(_modal_data.item.id)
+                }}
                 onHandleSubmit={handleSubmit(onHandleSubmit)}
             />
 

@@ -34,7 +34,6 @@ class ProjectController extends Controller
 
         //To create new project
         $project = Project::create($data);
-        //$project = Project::find(1);
         
         return response($project->toJson(), 200);
     }
@@ -64,9 +63,9 @@ class ProjectController extends Controller
     public function doDelete(Request $request, $id){
         $project = Project::findOrFail($id);
 
-        $project->delete();
+        //$project->delete();
 
-        return response(['id' => $project->id], 200);
+        return response($project->toJson(), 200);
     }
 
 
@@ -75,7 +74,6 @@ class ProjectController extends Controller
      */
     public function doUploadImage(Request $request, $id){
         $project = Project::findOrFail($id);
-
 
         $request->validate([
             'image'     =>  'required|image|mimes:jpeg,png,jpg,gif|max:3072'

@@ -10,6 +10,9 @@ import AllProjectsBody from './components/all-projects-body'
 import store from './store/projects-store'
 import {setProjects} from './slice/projects-slice'
 import ProjectModal from './modals/project-modal'
+import ToastBox from '../../tools/toast-box/toast-box'
+import LoadingSpinner from '../../tools/loading-spinner/loading-spinner'
+import ConfirmDialog from '../../tools/confirm-dialog/confirm-dialog'
 
 
 //To get json string from DOM
@@ -52,6 +55,13 @@ ReactDOM.render(
 
             {/* Include Project Modal */}
             <ProjectModal />
+
+            {/* Toast Box */}
+            <ToastBox />
+            {/* Loading Spinner */}
+            <LoadingSpinner />
+            {/* Confirm Dialog */}
+            <ConfirmDialog />
         </HashRouter>
     </Provider>,
     document.getElementById('root-projects') as HTMLElement
