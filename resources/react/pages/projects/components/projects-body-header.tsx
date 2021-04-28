@@ -1,8 +1,11 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {SUB_NAV_LINK} from './sub-nav'
+import {useAppDispatch} from '../store/store-hook'
+import {show} from '../slice/project-modal-slice'
 
 const ProjectsBodyHeader:React.FC<{is_4_new:boolean}> = ({is_4_new}):JSX.Element => {
+    const _dispatch = useAppDispatch()
 
     //To resetup vars
     let _header = "All project(s)"
@@ -29,7 +32,7 @@ const ProjectsBodyHeader:React.FC<{is_4_new:boolean}> = ({is_4_new}):JSX.Element
 
                 <button className="btn btn-success" 
                     onClick={() => {
-                        alert("CLICKED")
+                        _dispatch(show())
                     }}
                 >
                     <i className="mdi mdi-plus-circle"></i>

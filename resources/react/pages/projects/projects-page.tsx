@@ -9,6 +9,7 @@ import NewProjectsBody from './components/new-projects-body'
 import AllProjectsBody from './components/all-projects-body'
 import store from './store/projects-store'
 import {setProjects} from './slice/projects-slice'
+import ProjectModal from './modals/project-modal'
 
 
 //To get json string from DOM
@@ -48,6 +49,9 @@ ReactDOM.render(
                     <Redirect to={SUB_NAV_LINK.NEW_PROJECTS} />
                 </Route>
             </Switch>
+
+            {/* Include Project Modal */}
+            <ProjectModal />
         </HashRouter>
     </Provider>,
     document.getElementById('root-projects') as HTMLElement

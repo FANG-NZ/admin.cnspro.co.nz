@@ -40,6 +40,7 @@
     "@babel/preset-typescript": "^7.13.0",
     "@reduxjs/toolkit": "^1.5.0",
     "@types/pubsub-js": "^1.8.2",
+    "@types/react-datepicker": "^3.1.8",
     "@types/react-dom": "^17.0.3",
     "@types/react-router-dom": "^5.1.7",
     "dotenv": "^8.2.0",
