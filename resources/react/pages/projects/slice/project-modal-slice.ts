@@ -72,10 +72,25 @@ const ProjectModalSlice = createSlice({
             state.shown = false
             state.is_adding_new = true
             state.item = initialState.item
+        },
+
+        /**
+         * TODO
+         * Function is to setup project item, this is to update
+         * current modal project item
+         * @param state 
+         * @param action 
+         */
+        setProject: (state, action:PayloadAction<TProjectItem>) => {
+            state.item = action.payload
+
+            //Check if project item is REAL object with values
+            if(action.payload.id > 0)
+                state.is_adding_new = false
         }
 
     }
 })
 
-export const {show, hide} = ProjectModalSlice.actions
+export const {show, hide, setProject} = ProjectModalSlice.actions
 export default ProjectModalSlice.reducer

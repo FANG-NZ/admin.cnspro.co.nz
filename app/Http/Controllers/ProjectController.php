@@ -34,6 +34,7 @@ class ProjectController extends Controller
 
         //To create new project
         $project = Project::create($data);
+        //$project = Project::find(1);
         
         return response($project->toJson(), 200);
     }

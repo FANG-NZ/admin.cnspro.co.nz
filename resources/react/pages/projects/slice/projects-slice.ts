@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit'
 import type {TProjectItem} from '../../../types/project-item.type'
 import type {RootState} from '../store/projects-store'
+import {Client} from '../../../tools/fetch-client'
 
 type TProjectsState = {
     list: Array<TProjectItem>
@@ -12,6 +13,21 @@ type TProjectsState = {
 const initialState:TProjectsState = {
     list: []
 }
+
+
+/**
+ * TODO
+ * Request for adding new project
+ */
+export const addNewProject = createAsyncThunk(
+    'Projects/addNewProject',
+    (data:Array<any>) => {
+        const _url = process.env.REACT_APP_REQUEST_URL
+
+        const response = Client.post(`${_url}projects/add`, data)
+        return response
+    }
+)
 
 
 /**
@@ -33,6 +49,23 @@ const ProjectsSlice = createSlice({
         setProjects: (state, action:PayloadAction<Array<TProjectItem>>)=>{
             state.list = action.payload
         }
+
+    },
+
+    //For extra reducers
+    extraReducers: (builder) => {
+
+        //addNewProject
+        builder.addCase(addNewProject.fulfilled, (state, action) => {
+
+            const project = <TProjectItem>action.payload
+            const _index = state.list.findIndex((item) => item.id === project.id)
+
+            //Check if project not existed, and then
+            //add item into beginning of list
+            if(_index === -1)
+                state.list.unshift(project)
+        })
 
     }
 })

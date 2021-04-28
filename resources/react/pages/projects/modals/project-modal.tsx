@@ -4,14 +4,16 @@ import {useForm, SubmitHandler, useFormContext, FormProvider, Controller} from '
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
-
 import PubSub from 'pubsub-js'
 import {EVENT_OPEN_CONFIRM_DIALOG} from '../../../tools/confirm-dialog/confirm-dialog'
+import {ToastState, EVENT_TOAST_BOX} from '../../../tools/toast-box/toast-box'
 import Modal from 'react-bootstrap/Modal'
 import {useAppDispatch , useAppSelector} from '../store/store-hook'
-import {hide} from '../slice/project-modal-slice'
-import type {TProjectItem} from '../../../types/project-item.type'
+import {hide, setProject} from '../slice/project-modal-slice'
+import {TProjectItem} from '../../../types/project-item.type'
 import ProjectImageField from './project-image-field'
+import {addNewProject} from '../slice/projects-slice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 
 /**
@@ -398,8 +400,43 @@ const ProjectModal = ():JSX.Element => {
      * Function is to handle form submitted
      */
     const onHandleSubmit:SubmitHandler<any> = (data):void => {
-        console.log(data)
-        alert("Handle form submitted")
+
+        //To convert completed_on to string format
+        if(data.completed_on){
+            data.completed_on = moment(data.completed_on).format("YYYY-MM-DD")
+        }
+        //Convert is_new from TRUE|FALSE back to number (1|0)
+        data.is_new = data.is_new? 1:0
+        
+        //For add new project
+        if(_modal_data.is_adding_new){
+
+            _dispatch(addNewProject(data))
+                .then(unwrapResult)
+                .then(result => {
+
+                    const _project = result as TProjectItem
+
+                    //To update project of modal
+                    _dispatch(setProject(_project))
+                    //To reset form 
+                    resetForm(_project)
+
+                    PubSub.publish(EVENT_TOAST_BOX, {
+                        'title' : "Project added",
+                        'message' : 'The new project has been added successfully',
+                        'state' : ToastState.SUCCESS
+                    })
+
+                })
+
+        }
+        //For update project
+        else{
+            alert("handle project updated")
+        }
+
+        
     }
 
     return createPortal(

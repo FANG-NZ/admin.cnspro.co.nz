@@ -2569,6 +2569,97 @@ function usePrevious(value) {
 
 /***/ }),
 
+/***/ "./node_modules/@restart/hooks/esm/useTimeout.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/@restart/hooks/esm/useTimeout.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ useTimeout)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _useMounted__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./useMounted */ "./node_modules/@restart/hooks/esm/useMounted.js");
+/* harmony import */ var _useWillUnmount__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./useWillUnmount */ "./node_modules/@restart/hooks/esm/useWillUnmount.js");
+
+
+
+/*
+ * Browsers including Internet Explorer, Chrome, Safari, and Firefox store the
+ * delay as a 32-bit signed integer internally. This causes an integer overflow
+ * when using delays larger than 2,147,483,647 ms (about 24.8 days),
+ * resulting in the timeout being executed immediately.
+ *
+ * via: https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout
+ */
+
+var MAX_DELAY_MS = Math.pow(2, 31) - 1;
+
+function setChainedTimeout(handleRef, fn, timeoutAtMs) {
+  var delayMs = timeoutAtMs - Date.now();
+  handleRef.current = delayMs <= MAX_DELAY_MS ? setTimeout(fn, delayMs) : setTimeout(function () {
+    return setChainedTimeout(handleRef, fn, timeoutAtMs);
+  }, MAX_DELAY_MS);
+}
+/**
+ * Returns a controller object for setting a timeout that is properly cleaned up
+ * once the component unmounts. New timeouts cancel and replace existing ones.
+ *
+ *
+ *
+ * ```tsx
+ * const { set, clear } = useTimeout();
+ * const [hello, showHello] = useState(false);
+ * //Display hello after 5 seconds
+ * set(() => showHello(true), 5000);
+ * return (
+ *   <div className="App">
+ *     {hello ? <h3>Hello</h3> : null}
+ *   </div>
+ * );
+ * ```
+ */
+
+
+function useTimeout() {
+  var isMounted = (0,_useMounted__WEBPACK_IMPORTED_MODULE_1__.default)(); // types are confused between node and web here IDK
+
+  var handleRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+  (0,_useWillUnmount__WEBPACK_IMPORTED_MODULE_2__.default)(function () {
+    return clearTimeout(handleRef.current);
+  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(function () {
+    var clear = function clear() {
+      return clearTimeout(handleRef.current);
+    };
+
+    function set(fn, delayMs) {
+      if (delayMs === void 0) {
+        delayMs = 0;
+      }
+
+      if (!isMounted()) return;
+      clear();
+
+      if (delayMs <= MAX_DELAY_MS) {
+        // For simplicity, if the timeout is short, just set a normal timeout.
+        handleRef.current = setTimeout(fn, delayMs);
+      } else {
+        setChainedTimeout(handleRef, fn, Date.now() + delayMs);
+      }
+    }
+
+    return {
+      set: set,
+      clear: clear
+    };
+  }, []);
+}
+
+/***/ }),
+
 /***/ "./node_modules/@restart/hooks/esm/useUpdatedRef.js":
 /*!**********************************************************!*\
   !*** ./node_modules/@restart/hooks/esm/useUpdatedRef.js ***!
@@ -3203,6 +3294,10 @@ __webpack_require__(/*! react-datepicker/dist/react-datepicker.css */ "./node_mo
 
 var moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
 
+var pubsub_js_1 = __importDefault(__webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js"));
+
+var toast_box_1 = __webpack_require__(/*! ../../../tools/toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.tsx");
+
 var Modal_1 = __importDefault(__webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js"));
 
 var store_hook_1 = __webpack_require__(/*! ../store/store-hook */ "./resources/react/pages/projects/store/store-hook.ts");
@@ -3210,6 +3305,10 @@ var store_hook_1 = __webpack_require__(/*! ../store/store-hook */ "./resources/r
 var project_modal_slice_1 = __webpack_require__(/*! ../slice/project-modal-slice */ "./resources/react/pages/projects/slice/project-modal-slice.ts");
 
 var project_image_field_1 = __importDefault(__webpack_require__(/*! ./project-image-field */ "./resources/react/pages/projects/modals/project-image-field.tsx"));
+
+var projects_slice_1 = __webpack_require__(/*! ../slice/projects-slice */ "./resources/react/pages/projects/slice/projects-slice.ts");
+
+var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 /**
  * TODO
  * define the Modal Header
@@ -3543,8 +3642,32 @@ var ProjectModal = function ProjectModal() {
 
 
   var onHandleSubmit = function onHandleSubmit(data) {
-    console.log(data);
-    alert("Handle form submitted");
+    //To convert completed_on to string format
+    if (data.completed_on) {
+      data.completed_on = moment_1["default"](data.completed_on).format("YYYY-MM-DD");
+    } //Convert is_new from TRUE|FALSE back to number (1|0)
+
+
+    data.is_new = data.is_new ? 1 : 0; //For add new project
+
+    if (_modal_data.is_adding_new) {
+      _dispatch(projects_slice_1.addNewProject(data)).then(toolkit_1.unwrapResult).then(function (result) {
+        var _project = result; //To update project of modal
+
+        _dispatch(project_modal_slice_1.setProject(_project)); //To reset form 
+
+
+        resetForm(_project);
+        pubsub_js_1["default"].publish(toast_box_1.EVENT_TOAST_BOX, {
+          'title': "Project added",
+          'message': 'The new project has been added successfully',
+          'state': toast_box_1.ToastState.SUCCESS
+        });
+      });
+    } //For update project
+    else {
+        alert("handle project updated");
+      }
   };
 
   return react_dom_1.createPortal(react_1["default"].createElement(Modal_1["default"], {
@@ -3701,7 +3824,7 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.hide = exports.show = void 0;
+exports.setProject = exports.hide = exports.show = void 0;
 
 var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js"); //TODO
 //define the default initial state
@@ -3767,10 +3890,23 @@ var ProjectModalSlice = toolkit_1.createSlice({
       state.shown = false;
       state.is_adding_new = true;
       state.item = initialState.item;
+    },
+
+    /**
+     * TODO
+     * Function is to setup project item, this is to update
+     * current modal project item
+     * @param state
+     * @param action
+     */
+    setProject: function setProject(state, action) {
+      state.item = action.payload; //Check if project item is REAL object with values
+
+      if (action.payload.id > 0) state.is_adding_new = false;
     }
   }
 });
-exports.show = (_a = ProjectModalSlice.actions, _a.show), exports.hide = _a.hide;
+exports.show = (_a = ProjectModalSlice.actions, _a.show), exports.hide = _a.hide, exports.setProject = _a.setProject;
 exports.default = ProjectModalSlice.reducer;
 
 /***/ }),
@@ -3787,9 +3923,11 @@ exports.default = ProjectModalSlice.reducer;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.getNotNewProjects = exports.getNewProjects = exports.setProjects = void 0;
+exports.getNotNewProjects = exports.getNewProjects = exports.setProjects = exports.addNewProject = void 0;
 
 var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+
+var fetch_client_1 = __webpack_require__(/*! ../../../tools/fetch-client */ "./resources/react/tools/fetch-client.ts");
 /**
  * define the default initialState
  */
@@ -3798,6 +3936,16 @@ var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@red
 var initialState = {
   list: []
 };
+/**
+ * TODO
+ * Request for adding new project
+ */
+
+exports.addNewProject = toolkit_1.createAsyncThunk('Projects/addNewProject', function (data) {
+  var _url = "http://localhost/";
+  var response = fetch_client_1.Client.post(_url + "projects/add", data);
+  return response;
+});
 /**
  * TODO
  * define the projects slice
@@ -3816,6 +3964,21 @@ var ProjectsSlice = toolkit_1.createSlice({
     setProjects: function setProjects(state, action) {
       state.list = action.payload;
     }
+  },
+  //For extra reducers
+  extraReducers: function extraReducers(builder) {
+    //addNewProject
+    builder.addCase(exports.addNewProject.fulfilled, function (state, action) {
+      var project = action.payload;
+
+      var _index = state.list.findIndex(function (item) {
+        return item.id === project.id;
+      }); //Check if project not existed, and then
+      //add item into beginning of list
+
+
+      if (_index === -1) state.list.unshift(project);
+    });
   }
 });
 exports.setProjects = ProjectsSlice.actions.setProjects;
@@ -3899,6 +4062,635 @@ var useAppDispatch = function useAppDispatch() {
 
 exports.useAppDispatch = useAppDispatch;
 exports.useAppSelector = react_redux_1.useSelector;
+
+/***/ }),
+
+/***/ "./resources/react/tools/fetch-client.ts":
+/*!***********************************************!*\
+  !*** ./resources/react/tools/fetch-client.ts ***!
+  \***********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.Client = void 0;
+
+var pubsub_js_1 = __importDefault(__webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js"));
+
+var loading_spinner_1 = __webpack_require__(/*! ./loading-spinner/loading-spinner */ "./resources/react/tools/loading-spinner/loading-spinner.tsx");
+/**
+ * TODO
+ * deifne the client
+ * @param endpoint
+ * @param config
+ * @param body
+ * @returns
+ */
+
+
+function Client(endpoint, config, //Flag to indicate if there is file attached 
+attached_file, show_loading) {
+  if (attached_file === void 0) {
+    attached_file = false;
+  }
+
+  if (show_loading === void 0) {
+    show_loading = true;
+  }
+
+  return __awaiter(this, void 0, void 0, function () {
+    var headers, _formdata, _i, _a, _b, key, value, _config, data, response, error_1;
+
+    return __generator(this, function (_c) {
+      switch (_c.label) {
+        case 0:
+          //If attached file, we just need to update Content-Type
+          if (attached_file) {
+            //headers = { 'Content-Type': 'multipart/form-data' }
+            //headers = {'Content-Type': "application/x-www-form-urlencoded"}
+            //To rebuild formdata
+            if (config.body) {
+              _formdata = new FormData();
+
+              for (_i = 0, _a = Object.entries(config.body); _i < _a.length; _i++) {
+                _b = _a[_i], key = _b[0], value = _b[1];
+
+                _formdata.append(key, value);
+              }
+
+              config.body = _formdata;
+            }
+          } else {
+            headers = {
+              'Content-Type': 'application/json'
+            };
+            config.body = JSON.stringify(config.body);
+          }
+
+          _config = __assign(__assign({}, config), {
+            headers: __assign(__assign({}, headers), config.headers)
+          }); //To trigger show loading icon event
+
+          if (show_loading) {
+            pubsub_js_1["default"].publish(loading_spinner_1.EVENT_LOADING_SPINNER, true);
+          }
+
+          _c.label = 1;
+
+        case 1:
+          _c.trys.push([1, 4, 5, 6]);
+
+          return [4
+          /*yield*/
+          , window.fetch(endpoint, _config)];
+
+        case 2:
+          response = _c.sent();
+          return [4
+          /*yield*/
+          , response.json()];
+
+        case 3:
+          data = _c.sent();
+
+          if (response.ok) {
+            return [2
+            /*return*/
+            , data];
+          }
+
+          throw new Error(response.statusText);
+
+        case 4:
+          error_1 = _c.sent();
+          return [2
+          /*return*/
+          , Promise.reject({
+            message: data.message
+          })];
+
+        case 5:
+          if (show_loading) {
+            pubsub_js_1["default"].publish(loading_spinner_1.EVENT_LOADING_SPINNER, false);
+          }
+
+          return [7
+          /*endfinally*/
+          ];
+
+        case 6:
+          return [2
+          /*return*/
+          ];
+      }
+    });
+  });
+}
+
+exports.Client = Client;
+/**
+ * define the GET method
+ * @param endpoint
+ * @returns
+ */
+
+Client.get = function (endpoint, customConfig, show_loading) {
+  if (customConfig === void 0) {
+    customConfig = {};
+  }
+
+  if (show_loading === void 0) {
+    show_loading = true;
+  }
+
+  return Client(endpoint, __assign(__assign({}, customConfig), {
+    method: 'GET'
+  }), false, show_loading);
+};
+/**
+ * define the POST method
+ * @param endpoint
+ * @param body
+ * @param customConfig
+ * @returns
+ */
+
+
+Client.post = function (endpoint, body, attached_file, customConfig, show_loading) {
+  if (attached_file === void 0) {
+    attached_file = false;
+  }
+
+  if (customConfig === void 0) {
+    customConfig = {};
+  }
+
+  if (show_loading === void 0) {
+    show_loading = true;
+  }
+
+  return Client(endpoint, __assign(__assign({}, customConfig), {
+    method: "POST",
+    body: body
+  }), attached_file, show_loading);
+};
+/**
+ * define the PUT method
+ * @param endpoint
+ * @param body
+ * @param attached_file
+ * @param customConfig
+ * @param show_loading
+ */
+
+
+Client.put = function (endpoint, body, attached_file, customConfig, show_loading) {
+  if (attached_file === void 0) {
+    attached_file = false;
+  }
+
+  if (customConfig === void 0) {
+    customConfig = {};
+  }
+
+  if (show_loading === void 0) {
+    show_loading = true;
+  } //Laravel can't handle PUT method with FormData
+  //Check https://stackoverflow.com/questions/50691938/patch-and-put-request-does-not-working-with-form-data
+
+
+  body._method = "PUT";
+  return Client(endpoint, __assign(__assign({}, customConfig), {
+    method: "POST",
+    body: body
+  }), attached_file, show_loading);
+};
+/**
+ * define the PUT method
+ * @param endpoint
+ * @param body
+ * @param attached_file
+ * @param customConfig
+ * @param show_loading
+ */
+
+
+Client["delete"] = function (endpoint, body, customConfig, show_loading) {
+  if (customConfig === void 0) {
+    customConfig = {};
+  }
+
+  if (show_loading === void 0) {
+    show_loading = true;
+  }
+
+  return Client(endpoint, __assign(__assign({}, customConfig), {
+    method: "DELETE",
+    body: body
+  }), false, show_loading);
+};
+
+/***/ }),
+
+/***/ "./resources/react/tools/loading-spinner/loading-spinner.tsx":
+/*!*******************************************************************!*\
+  !*** ./resources/react/tools/loading-spinner/loading-spinner.tsx ***!
+  \*******************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.EVENT_LOADING_SPINNER = void 0;
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_dom_1 = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+
+var pubsub_js_1 = __importDefault(__webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js"));
+
+exports.EVENT_LOADING_SPINNER = "Loading_Spinner"; //define the loading spinner
+
+var LoadingSpinner = function LoadingSpinner() {
+  var _portalBox = document.getElementById("portal-box");
+
+  var _a = react_1.useState(false),
+      show = _a[0],
+      setShow = _a[1];
+  /**
+   * Function is to handle subscribe
+   * @param msg
+   * @param data
+   */
+
+
+  var onHandleSubscriber = function onHandleSubscriber(msg, data) {
+    setShow(data);
+  };
+
+  react_1.useEffect(function () {
+    var _token = pubsub_js_1["default"].subscribe(exports.EVENT_LOADING_SPINNER, onHandleSubscriber);
+
+    return function () {
+      pubsub_js_1["default"].unsubscribe(_token);
+    };
+  }, []);
+  return react_dom_1.createPortal(show && react_1["default"].createElement("div", {
+    id: "main-loader",
+    className: "ff-loader-container"
+  }, react_1["default"].createElement("div", {
+    className: "ff-loader"
+  })), _portalBox);
+};
+
+exports.default = LoadingSpinner;
+
+/***/ }),
+
+/***/ "./resources/react/tools/toast-box/toast-box.tsx":
+/*!*******************************************************!*\
+  !*** ./resources/react/tools/toast-box/toast-box.tsx ***!
+  \*******************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.ToastState = exports.EVENT_TOAST_BOX = void 0;
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var Toast_1 = __importDefault(__webpack_require__(/*! react-bootstrap/Toast */ "./node_modules/react-bootstrap/esm/Toast.js"));
+
+var pubsub_js_1 = __importDefault(__webpack_require__(/*! pubsub-js */ "./node_modules/pubsub-js/src/pubsub.js"));
+
+exports.EVENT_TOAST_BOX = "Toast_Box";
+var ToastState;
+
+(function (ToastState) {
+  ToastState["SUCCESS"] = "success";
+  ToastState["ERROR"] = "danger";
+})(ToastState = exports.ToastState || (exports.ToastState = {})); //define the default toast data
+
+
+var default_data = {
+  show: false,
+  message: '------',
+  state: ToastState.SUCCESS,
+  title: 'Request done'
+};
+
+var ToastBox = function ToastBox() {
+  var _a = react_1.useState(default_data),
+      status = _a[0],
+      setStatus = _a[1];
+  /**
+   * Function is to handle on subpub
+   * @param {*} msg
+   * @param {*} data
+   */
+
+
+  function onHandleSubscriber(msg, data) {
+    data.show = true;
+    setStatus(data);
+  } //define the effect
+
+
+  react_1.useEffect(function () {
+    var _token = pubsub_js_1["default"].subscribe(exports.EVENT_TOAST_BOX, onHandleSubscriber);
+
+    return function () {
+      pubsub_js_1["default"].unsubscribe(_token);
+    };
+  }, []);
+  return react_1["default"].createElement(Toast_1["default"], {
+    show: status.show,
+    delay: 3000,
+    autohide: true,
+    className: status.state,
+    onClose: function onClose() {
+      setStatus(__assign(__assign({}, status), {
+        show: false
+      }));
+    }
+  }, react_1["default"].createElement(Toast_1["default"].Header, null, react_1["default"].createElement("strong", {
+    className: "mr-auto"
+  }, status.title)), react_1["default"].createElement(Toast_1["default"].Body, null, status.message));
+};
+
+exports.default = ToastBox;
 
 /***/ }),
 
@@ -41207,6 +41999,367 @@ module.exports = ReactPropTypesSecret;
 
 /***/ }),
 
+/***/ "./node_modules/pubsub-js/src/pubsub.js":
+/*!**********************************************!*\
+  !*** ./node_modules/pubsub-js/src/pubsub.js ***!
+  \**********************************************/
+/***/ (function(module, exports, __webpack_require__) {
+
+/* module decorator */ module = __webpack_require__.nmd(module);
+/**
+ * Copyright (c) 2010,2011,2012,2013,2014 Morgan Roderick http://roderick.dk
+ * License: MIT - http://mrgnrdrck.mit-license.org
+ *
+ * https://github.com/mroderick/PubSubJS
+ */
+
+(function (root, factory){
+    'use strict';
+
+    var PubSub = {};
+    root.PubSub = PubSub;
+    factory(PubSub);
+    // CommonJS and Node.js module support
+    if (true){
+        if (module !== undefined && module.exports) {
+            exports = module.exports = PubSub; // Node.js specific `module.exports`
+        }
+        exports.PubSub = PubSub; // CommonJS module 1.1.1 spec
+        module.exports = exports = PubSub; // CommonJS
+    }
+    // AMD support
+    /* eslint-disable no-undef */
+    else {}
+
+}(( typeof window === 'object' && window ) || this, function (PubSub){
+    'use strict';
+
+    var messages = {},
+        lastUid = -1,
+        ALL_SUBSCRIBING_MSG = '*';
+
+    function hasKeys(obj){
+        var key;
+
+        for (key in obj){
+            if ( Object.prototype.hasOwnProperty.call(obj, key) ){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns a function that throws the passed exception, for use as argument for setTimeout
+     * @alias throwException
+     * @function
+     * @param { Object } ex An Error object
+     */
+    function throwException( ex ){
+        return function reThrowException(){
+            throw ex;
+        };
+    }
+
+    function callSubscriberWithDelayedExceptions( subscriber, message, data ){
+        try {
+            subscriber( message, data );
+        } catch( ex ){
+            setTimeout( throwException( ex ), 0);
+        }
+    }
+
+    function callSubscriberWithImmediateExceptions( subscriber, message, data ){
+        subscriber( message, data );
+    }
+
+    function deliverMessage( originalMessage, matchedMessage, data, immediateExceptions ){
+        var subscribers = messages[matchedMessage],
+            callSubscriber = immediateExceptions ? callSubscriberWithImmediateExceptions : callSubscriberWithDelayedExceptions,
+            s;
+
+        if ( !Object.prototype.hasOwnProperty.call( messages, matchedMessage ) ) {
+            return;
+        }
+
+        for (s in subscribers){
+            if ( Object.prototype.hasOwnProperty.call(subscribers, s)){
+                callSubscriber( subscribers[s], originalMessage, data );
+            }
+        }
+    }
+
+    function createDeliveryFunction( message, data, immediateExceptions ){
+        return function deliverNamespaced(){
+            var topic = String( message ),
+                position = topic.lastIndexOf( '.' );
+
+            // deliver the message as it is now
+            deliverMessage(message, message, data, immediateExceptions);
+
+            // trim the hierarchy and deliver message to each level
+            while( position !== -1 ){
+                topic = topic.substr( 0, position );
+                position = topic.lastIndexOf('.');
+                deliverMessage( message, topic, data, immediateExceptions );
+            }
+
+            deliverMessage(message, ALL_SUBSCRIBING_MSG, data, immediateExceptions);
+        };
+    }
+
+    function hasDirectSubscribersFor( message ) {
+        var topic = String( message ),
+            found = Boolean(Object.prototype.hasOwnProperty.call( messages, topic ) && hasKeys(messages[topic]));
+
+        return found;
+    }
+
+    function messageHasSubscribers( message ){
+        var topic = String( message ),
+            found = hasDirectSubscribersFor(topic) || hasDirectSubscribersFor(ALL_SUBSCRIBING_MSG),
+            position = topic.lastIndexOf( '.' );
+
+        while ( !found && position !== -1 ){
+            topic = topic.substr( 0, position );
+            position = topic.lastIndexOf( '.' );
+            found = hasDirectSubscribersFor(topic);
+        }
+
+        return found;
+    }
+
+    function publish( message, data, sync, immediateExceptions ){
+        message = (typeof message === 'symbol') ? message.toString() : message;
+
+        var deliver = createDeliveryFunction( message, data, immediateExceptions ),
+            hasSubscribers = messageHasSubscribers( message );
+
+        if ( !hasSubscribers ){
+            return false;
+        }
+
+        if ( sync === true ){
+            deliver();
+        } else {
+            setTimeout( deliver, 0 );
+        }
+        return true;
+    }
+
+    /**
+     * Publishes the message, passing the data to it's subscribers
+     * @function
+     * @alias publish
+     * @param { String } message The message to publish
+     * @param {} data The data to pass to subscribers
+     * @return { Boolean }
+     */
+    PubSub.publish = function( message, data ){
+        return publish( message, data, false, PubSub.immediateExceptions );
+    };
+
+    /**
+     * Publishes the message synchronously, passing the data to it's subscribers
+     * @function
+     * @alias publishSync
+     * @param { String } message The message to publish
+     * @param {} data The data to pass to subscribers
+     * @return { Boolean }
+     */
+    PubSub.publishSync = function( message, data ){
+        return publish( message, data, true, PubSub.immediateExceptions );
+    };
+
+    /**
+     * Subscribes the passed function to the passed message. Every returned token is unique and should be stored if you need to unsubscribe
+     * @function
+     * @alias subscribe
+     * @param { String } message The message to subscribe to
+     * @param { Function } func The function to call when a new message is published
+     * @return { String }
+     */
+    PubSub.subscribe = function( message, func ){
+        if ( typeof func !== 'function'){
+            return false;
+        }
+
+        message = (typeof message === 'symbol') ? message.toString() : message;
+
+        // message is not registered yet
+        if ( !Object.prototype.hasOwnProperty.call( messages, message ) ){
+            messages[message] = {};
+        }
+
+        // forcing token as String, to allow for future expansions without breaking usage
+        // and allow for easy use as key names for the 'messages' object
+        var token = 'uid_' + String(++lastUid);
+        messages[message][token] = func;
+
+        // return token for unsubscribing
+        return token;
+    };
+
+    PubSub.subscribeAll = function( func ){
+        return PubSub.subscribe(ALL_SUBSCRIBING_MSG, func);
+    };
+
+    /**
+     * Subscribes the passed function to the passed message once
+     * @function
+     * @alias subscribeOnce
+     * @param { String } message The message to subscribe to
+     * @param { Function } func The function to call when a new message is published
+     * @return { PubSub }
+     */
+    PubSub.subscribeOnce = function( message, func ){
+        var token = PubSub.subscribe( message, function(){
+            // before func apply, unsubscribe message
+            PubSub.unsubscribe( token );
+            func.apply( this, arguments );
+        });
+        return PubSub;
+    };
+
+    /**
+     * Clears all subscriptions
+     * @function
+     * @public
+     * @alias clearAllSubscriptions
+     */
+    PubSub.clearAllSubscriptions = function clearAllSubscriptions(){
+        messages = {};
+    };
+
+    /**
+     * Clear subscriptions by the topic
+     * @function
+     * @public
+     * @alias clearAllSubscriptions
+     * @return { int }
+     */
+    PubSub.clearSubscriptions = function clearSubscriptions(topic){
+        var m;
+        for (m in messages){
+            if (Object.prototype.hasOwnProperty.call(messages, m) && m.indexOf(topic) === 0){
+                delete messages[m];
+            }
+        }
+    };
+
+    /**
+       Count subscriptions by the topic
+     * @function
+     * @public
+     * @alias countSubscriptions
+     * @return { Array }
+    */
+    PubSub.countSubscriptions = function countSubscriptions(topic){
+        var m;
+        // eslint-disable-next-line no-unused-vars
+        var token;
+        var count = 0;
+        for (m in messages) {
+            if (Object.prototype.hasOwnProperty.call(messages, m) && m.indexOf(topic) === 0) {
+                for (token in messages[m]) {
+                    count++;
+                }
+                break;
+            }
+        }
+        return count;
+    };
+
+
+    /**
+       Gets subscriptions by the topic
+     * @function
+     * @public
+     * @alias getSubscriptions
+    */
+    PubSub.getSubscriptions = function getSubscriptions(topic){
+        var m;
+        var list = [];
+        for (m in messages){
+            if (Object.prototype.hasOwnProperty.call(messages, m) && m.indexOf(topic) === 0){
+                list.push(m);
+            }
+        }
+        return list;
+    };
+
+    /**
+     * Removes subscriptions
+     *
+     * - When passed a token, removes a specific subscription.
+     *
+	 * - When passed a function, removes all subscriptions for that function
+     *
+	 * - When passed a topic, removes all subscriptions for that topic (hierarchy)
+     * @function
+     * @public
+     * @alias subscribeOnce
+     * @param { String | Function } value A token, function or topic to unsubscribe from
+     * @example // Unsubscribing with a token
+     * var token = PubSub.subscribe('mytopic', myFunc);
+     * PubSub.unsubscribe(token);
+     * @example // Unsubscribing with a function
+     * PubSub.unsubscribe(myFunc);
+     * @example // Unsubscribing from a topic
+     * PubSub.unsubscribe('mytopic');
+     */
+    PubSub.unsubscribe = function(value){
+        var descendantTopicExists = function(topic) {
+                var m;
+                for ( m in messages ){
+                    if ( Object.prototype.hasOwnProperty.call(messages, m) && m.indexOf(topic) === 0 ){
+                        // a descendant of the topic exists:
+                        return true;
+                    }
+                }
+
+                return false;
+            },
+            isTopic    = typeof value === 'string' && ( Object.prototype.hasOwnProperty.call(messages, value) || descendantTopicExists(value) ),
+            isToken    = !isTopic && typeof value === 'string',
+            isFunction = typeof value === 'function',
+            result = false,
+            m, message, t;
+
+        if (isTopic){
+            PubSub.clearSubscriptions(value);
+            return;
+        }
+
+        for ( m in messages ){
+            if ( Object.prototype.hasOwnProperty.call( messages, m ) ){
+                message = messages[m];
+
+                if ( isToken && message[value] ){
+                    delete message[value];
+                    result = value;
+                    // tokens are unique, so we can just stop here
+                    break;
+                }
+
+                if (isFunction) {
+                    for ( t in message ){
+                        if (Object.prototype.hasOwnProperty.call(message, t) && message[t] === value){
+                            delete message[t];
+                            result = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    };
+}));
+
+
+/***/ }),
+
 /***/ "./node_modules/react-bootstrap/esm/BootstrapModalManager.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/react-bootstrap/esm/BootstrapModalManager.js ***!
@@ -42020,6 +43173,206 @@ function createBootstrapComponent(Component, opts) {
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ThemeProvider);
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/Toast.js":
+/*!***************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/Toast.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/esm/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _restart_hooks_useTimeout__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @restart/hooks/useTimeout */ "./node_modules/@restart/hooks/esm/useTimeout.js");
+/* harmony import */ var _Fade__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Fade */ "./node_modules/react-bootstrap/esm/Fade.js");
+/* harmony import */ var _ToastHeader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ToastHeader */ "./node_modules/react-bootstrap/esm/ToastHeader.js");
+/* harmony import */ var _ToastBody__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ToastBody */ "./node_modules/react-bootstrap/esm/ToastBody.js");
+/* harmony import */ var _ThemeProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/esm/ThemeProvider.js");
+/* harmony import */ var _ToastContext__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ToastContext */ "./node_modules/react-bootstrap/esm/ToastContext.js");
+
+
+
+
+
+
+
+
+
+
+var Toast = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      className = _ref.className,
+      children = _ref.children,
+      _ref$transition = _ref.transition,
+      Transition = _ref$transition === void 0 ? _Fade__WEBPACK_IMPORTED_MODULE_5__.default : _ref$transition,
+      _ref$show = _ref.show,
+      show = _ref$show === void 0 ? true : _ref$show,
+      _ref$animation = _ref.animation,
+      animation = _ref$animation === void 0 ? true : _ref$animation,
+      _ref$delay = _ref.delay,
+      delay = _ref$delay === void 0 ? 3000 : _ref$delay,
+      _ref$autohide = _ref.autohide,
+      autohide = _ref$autohide === void 0 ? false : _ref$autohide,
+      onClose = _ref.onClose,
+      props = (0,_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__.default)(_ref, ["bsPrefix", "className", "children", "transition", "show", "animation", "delay", "autohide", "onClose"]);
+
+  bsPrefix = (0,_ThemeProvider__WEBPACK_IMPORTED_MODULE_6__.useBootstrapPrefix)(bsPrefix, 'toast'); // We use refs for these, because we don't want to restart the autohide
+  // timer in case these values change.
+
+  var delayRef = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(delay);
+  var onCloseRef = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(onClose);
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
+    delayRef.current = delay;
+    onCloseRef.current = onClose;
+  }, [delay, onClose]);
+  var autohideTimeout = (0,_restart_hooks_useTimeout__WEBPACK_IMPORTED_MODULE_4__.default)();
+  var autohideToast = !!(autohide && show);
+  var autohideFunc = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)(function () {
+    if (autohideToast) {
+      onCloseRef.current == null ? void 0 : onCloseRef.current();
+    }
+  }, [autohideToast]);
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
+    // Only reset timer if show or autohide changes.
+    autohideTimeout.set(autohideFunc, delayRef.current);
+  }, [autohideTimeout, autohideFunc]);
+  var toastContext = (0,react__WEBPACK_IMPORTED_MODULE_2__.useMemo)(function () {
+    return {
+      onClose: onClose
+    };
+  }, [onClose]);
+  var hasAnimation = !!(Transition && animation);
+  var toast = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("div", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, props, {
+    ref: ref,
+    className: classnames__WEBPACK_IMPORTED_MODULE_3___default()(bsPrefix, className, !hasAnimation && (show ? 'show' : 'hide')),
+    role: "alert",
+    "aria-live": "assertive",
+    "aria-atomic": "true"
+  }), children);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement(_ToastContext__WEBPACK_IMPORTED_MODULE_7__.default.Provider, {
+    value: toastContext
+  }, hasAnimation && Transition ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement(Transition, {
+    in: show,
+    unmountOnExit: true
+  }, toast) : toast);
+});
+Toast.displayName = 'Toast';
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.assign(Toast, {
+  Body: _ToastBody__WEBPACK_IMPORTED_MODULE_8__.default,
+  Header: _ToastHeader__WEBPACK_IMPORTED_MODULE_9__.default
+}));
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/ToastBody.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/ToastBody.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _createWithBsPrefix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createWithBsPrefix */ "./node_modules/react-bootstrap/esm/createWithBsPrefix.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_createWithBsPrefix__WEBPACK_IMPORTED_MODULE_0__.default)('toast-body'));
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/ToastContext.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/ToastContext.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+ // TODO: check
+
+var ToastContext = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createContext({
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onClose: function onClose() {}
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ToastContext);
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/esm/ToastHeader.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/react-bootstrap/esm/ToastHeader.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/esm/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @restart/hooks/useEventCallback */ "./node_modules/@restart/hooks/esm/useEventCallback.js");
+/* harmony import */ var _ThemeProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/esm/ThemeProvider.js");
+/* harmony import */ var _CloseButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./CloseButton */ "./node_modules/react-bootstrap/esm/CloseButton.js");
+/* harmony import */ var _ToastContext__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ToastContext */ "./node_modules/react-bootstrap/esm/ToastContext.js");
+
+
+
+
+
+
+
+
+var defaultProps = {
+  closeLabel: 'Close',
+  closeButton: true
+};
+var ToastHeader = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      closeLabel = _ref.closeLabel,
+      closeButton = _ref.closeButton,
+      className = _ref.className,
+      children = _ref.children,
+      props = (0,_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__.default)(_ref, ["bsPrefix", "closeLabel", "closeButton", "className", "children"]);
+
+  bsPrefix = (0,_ThemeProvider__WEBPACK_IMPORTED_MODULE_5__.useBootstrapPrefix)(bsPrefix, 'toast-header');
+  var context = (0,react__WEBPACK_IMPORTED_MODULE_3__.useContext)(_ToastContext__WEBPACK_IMPORTED_MODULE_6__.default);
+  var handleClick = (0,_restart_hooks_useEventCallback__WEBPACK_IMPORTED_MODULE_4__.default)(function (e) {
+    if (context && context.onClose) {
+      context.onClose(e);
+    }
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__.default)({
+    ref: ref
+  }, props, {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(bsPrefix, className)
+  }), children, closeButton && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement(_CloseButton__WEBPACK_IMPORTED_MODULE_7__.default, {
+    label: closeLabel,
+    onClick: handleClick,
+    className: "ml-2 mb-1",
+    "data-dismiss": "toast"
+  }));
+});
+ToastHeader.displayName = 'ToastHeader';
+ToastHeader.defaultProps = defaultProps;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ToastHeader);
 
 /***/ }),
 
