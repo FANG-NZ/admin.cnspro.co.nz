@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react'
 import Moment from 'react-moment'
 import type {TProjectItem} from '../../../types/project-item.type'
+import {useAppDispatch} from '../store/store-hook'
+import {show} from '../slice/project-modal-slice'
 
 
 /**
@@ -25,6 +27,7 @@ const ProjectEmptyItem = ():JSX.Element => {
  * define the project item
  */
 const ProjectItem:React.FC<{item:TProjectItem}> = ({item}):JSX.Element => {
+    const _dispatch = useAppDispatch()
 
     return(
         <tr>
@@ -32,7 +35,8 @@ const ProjectItem:React.FC<{item:TProjectItem}> = ({item}):JSX.Element => {
                 <a href="#view" 
                     onClick={(e) => {
                         e.preventDefault()
-                        alert("view clicked")
+                        //call open project modal
+                        _dispatch(show(item))
                     }}
                 >
                     {item.street}<br/>{item.city}

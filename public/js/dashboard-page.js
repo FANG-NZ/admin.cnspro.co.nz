@@ -2761,7 +2761,7 @@ var MainBannerSliderList = function MainBannerSliderList(_a) {
   }, sliders.length === 0 ? react_1["default"].createElement(main_banner_slider_item_1.MainBannerSliderEmptyItem, null) : sliders.map(function (item) {
     return react_1["default"].createElement(main_banner_slider_item_1["default"], {
       item: item,
-      key: item.id
+      key: "banner_slider_item_" + item.id
     });
   })));
 };

@@ -11,6 +11,7 @@ import Modal from 'react-bootstrap/Modal'
 import {useAppDispatch , useAppSelector} from '../store/store-hook'
 import {hide} from '../slice/project-modal-slice'
 import type {TProjectItem} from '../../../types/project-item.type'
+import ProjectImageField from './project-image-field'
 
 
 /**
@@ -84,8 +85,8 @@ const ProjectFields:React.FC<{project:TProjectItem}> = ({project}):JSX.Element =
     const {errors, register, control} = useFormContext()
 
     return(
-        <div className="col-info_fields">
-            <div className="row mb-2">
+        <>
+        <div className="row mb-2">
             <div className="col-7">
                 <label>Title</label>
 
@@ -154,7 +155,6 @@ const ProjectFields:React.FC<{project:TProjectItem}> = ({project}):JSX.Element =
             </div>
         </div>
         
-
         <div className="row mb-2">
             <div className="col-6">
                 <label>Completed On</label>
@@ -185,7 +185,6 @@ const ProjectFields:React.FC<{project:TProjectItem}> = ({project}):JSX.Element =
 
             </div>
         </div>
-
 
         <h5 className="header-title">Properties</h5>
 
@@ -318,7 +317,7 @@ const ProjectFields:React.FC<{project:TProjectItem}> = ({project}):JSX.Element =
                 
             </div>
         </div>
-        </div>
+        </>
     )
 }
 
@@ -349,10 +348,36 @@ const ProjectModal = ():JSX.Element => {
 
 
     /**
+     * HELPER
+     * Function is to reset form with data
+     * @param data 
+     */
+    const resetForm = (data:TProjectItem):void => {
+
+        reset({
+            'title': data.title ,
+            //we need to convert into boolean type for checkbox
+            'is_new': data.is_new?true:false,
+            'street': data.street,
+            'city': data.city,
+            'completed_on': data.completed_on,
+            'bedrooms': data.bedrooms,
+            'bathrooms': data.bathrooms,
+            'carpark': data.carpark,
+            'livingrooms': data.livingrooms,
+            'land_area': data.land_area,
+            'floor_area': data.floor_area,
+            'short_description': data.short_description,
+            'description': data.description 
+        })
+    }
+
+    /**
      * Function is to handle on modal enter
      */
     const onHandleEnter = ():void => {
-        console.log("Handle modal enter")
+        //call reset form
+        resetForm(_modal_data.item)
     }
 
     /**
@@ -390,14 +415,21 @@ const ProjectModal = ():JSX.Element => {
 
             {/* START modal body */}
             <Modal.Body>
+                <div className="row">
+                    {/* Include form fields */}
+                    <FormProvider {..._form}>
+                        <div className="col-info_fields">
+                            <form onSubmit={handleSubmit(onHandleSubmit)}>
+                                <ProjectFields project={_modal_data.item} />
+                            </form>
+                        </div>
+                    </FormProvider>
 
-                {/* Include form fields */}
-                <FormProvider {..._form}>
-                    <form onSubmit={handleSubmit(onHandleSubmit)}>
-                        <ProjectFields project={_modal_data.item} />
-                    </form>
-                </FormProvider>
-
+                    {/* Include image field */}
+                    { !_modal_data.is_adding_new &&
+                        <ProjectImageField project={_modal_data.item} />
+                    }
+                </div>
             </Modal.Body>
 
             <ModalFooter 

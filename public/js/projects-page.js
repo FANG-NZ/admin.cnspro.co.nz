@@ -2846,6 +2846,10 @@ Object.defineProperty(exports, "__esModule", ({
 var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
 var react_moment_1 = __importDefault(__webpack_require__(/*! react-moment */ "./node_modules/react-moment/dist/index.js"));
+
+var store_hook_1 = __webpack_require__(/*! ../store/store-hook */ "./resources/react/pages/projects/store/store-hook.ts");
+
+var project_modal_slice_1 = __webpack_require__(/*! ../slice/project-modal-slice */ "./resources/react/pages/projects/slice/project-modal-slice.ts");
 /**
  * TODO
  * Defien the Empty project item
@@ -2868,13 +2872,17 @@ var ProjectEmptyItem = function ProjectEmptyItem() {
 
 var ProjectItem = function ProjectItem(_a) {
   var item = _a.item;
+
+  var _dispatch = store_hook_1.useAppDispatch();
+
   return react_1["default"].createElement("tr", null, react_1["default"].createElement("td", {
     className: "td-address"
   }, react_1["default"].createElement("a", {
     href: "#view",
     onClick: function onClick(e) {
-      e.preventDefault();
-      alert("view clicked");
+      e.preventDefault(); //call open project modal
+
+      _dispatch(project_modal_slice_1.show(item));
     }
   }, item.street, react_1["default"].createElement("br", null), item.city), react_1["default"].createElement("span", {
     className: "text-muted"
@@ -3022,6 +3030,132 @@ exports.default = SubNav;
 
 /***/ }),
 
+/***/ "./resources/react/pages/projects/modals/project-image-field.tsx":
+/*!***********************************************************************!*\
+  !*** ./resources/react/pages/projects/modals/project-image-field.tsx ***!
+  \***********************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_images_uploading_1 = __importDefault(__webpack_require__(/*! react-images-uploading */ "./node_modules/react-images-uploading/dist/index.js"));
+/**
+ * TODO
+ * define the image item
+ * @param param0
+ * @returns
+ */
+
+
+var ProjectImageItem = function ProjectImageItem(_a) {
+  var image = _a.image;
+  return react_1["default"].createElement("div", {
+    className: "col-4"
+  }, react_1["default"].createElement("div", {
+    className: "image-box"
+  }, react_1["default"].createElement("img", {
+    src: image.url
+  }), react_1["default"].createElement("button", {
+    className: "btn btn-icon btn-danger",
+    onClick: function onClick() {
+      alert("Image remove clicked");
+    }
+  }, react_1["default"].createElement("i", {
+    className: "mdi mdi-delete-forever"
+  }))));
+};
+/**
+ * TODO
+ * define the project image field
+ * @param param0
+ * @returns
+ */
+
+
+var ProjectImageField = function ProjectImageField(_a) {
+  var project = _a.project;
+  /**
+   * Function is to handle image selected
+   * @param images
+   */
+
+  var onHandleChange = function onHandleChange(images) {
+    alert('handle image uploaded');
+  };
+
+  return react_1["default"].createElement("div", {
+    className: "col-image_fields"
+  }, react_1["default"].createElement("div", {
+    className: "image-upload"
+  }, react_1["default"].createElement(react_images_uploading_1["default"], {
+    value: [],
+    onChange: onHandleChange,
+    dataURLKey: "data_url",
+    maxFileSize: 3145728
+  }, function (_a) {
+    var onImageUpload = _a.onImageUpload,
+        isDragging = _a.isDragging,
+        dragProps = _a.dragProps,
+        errors = _a.errors;
+    return (// START drop button
+      react_1["default"].createElement("button", __assign({
+        className: "dropzone",
+        onClick: onImageUpload
+      }, dragProps), react_1["default"].createElement("div", {
+        className: "dz-message"
+      }, react_1["default"].createElement("i", {
+        className: "mdi mdi-cloud-upload text-muted"
+      }), react_1["default"].createElement("h3", null, "Drop files or click to upload")), errors && react_1["default"].createElement("span", {
+        className: "alert alert-danger"
+      }, "The file size cannot be greater than 3M"))
+    );
+  })), react_1["default"].createElement("div", {
+    className: "images-list"
+  }, react_1["default"].createElement("div", {
+    className: "row"
+  }, project.images.length === 0 ? react_1["default"].createElement("div", {
+    className: "alert alert-warning col-12"
+  }, "There is ", react_1["default"].createElement("strong", null, "NO IMAGE"), " found!") : project.images.map(function (image) {
+    return react_1["default"].createElement(ProjectImageItem, {
+      key: "project_image_" + image.id,
+      image: image
+    });
+  }))));
+};
+
+exports.default = ProjectImageField;
+
+/***/ }),
+
 /***/ "./resources/react/pages/projects/modals/project-modal.tsx":
 /*!*****************************************************************!*\
   !*** ./resources/react/pages/projects/modals/project-modal.tsx ***!
@@ -3074,6 +3208,8 @@ var Modal_1 = __importDefault(__webpack_require__(/*! react-bootstrap/Modal */ "
 var store_hook_1 = __webpack_require__(/*! ../store/store-hook */ "./resources/react/pages/projects/store/store-hook.ts");
 
 var project_modal_slice_1 = __webpack_require__(/*! ../slice/project-modal-slice */ "./resources/react/pages/projects/slice/project-modal-slice.ts");
+
+var project_image_field_1 = __importDefault(__webpack_require__(/*! ./project-image-field */ "./resources/react/pages/projects/modals/project-image-field.tsx"));
 /**
  * TODO
  * define the Modal Header
@@ -3145,9 +3281,7 @@ var ProjectFields = function ProjectFields(_a) {
       register = _b.register,
       control = _b.control;
 
-  return react_1["default"].createElement("div", {
-    className: "col-info_fields"
-  }, react_1["default"].createElement("div", {
+  return react_1["default"].createElement(react_1["default"].Fragment, null, react_1["default"].createElement("div", {
     className: "row mb-2"
   }, react_1["default"].createElement("div", {
     className: "col-7"
@@ -3354,12 +3488,38 @@ var ProjectModal = function ProjectModal() {
     _title = "Add new project";
   }
   /**
+   * HELPER
+   * Function is to reset form with data
+   * @param data
+   */
+
+
+  var resetForm = function resetForm(data) {
+    reset({
+      'title': data.title,
+      //we need to convert into boolean type for checkbox
+      'is_new': data.is_new ? true : false,
+      'street': data.street,
+      'city': data.city,
+      'completed_on': data.completed_on,
+      'bedrooms': data.bedrooms,
+      'bathrooms': data.bathrooms,
+      'carpark': data.carpark,
+      'livingrooms': data.livingrooms,
+      'land_area': data.land_area,
+      'floor_area': data.floor_area,
+      'short_description': data.short_description,
+      'description': data.description
+    });
+  };
+  /**
    * Function is to handle on modal enter
    */
 
 
   var onHandleEnter = function onHandleEnter() {
-    console.log("Handle modal enter");
+    //call reset form
+    resetForm(_modal_data.item);
   };
   /**
    * Function is to handle close modal
@@ -3396,11 +3556,17 @@ var ProjectModal = function ProjectModal() {
   }, react_1["default"].createElement(ModalHeader, {
     title: _title,
     onHandleClose: onHandleClose
-  }), react_1["default"].createElement(Modal_1["default"].Body, null, react_1["default"].createElement(react_hook_form_1.FormProvider, __assign({}, _form), react_1["default"].createElement("form", {
+  }), react_1["default"].createElement(Modal_1["default"].Body, null, react_1["default"].createElement("div", {
+    className: "row"
+  }, react_1["default"].createElement(react_hook_form_1.FormProvider, __assign({}, _form), react_1["default"].createElement("div", {
+    className: "col-info_fields"
+  }, react_1["default"].createElement("form", {
     onSubmit: handleSubmit(onHandleSubmit)
   }, react_1["default"].createElement(ProjectFields, {
     project: _modal_data.item
-  })))), react_1["default"].createElement(ModalFooter, {
+  })))), !_modal_data.is_adding_new && react_1["default"].createElement(project_image_field_1["default"], {
+    project: _modal_data.item
+  }))), react_1["default"].createElement(ModalFooter, {
     is_adding_new: _modal_data.is_adding_new,
     is_dirty: isDirty,
     onHandleClose: onHandleClose,
@@ -70286,6 +70452,480 @@ if (false) {} else {
   module.exports = __webpack_require__(/*! ./index.cjs.development.js */ "./node_modules/react-hook-form/dist/index.cjs.development.js")
 }
 
+
+/***/ }),
+
+/***/ "./node_modules/react-images-uploading/dist/constants.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/react-images-uploading/dist/constants.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DEFAULT_DATA_URL_KEY = exports.INIT_MAX_NUMBER = exports.DEFAULT_NULL_INDEX = void 0;
+exports.DEFAULT_NULL_INDEX = -1;
+exports.INIT_MAX_NUMBER = 1000;
+exports.DEFAULT_DATA_URL_KEY = 'dataURL';
+//# sourceMappingURL=constants.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-images-uploading/dist/index.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/react-images-uploading/dist/index.js ***!
+  \***********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var utils_1 = __webpack_require__(/*! ./utils */ "./node_modules/react-images-uploading/dist/utils.js");
+var validation_1 = __webpack_require__(/*! ./validation */ "./node_modules/react-images-uploading/dist/validation.js");
+var constants_1 = __webpack_require__(/*! ./constants */ "./node_modules/react-images-uploading/dist/constants.js");
+var ReactImageUploading = function (_a) {
+    var _b = _a.value, value = _b === void 0 ? [] : _b, onChange = _a.onChange, onError = _a.onError, children = _a.children, _c = _a.dataURLKey, dataURLKey = _c === void 0 ? constants_1.DEFAULT_DATA_URL_KEY : _c, _d = _a.multiple, multiple = _d === void 0 ? false : _d, _e = _a.maxNumber, maxNumber = _e === void 0 ? constants_1.INIT_MAX_NUMBER : _e, acceptType = _a.acceptType, maxFileSize = _a.maxFileSize, resolutionWidth = _a.resolutionWidth, resolutionHeight = _a.resolutionHeight, resolutionType = _a.resolutionType;
+    var inValue = value || [];
+    var inputRef = react_1.useRef(null);
+    var _f = react_1.useState(constants_1.DEFAULT_NULL_INDEX), keyUpdate = _f[0], setKeyUpdate = _f[1];
+    var _g = react_1.useState(null), errors = _g[0], setErrors = _g[1];
+    var _h = react_1.useState(false), isDragging = _h[0], setIsDragging = _h[1];
+    var handleClickInput = react_1.useCallback(function () { return utils_1.openFileDialog(inputRef); }, [
+        inputRef,
+    ]);
+    var onImageUpload = react_1.useCallback(function () {
+        setKeyUpdate(constants_1.DEFAULT_NULL_INDEX);
+        handleClickInput();
+    }, [handleClickInput]);
+    var onImageRemoveAll = react_1.useCallback(function () {
+        onChange && onChange([]);
+    }, [onChange]);
+    var onImageRemove = function (index) {
+        var updatedList = __spreadArrays(inValue);
+        if (Array.isArray(index)) {
+            index.forEach(function (i) {
+                updatedList.splice(i, 1);
+            });
+        }
+        else {
+            updatedList.splice(index, 1);
+        }
+        onChange && onChange(updatedList);
+    };
+    var onImageUpdate = function (index) {
+        setKeyUpdate(index);
+        handleClickInput();
+    };
+    var validate = function (fileList) { return __awaiter(void 0, void 0, void 0, function () {
+        var errorsValidation;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, validation_1.getErrorValidation({
+                        fileList: fileList,
+                        maxFileSize: maxFileSize,
+                        maxNumber: maxNumber,
+                        acceptType: acceptType,
+                        keyUpdate: keyUpdate,
+                        resolutionType: resolutionType,
+                        resolutionWidth: resolutionWidth,
+                        resolutionHeight: resolutionHeight,
+                        value: inValue,
+                    })];
+                case 1:
+                    errorsValidation = _a.sent();
+                    if (errorsValidation) {
+                        setErrors(errorsValidation);
+                        onError && onError(errorsValidation, fileList);
+                        return [2 /*return*/, false];
+                    }
+                    errors && setErrors(null);
+                    return [2 /*return*/, true];
+            }
+        });
+    }); };
+    var handleChange = function (files) { return __awaiter(void 0, void 0, void 0, function () {
+        var fileList, checkValidate, updatedFileList, updatedIndexes, i;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!files)
+                        return [2 /*return*/];
+                    return [4 /*yield*/, utils_1.getListFiles(files, dataURLKey)];
+                case 1:
+                    fileList = _a.sent();
+                    if (!fileList.length)
+                        return [2 /*return*/];
+                    return [4 /*yield*/, validate(fileList)];
+                case 2:
+                    checkValidate = _a.sent();
+                    if (!checkValidate)
+                        return [2 /*return*/];
+                    updatedIndexes = [];
+                    if (keyUpdate > constants_1.DEFAULT_NULL_INDEX) {
+                        updatedFileList = __spreadArrays(inValue);
+                        updatedFileList[keyUpdate] = fileList[0];
+                        updatedIndexes.push(keyUpdate);
+                    }
+                    else {
+                        if (multiple) {
+                            updatedFileList = __spreadArrays(inValue, fileList);
+                            for (i = inValue.length; i < updatedFileList.length; i++) {
+                                updatedIndexes.push(i);
+                            }
+                        }
+                        else {
+                            updatedFileList = [fileList[0]];
+                            updatedIndexes.push(0);
+                        }
+                    }
+                    onChange && onChange(updatedFileList, updatedIndexes);
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    var onInputChange = function (e) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, handleChange(e.target.files)];
+                case 1:
+                    _a.sent();
+                    keyUpdate > constants_1.DEFAULT_NULL_INDEX && setKeyUpdate(constants_1.DEFAULT_NULL_INDEX);
+                    if (inputRef.current)
+                        inputRef.current.value = '';
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    var acceptTypeString = react_1.useMemo(function () { return utils_1.getAcceptTypeString(acceptType); }, [
+        acceptType,
+    ]);
+    var handleDrag = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+    var handleDragIn = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+            setIsDragging(true);
+        }
+    };
+    var handleDragOut = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+    };
+    var handleDrop = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            handleChange(e.dataTransfer.files);
+            e.dataTransfer.clearData();
+        }
+    };
+    return (react_1.default.createElement(react_1.default.Fragment, null,
+        react_1.default.createElement("input", { type: "file", accept: acceptTypeString, ref: inputRef, multiple: multiple && keyUpdate === constants_1.DEFAULT_NULL_INDEX, onChange: onInputChange, style: { display: 'none' } }),
+        children &&
+            children({
+                imageList: inValue,
+                onImageUpload: onImageUpload,
+                onImageRemoveAll: onImageRemoveAll,
+                onImageUpdate: onImageUpdate,
+                onImageRemove: onImageRemove,
+                errors: errors,
+                dragProps: {
+                    onDrop: handleDrop,
+                    onDragEnter: handleDragIn,
+                    onDragLeave: handleDragOut,
+                    onDragOver: handleDrag,
+                },
+                isDragging: isDragging,
+            })));
+};
+exports.default = ReactImageUploading;
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-images-uploading/dist/utils.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/react-images-uploading/dist/utils.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getListFiles = exports.getImage = exports.getBase64 = exports.getAcceptTypeString = exports.openFileDialog = void 0;
+exports.openFileDialog = function (inputRef) {
+    if (inputRef.current)
+        inputRef.current.click();
+};
+exports.getAcceptTypeString = function (acceptType) {
+    return acceptType && acceptType.length > 0
+        ? acceptType.map(function (item) { return "." + item; }).join(', ')
+        : 'image/*';
+};
+exports.getBase64 = function (file) {
+    var reader = new FileReader();
+    return new Promise(function (resolve) {
+        reader.addEventListener('load', function () { return resolve(String(reader.result)); });
+        reader.readAsDataURL(file);
+    });
+};
+exports.getImage = function (file) {
+    var image = new Image();
+    return new Promise(function (resolve) {
+        image.addEventListener('load', function () { return resolve(image); });
+        image.src = URL.createObjectURL(file);
+    });
+};
+exports.getListFiles = function (files, dataURLKey) {
+    var promiseFiles = [];
+    for (var i = 0; i < files.length; i++) {
+        promiseFiles.push(exports.getBase64(files[i]));
+    }
+    return Promise.all(promiseFiles).then(function (fileListBase64) {
+        var fileList = fileListBase64.map(function (base64, index) {
+            var _a;
+            return (_a = {},
+                _a[dataURLKey] = base64,
+                _a.file = files[index],
+                _a);
+        });
+        return fileList;
+    });
+};
+//# sourceMappingURL=utils.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-images-uploading/dist/validation.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/react-images-uploading/dist/validation.js ***!
+  \****************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getErrorValidation = exports.isMaxNumberValid = exports.isAcceptTypeValid = exports.isMaxFileSizeValid = exports.isImageValid = exports.isResolutionValid = void 0;
+var constants_1 = __webpack_require__(/*! ./constants */ "./node_modules/react-images-uploading/dist/constants.js");
+var utils_1 = __webpack_require__(/*! ./utils */ "./node_modules/react-images-uploading/dist/utils.js");
+exports.isResolutionValid = function (image, resolutionType, resolutionWidth, resolutionHeight) {
+    if (resolutionWidth === void 0) { resolutionWidth = 0; }
+    if (resolutionHeight === void 0) { resolutionHeight = 1; }
+    if (!resolutionWidth || !resolutionHeight || !image.width || !image.height)
+        return true;
+    switch (resolutionType) {
+        case 'absolute': {
+            if (image.width === resolutionWidth && image.height === resolutionHeight)
+                return true;
+            break;
+        }
+        case 'ratio': {
+            var ratio = resolutionWidth / resolutionHeight;
+            if (image.width / image.height === ratio)
+                return true;
+            break;
+        }
+        case 'less': {
+            if (image.width <= resolutionWidth && image.height <= resolutionHeight)
+                return true;
+            break;
+        }
+        case 'more': {
+            if (image.width >= resolutionWidth && image.height >= resolutionHeight)
+                return true;
+            break;
+        }
+    }
+    return false;
+};
+exports.isImageValid = function (fileType) {
+    if (fileType.includes('image')) {
+        return true;
+    }
+    return false;
+};
+exports.isMaxFileSizeValid = function (fileSize, maxFileSize) {
+    return maxFileSize ? fileSize <= maxFileSize : true;
+};
+exports.isAcceptTypeValid = function (acceptType, fileName) {
+    if (acceptType && acceptType.length > 0) {
+        var type_1 = fileName.split('.').pop() || '';
+        if (acceptType.findIndex(function (item) { return item.toLowerCase() === type_1.toLowerCase(); }) < 0)
+            return false;
+    }
+    return true;
+};
+exports.isMaxNumberValid = function (totalNumber, maxNumber, keyUpdate) {
+    if (maxNumber !== 0 && !maxNumber)
+        return true;
+    if (keyUpdate === constants_1.DEFAULT_NULL_INDEX) {
+        if (totalNumber <= maxNumber)
+            return true;
+    }
+    else {
+        if (totalNumber <= maxNumber + 1)
+            return true;
+    }
+    return false;
+};
+exports.getErrorValidation = function (_a) {
+    var fileList = _a.fileList, value = _a.value, maxNumber = _a.maxNumber, keyUpdate = _a.keyUpdate, acceptType = _a.acceptType, maxFileSize = _a.maxFileSize, resolutionType = _a.resolutionType, resolutionWidth = _a.resolutionWidth, resolutionHeight = _a.resolutionHeight;
+    return __awaiter(void 0, void 0, void 0, function () {
+        var newErrors, i, file, image, checkRes;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    newErrors = {};
+                    if (!!exports.isMaxNumberValid(fileList.length + value.length, maxNumber, keyUpdate)) return [3 /*break*/, 1];
+                    newErrors.maxNumber = true;
+                    return [3 /*break*/, 5];
+                case 1:
+                    i = 0;
+                    _b.label = 2;
+                case 2:
+                    if (!(i < fileList.length)) return [3 /*break*/, 5];
+                    file = fileList[i].file;
+                    if (!file)
+                        return [3 /*break*/, 4];
+                    if (!exports.isImageValid(file.type)) {
+                        newErrors.acceptType = true;
+                        return [3 /*break*/, 5];
+                    }
+                    if (!exports.isAcceptTypeValid(acceptType, file.name)) {
+                        newErrors.acceptType = true;
+                        return [3 /*break*/, 5];
+                    }
+                    if (!exports.isMaxFileSizeValid(file.size, maxFileSize)) {
+                        newErrors.maxFileSize = true;
+                        return [3 /*break*/, 5];
+                    }
+                    if (!resolutionType) return [3 /*break*/, 4];
+                    return [4 /*yield*/, utils_1.getImage(file)];
+                case 3:
+                    image = _b.sent();
+                    checkRes = exports.isResolutionValid(image, resolutionType, resolutionWidth, resolutionHeight);
+                    if (!checkRes) {
+                        newErrors.resolution = true;
+                        return [3 /*break*/, 5];
+                    }
+                    _b.label = 4;
+                case 4:
+                    i++;
+                    return [3 /*break*/, 2];
+                case 5:
+                    if (Object.values(newErrors).find(Boolean))
+                        return [2 /*return*/, newErrors];
+                    return [2 /*return*/, null];
+            }
+        });
+    });
+};
+//# sourceMappingURL=validation.js.map
 
 /***/ }),
 
