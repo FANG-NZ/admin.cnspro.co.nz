@@ -2934,7 +2934,7 @@ var ModalFooter = function ModalFooter(_a) {
     disabled: !formState.isDirty
   }, react_1["default"].createElement("i", {
     className: "mdi mdi-database-plus"
-  }), react_1["default"].createElement("span", null, is_adding_new ? "Add new item" : "Edit")));
+  }), react_1["default"].createElement("span", null, is_adding_new ? "New item" : "Edit")));
 };
 /**
  * TODO
