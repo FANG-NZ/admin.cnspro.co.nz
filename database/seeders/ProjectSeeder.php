@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Project;
+use App\Models\ProjectImage;
 use Illuminate\Database\Seeder;
 
 class ProjectSeeder extends Seeder
@@ -75,7 +76,10 @@ class ProjectSeeder extends Seeder
         // }
 
         //To generate 30 fake projects
-        Project::factory()->count(30)->create();
+        Project::factory()->count(30)
+            ->has(ProjectImage::factory()->count(5), 'hasImages')
+            ->create();
+
         echo "> PROJECT [30] CREATED\r\n";
     }
 

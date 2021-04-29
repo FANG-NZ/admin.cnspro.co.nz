@@ -14,6 +14,8 @@ class BannerSliderFactory extends Factory
      */
     protected $model = BannerSlider::class;
 
+    
+
     /**
      * Define the model's default state.
      *
