@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 class ProjectSeeder extends Seeder
 {
 
+    //define the pre-set data
     private $default_data = [
         //First
         [
@@ -69,10 +70,13 @@ class ProjectSeeder extends Seeder
     public function run()
     {
         
-        foreach($this->default_data as $k => $item){
-            $this->createProject($item);
-        }
+        // foreach($this->default_data as $k => $item){
+        //     $this->createProject($item);
+        // }
 
+        //To generate 30 fake projects
+        Project::factory()->count(30)->create();
+        echo "> PROJECT [30] CREATED\r\n";
     }
 
 

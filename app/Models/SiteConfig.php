@@ -35,11 +35,7 @@ class SiteConfig extends Model
 
         if(SiteConfig::get()->count() === 0){
             
-            $siteconfig = SiteConfig::create([
-                'email' => "info@cnspro.co.nz",
-                'address' => "Not address setup"
-            ]);
-
+            $siteconfig = SiteConfig::create();
             return $siteconfig;
         }
 
