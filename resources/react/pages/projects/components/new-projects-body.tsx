@@ -12,7 +12,7 @@ const NewProjectsBody = ():JSX.Element => {
 
     return(
         <div className="card m-b-30">
-            <ProjectsBodyHeader is_4_new={true} />
+            <ProjectsBodyHeader is_4_new={true} total={newProjects.length} />
 
             <ProjectsTable projects={newProjects} />
         </div>

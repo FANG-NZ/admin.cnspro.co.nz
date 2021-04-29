@@ -53,10 +53,10 @@ const ProjectModalSlice = createSlice({
                 state.item = action.payload.item
                 state.is_adding_new = action.payload.is_adding_new
             },
-            prepare(_item:TProjectItem|null = null){
+            prepare(_item:TProjectItem|null = null, _is_new:boolean = true){
 
                 const payload = {
-                    item : _item?_item: initialState.item,
+                    item : _item?_item: {...initialState.item, ...{is_new: _is_new}},
                     is_adding_new : _item ? false:true
                 }
                 return {payload}

@@ -4,22 +4,22 @@ import {SUB_NAV_LINK} from './sub-nav'
 import {useAppDispatch} from '../store/store-hook'
 import {show} from '../slice/project-modal-slice'
 
-const ProjectsBodyHeader:React.FC<{is_4_new:boolean}> = ({is_4_new}):JSX.Element => {
+const ProjectsBodyHeader:React.FC<{is_4_new:boolean, total:number}> = ({is_4_new, total}):JSX.Element => {
     const _dispatch = useAppDispatch()
 
     //To resetup vars
-    let _header = "All project(s)"
+    let _header = "All projects"
     let _btnText = "Add project"
 
     if(is_4_new){
-        _header = "New projects(s)"
+        _header = "New projects"
         _btnText = "New project"
     }
 
     return(
         <div className="card-header ff-card-header">
             <div className="card-header-content">
-                <h4 className="m-t-0 header-title">{_header}</h4>
+                <h4 className="m-t-0 header-title">{_header} <span>({total})</span></h4>
                 <p className="text-muted font-13">
                     {is_4_new
                         ? <>There are ONLY for all NEW PROJECTS, if you want to see all projects click <Link to={SUB_NAV_LINK.ALL_PROJECTS}>ALL PROJECTS</Link></>
@@ -32,7 +32,12 @@ const ProjectsBodyHeader:React.FC<{is_4_new:boolean}> = ({is_4_new}):JSX.Element
 
                 <button className="btn btn-success" 
                     onClick={() => {
-                        _dispatch(show())
+
+                        if(is_4_new){
+                            _dispatch(show())
+                        }else{
+                            _dispatch(show(null, false))
+                        }
                     }}
                 >
                     <i className="mdi mdi-plus-circle"></i>

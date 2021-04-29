@@ -2755,7 +2755,8 @@ var AllProjectsBody = function AllProjectsBody() {
   return react_1["default"].createElement("div", {
     className: "card m-b-30"
   }, react_1["default"].createElement(projects_body_header_1["default"], {
-    is_4_new: false
+    is_4_new: false,
+    total: projects.length
   }), react_1["default"].createElement(projects_table_1["default"], {
     projects: projects
   }));
@@ -2799,7 +2800,8 @@ var NewProjectsBody = function NewProjectsBody() {
   return react_1["default"].createElement("div", {
     className: "card m-b-30"
   }, react_1["default"].createElement(projects_body_header_1["default"], {
-    is_4_new: true
+    is_4_new: true,
+    total: newProjects.length
   }), react_1["default"].createElement(projects_table_1["default"], {
     projects: newProjects
   }));
@@ -2839,7 +2841,7 @@ var PageHeader = function PageHeader() {
     className: "breadcrumb-item"
   }, "CMS.CNSPRO")), react_1["default"].createElement("h4", {
     className: "page-title"
-  }, "Project(s)"));
+  }, "Project Management"));
 };
 
 exports.default = PageHeader;
@@ -2876,16 +2878,17 @@ var store_hook_1 = __webpack_require__(/*! ../store/store-hook */ "./resources/r
 var project_modal_slice_1 = __webpack_require__(/*! ../slice/project-modal-slice */ "./resources/react/pages/projects/slice/project-modal-slice.ts");
 
 var ProjectsBodyHeader = function ProjectsBodyHeader(_a) {
-  var is_4_new = _a.is_4_new;
+  var is_4_new = _a.is_4_new,
+      total = _a.total;
 
   var _dispatch = store_hook_1.useAppDispatch(); //To resetup vars
 
 
-  var _header = "All project(s)";
+  var _header = "All projects";
   var _btnText = "Add project";
 
   if (is_4_new) {
-    _header = "New projects(s)";
+    _header = "New projects";
     _btnText = "New project";
   }
 
@@ -2895,7 +2898,7 @@ var ProjectsBodyHeader = function ProjectsBodyHeader(_a) {
     className: "card-header-content"
   }, react_1["default"].createElement("h4", {
     className: "m-t-0 header-title"
-  }, _header), react_1["default"].createElement("p", {
+  }, _header, " ", react_1["default"].createElement("span", null, "(", total, ")")), react_1["default"].createElement("p", {
     className: "text-muted font-13"
   }, is_4_new ? react_1["default"].createElement(react_1["default"].Fragment, null, "There are ONLY for all NEW PROJECTS, if you want to see all projects click ", react_1["default"].createElement(react_router_dom_1.Link, {
     to: sub_nav_1.SUB_NAV_LINK.ALL_PROJECTS
@@ -2904,7 +2907,11 @@ var ProjectsBodyHeader = function ProjectsBodyHeader(_a) {
   }, react_1["default"].createElement("button", {
     className: "btn btn-success",
     onClick: function onClick() {
-      _dispatch(project_modal_slice_1.show());
+      if (is_4_new) {
+        _dispatch(project_modal_slice_1.show());
+      } else {
+        _dispatch(project_modal_slice_1.show(null, false));
+      }
     }
   }, react_1["default"].createElement("i", {
     className: "mdi mdi-plus-circle"
@@ -4000,10 +4007,26 @@ react_dom_1["default"].render(react_1["default"].createElement(react_redux_1.Pro
 /*!*********************************************************************!*\
   !*** ./resources/react/pages/projects/slice/project-modal-slice.ts ***!
   \*********************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
 
 var _a;
 
@@ -4052,13 +4075,19 @@ var ProjectModalSlice = toolkit_1.createSlice({
         state.item = action.payload.item;
         state.is_adding_new = action.payload.is_adding_new;
       },
-      prepare: function prepare(_item) {
+      prepare: function prepare(_item, _is_new) {
         if (_item === void 0) {
           _item = null;
         }
 
+        if (_is_new === void 0) {
+          _is_new = true;
+        }
+
         var payload = {
-          item: _item ? _item : initialState.item,
+          item: _item ? _item : __assign(__assign({}, initialState.item), {
+            is_new: _is_new
+          }),
           is_adding_new: _item ? false : true
         };
         return {

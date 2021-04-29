@@ -7,7 +7,7 @@ const PageHeader = ():JSX.Element => {
             <ol className="breadcrumb float-right">
                 <li className="breadcrumb-item">CMS.CNSPRO</li>
             </ol>
-            <h4 className="page-title">Project(s)</h4>
+            <h4 className="page-title">Project Management</h4>
         </div>
     )
 }
