@@ -26,6 +26,7 @@ mix.webpackConfig({
 
     plugins: [
 
+        //To define the env variables
         new webpack.DefinePlugin({
             'process.env': {
                 REACT_APP_REQUEST_URL: JSON.stringify(process.env.REACT_APP_REQUEST_URL),
@@ -72,4 +73,5 @@ mix.js('resources/js/app.js', 'public/js')
     ]);
 
 mix.js('resources/react/pages/*.tsx', 'public/js')
+mix.js('resources/react/pages/*/*.tsx', 'public/js')
 

@@ -18,7 +18,7 @@ const MainBannerSliderList : React.FC<BannerSliderListProps> = ({sliders}):JSX.E
 
                 {sliders.length === 0 
                     ? <MainBannerSliderEmptyItem />
-                    : sliders.map((item) => <MainBannerSliderItem item={item} key={item.id} />)
+                    : sliders.map((item) => <MainBannerSliderItem item={item} key={`banner_slider_item_${item.id}`} />)
                 }
 
             </div>

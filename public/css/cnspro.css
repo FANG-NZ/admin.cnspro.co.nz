@@ -13321,6 +13321,10 @@ input[type=range]::-moz-range-thumb {
     transform: rotate(360deg);
   }
 }
+.nav-second-level a.active {
+  font-weight: bold;
+}
+
 .dropzone {
   position: relative;
   width: 100%;
@@ -13452,7 +13456,6 @@ input[type=range]::-moz-range-thumb {
 .projects-table .td-btns {
   padding-left: 0;
   padding-right: 0;
-  text-align: right;
 }
 
 .modal-update_project #project-modal {

@@ -64,7 +64,7 @@ const ModalFooter:React.FC<{is_adding_new:boolean, onHandleClose:()=>void, onHan
 
             <button type="submit" className="btn btn-success" disabled={!formState.isDirty}>
                 <i className="mdi mdi-database-plus"></i>
-                <span>{is_adding_new ? "Add new project" : "Edit"}</span>
+                <span>{is_adding_new ? "Add new item" : "Edit"}</span>
             </button>
         </Modal.Footer>
     )

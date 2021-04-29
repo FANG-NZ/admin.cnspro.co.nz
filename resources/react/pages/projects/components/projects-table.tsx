@@ -1,42 +1,56 @@
-import React from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import React, {useEffect} from 'react'
 import Moment from 'react-moment'
-
-import store from '../stores/new-projects-page-store'
-import {allNewProjects, deleteProject} from '../stores/projects-slice'
-import {openAlert} from '../tools/confirm-alert/confirm-alert-slice'
-import {show as showModal} from '../tools/modals/project-modal-slice'
-import { unwrapResult } from '@reduxjs/toolkit'
+import type {TProjectItem} from '../../../types/project-item.type'
+import {useAppDispatch} from '../store/store-hook'
+import {show} from '../slice/project-modal-slice'
 import PubSub from 'pubsub-js'
-import {ToastState, EVENT_TOAST_BOX} from '../tools/toast-box/toast-box'
+import {EVENT_OPEN_CONFIRM_DIALOG} from '../../../tools/confirm-dialog/confirm-dialog'
+import {deleteProject} from '../slice/projects-slice'
+import { AnyAction, ThunkDispatch, unwrapResult } from '@reduxjs/toolkit'
+import {ToastState, EVENT_TOAST_BOX} from '../../../tools/toast-box/toast-box'
+
+/**
+ * TODO
+ * Defien the Empty project item
+ * @returns 
+ */
+const ProjectEmptyItem = ():JSX.Element => {
+    return(
+        <tr>
+            <td colSpan={5}>
+                <div className="alert alert-warning mb-0">
+                    There is <strong>NO</strong> any <strong>PROJECTS</strong> found
+                </div>
+            </td>
+        </tr>
+    )
+}
 
 
 /**
- * define the project item 
- * @param {*} props 
- * @returns 
+ * TODO
+ * define the project item
  */
-const ProjectItem = (props) => {
-    const _project = props.project
-    const _dispatch = useDispatch()
+const ProjectItem:React.FC<{item:TProjectItem}> = ({item}):JSX.Element => {
+    const _dispatch = useAppDispatch()
+
 
     /**
-     * Function is to handle delete project
+     * Function is to handle delete item
+     * @param id 
      */
-    function _handleDelete(_id){
-        
-        _dispatch(deleteProject({id:_id}))
-            .then(unwrapResult)
-            .then(result => {
+    const onHandleDelete = (id:number):void => {
 
+        _dispatch(deleteProject(id))
+            .then(unwrapResult)
+            .then(() => {
+                //Trigger ToastBox
                 PubSub.publish(EVENT_TOAST_BOX, {
                     'title' : "Project removed",
-                    'message' : 'The item has been removed successfully',
+                    'message' : "The project has been removed successfully",
                     'state' : ToastState.SUCCESS
                 })
-                
             })
-
     }
 
     return(
@@ -45,19 +59,20 @@ const ProjectItem = (props) => {
                 <a href="#view" 
                     onClick={(e) => {
                         e.preventDefault()
-                        _dispatch(showModal(_project))
+                        //call open project modal
+                        _dispatch(show(item))
                     }}
                 >
-                    {_project.street}<br/>{_project.city}
+                    {item.street}<br/>{item.city}
                 </a>
 
                 <span className="text-muted">
                     <Moment format="DD MMM YYYY \at\ HH:mm">
-                        {_project.created_at}
+                        {item.created_at}
                     </Moment>
                 </span>
             </td>
-            <td className="td-title">{_project.title}</td>
+            <td className="td-title">{item.title}</td>
             <td className='td-properties'>
                 <div className="properties-box row">
                     <div className="col-6">
@@ -66,7 +81,7 @@ const ProjectItem = (props) => {
                             <span>Bedrooms</span>
                         </span>
                         <span className="properties-item-value">
-                            {_project.bedrooms}
+                            {item.bedrooms}
                         </span>
                     </div>
                     <div className="col-6">
@@ -75,7 +90,7 @@ const ProjectItem = (props) => {
                             <span>Bathrooms</span>
                         </span>
                         <span className="properties-item-value">
-                            {_project.bathrooms}
+                            {item.bathrooms}
                         </span>
                     </div>
 
@@ -85,7 +100,7 @@ const ProjectItem = (props) => {
                             <span>Carpark</span>
                         </span>
                         <span className="properties-item-value">
-                            {_project.carpark}
+                            {item.carpark}
                         </span>
                     </div>
                     <div className="col-6">
@@ -94,7 +109,7 @@ const ProjectItem = (props) => {
                             <span>Living rooms</span>
                         </span>
                         <span className="properties-item-value">
-                            {_project.livingrooms}
+                            {item.livingrooms}
                         </span>
                     </div>
 
@@ -104,7 +119,7 @@ const ProjectItem = (props) => {
                             <span>Landarea</span>
                         </span>
                         <span className="properties-item-value">
-                            {_project.land_area}
+                            {item.land_area}
                         </span>
                     </div>
                     <div className="col-6">
@@ -113,32 +128,36 @@ const ProjectItem = (props) => {
                             <span>Floorarea</span>
                         </span>
                         <span className="properties-item-value">
-                            {_project.floor_area}
+                            {item.floor_area}
                         </span>
                     </div>
                 </div>
             </td>
             <td className="td-completed-on">
-                {_project.completed_on && 
+                {item.completed_on && 
                     <Moment format="MMM YYYY"> 
-                        {_project.completed_on}
+                        {item.completed_on}
                     </Moment>
                 }
             </td>
             <td className="td-btns">
                 <button className="btn btn-icon btn-danger btn-sm"
-                    onClick={() => 
-                        _dispatch(openAlert(
-                            store, 
+                    onClick={() => {
+
+                        //Trigger open confirm dialog
+                        PubSub.publish(
+                            EVENT_OPEN_CONFIRM_DIALOG, 
                             {
-                                'title': "Are you sure to delete this?",
-                                'message': `You will NOT recover [${_project.street}, ${_project.city}]!`,
+                                shown:true,
+                                title: "Are you sure to REMOVE?",
+                                confirm_btn_text : "Yes, remove it",
+                                confirm_callback: () => {
+                                    onHandleDelete(item.id)
+                                }
                             }
-                        ))
-                        .then(
-                            () => _handleDelete(_project.id)
                         )
-                    }
+
+                    }}
                 >
                     <i className="mdi mdi-close"></i>
                 </button>
@@ -147,60 +166,46 @@ const ProjectItem = (props) => {
     )
 }
 
-/**
- * define the EMPTY project item
- * @returns 
- */
-const EmptyProjectItem = (props) => {
-    
-    return(
-        <tr>
-            <td colSpan="5">
-                <div className="alert alert-warning mb-0">
-                    {props.message}
-                </div>
-            </td>
-        </tr>
-    )
-}
 
 
 /**
- * define the projects table 
- * @returns 
+ * define the type of projects table
  */
-const ProjectsTable = () => {
-    const _projects = useSelector(allNewProjects)
-
-    //define the warning message
-    const _message = <>There is <strong>NO</strong> any new projects added</>
-
-    return(
-        <React.Fragment>
-            <table className="table mb-0 projects-table">
-                <thead>
-                    <tr>
-                        <th>Address</th>
-                        <th>Title</th>
-                        <th>Properties</th>
-                        <th className="th-completed-on">Completed</th>
-                        <th className="th-btns"></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {_projects.length === 0
-                     ?  <EmptyProjectItem message={_message} />
-                     :  <>
-                            {_projects.map((item) => {
-                                return <ProjectItem key={item.id} project={item} />
-                            })}
-                        </>
-                    }
-                </tbody>
-            </table>
-        </React.Fragment>
-    )
+type TProjectsTable = {
+    projects : Array<TProjectItem>
 }
 
+/**
+ * Main projects table
+ * @returns 
+ */
+const ProjectsTable:React.FC<TProjectsTable> = ({projects}):JSX.Element => {
+
+    return(
+        <table className="table mb-0 projects-table">
+            <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>Title</th>
+                    <th>Properties</th>
+                    <th className="th-completed-on">Completed</th>
+                    <th className="th-btns"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {projects.length === 0 
+                    ? <ProjectEmptyItem />
+                    : <>
+                        {
+                            projects.map((item) => {
+                                return <ProjectItem item={item} key={`project_${item.id}`} />
+                            })
+                        }
+                      </>
+                }
+            </tbody>
+        </table>
+    )
+}
 export default ProjectsTable
