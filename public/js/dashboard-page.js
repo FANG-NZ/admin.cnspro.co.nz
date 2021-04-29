@@ -2440,71 +2440,6 @@ function useWillUnmount(fn) {
 
 /***/ }),
 
-/***/ "./resources/react/pages/dashboard-page.tsx":
-/*!**************************************************!*\
-  !*** ./resources/react/pages/dashboard-page.tsx ***!
-  \**************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-var _a;
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var react_dom_1 = __importDefault(__webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js"));
-
-var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-
-var dashboard_store_1 = __importDefault(__webpack_require__(/*! ./dashboard/store/dashboard-store */ "./resources/react/pages/dashboard/store/dashboard-store.ts"));
-
-var main_banner_slider_slice_1 = __webpack_require__(/*! ./dashboard/slice/main-banner-slider-slice */ "./resources/react/pages/dashboard/slice/main-banner-slider-slice.ts");
-
-var toast_box_1 = __importDefault(__webpack_require__(/*! ../tools/toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.tsx"));
-
-var loading_spinner_1 = __importDefault(__webpack_require__(/*! ../tools/loading-spinner/loading-spinner */ "./resources/react/tools/loading-spinner/loading-spinner.tsx"));
-
-var main_banner_slider_1 = __importDefault(__webpack_require__(/*! ./dashboard/components/main-banner-slider */ "./resources/react/pages/dashboard/components/main-banner-slider.tsx"));
-
-var banner_slider_modal_1 = __importDefault(__webpack_require__(/*! ./dashboard/modals/banner-slider-modal */ "./resources/react/pages/dashboard/modals/banner-slider-modal.tsx"));
-
-var confirm_dialog_1 = __importDefault(__webpack_require__(/*! ../tools/confirm-dialog/confirm-dialog */ "./resources/react/tools/confirm-dialog/confirm-dialog.tsx")); //To get json string from DOM
-
-
-try {
-  var json_string = (_a = document.getElementById("root-dashboard")) === null || _a === void 0 ? void 0 : _a.getAttribute("banner-sliders-data");
-
-  if (!json_string) {
-    throw new Error("NOT FOUND JSON STRING");
-  } //Try to load data from DOM attribute,
-  //if there is NO data, we just send AJAX request to fetch from server
-
-
-  var _data = JSON.parse(json_string); //call set sliders
-
-
-  dashboard_store_1["default"].dispatch(main_banner_slider_slice_1.setSliders(_data));
-} catch (err) {
-  console.error("Init default banner sliders data ERROR");
-}
-
-react_dom_1["default"].render(react_1["default"].createElement(react_redux_1.Provider, {
-  store: dashboard_store_1["default"]
-}, react_1["default"].createElement(main_banner_slider_1["default"], null), react_1["default"].createElement(banner_slider_modal_1["default"], null), react_1["default"].createElement(confirm_dialog_1["default"], null), react_1["default"].createElement(toast_box_1["default"], null), react_1["default"].createElement(loading_spinner_1["default"], null)), document.getElementById("root-dashboard"));
-
-/***/ }),
-
 /***/ "./resources/react/pages/dashboard/components/main-banner-slider-header.tsx":
 /*!**********************************************************************************!*\
   !*** ./resources/react/pages/dashboard/components/main-banner-slider-header.tsx ***!
@@ -2785,6 +2720,71 @@ var MainBannerSlider = function MainBannerSlider() {
 };
 
 exports.default = MainBannerSlider;
+
+/***/ }),
+
+/***/ "./resources/react/pages/dashboard/dashboard-page.tsx":
+/*!************************************************************!*\
+  !*** ./resources/react/pages/dashboard/dashboard-page.tsx ***!
+  \************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+var _a;
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_dom_1 = __importDefault(__webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js"));
+
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var dashboard_store_1 = __importDefault(__webpack_require__(/*! ./store/dashboard-store */ "./resources/react/pages/dashboard/store/dashboard-store.ts"));
+
+var main_banner_slider_slice_1 = __webpack_require__(/*! ./slice/main-banner-slider-slice */ "./resources/react/pages/dashboard/slice/main-banner-slider-slice.ts");
+
+var toast_box_1 = __importDefault(__webpack_require__(/*! ../../tools/toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.tsx"));
+
+var loading_spinner_1 = __importDefault(__webpack_require__(/*! ../../tools/loading-spinner/loading-spinner */ "./resources/react/tools/loading-spinner/loading-spinner.tsx"));
+
+var main_banner_slider_1 = __importDefault(__webpack_require__(/*! ./components/main-banner-slider */ "./resources/react/pages/dashboard/components/main-banner-slider.tsx"));
+
+var banner_slider_modal_1 = __importDefault(__webpack_require__(/*! ./modals/banner-slider-modal */ "./resources/react/pages/dashboard/modals/banner-slider-modal.tsx"));
+
+var confirm_dialog_1 = __importDefault(__webpack_require__(/*! ../../tools/confirm-dialog/confirm-dialog */ "./resources/react/tools/confirm-dialog/confirm-dialog.tsx")); //To get json string from DOM
+
+
+try {
+  var json_string = (_a = document.getElementById("root-dashboard")) === null || _a === void 0 ? void 0 : _a.getAttribute("banner-sliders-data");
+
+  if (!json_string) {
+    throw new Error("NOT FOUND JSON STRING");
+  } //Try to load data from DOM attribute,
+  //if there is NO data, we just send AJAX request to fetch from server
+
+
+  var _data = JSON.parse(json_string); //call set sliders
+
+
+  dashboard_store_1["default"].dispatch(main_banner_slider_slice_1.setSliders(_data));
+} catch (err) {
+  console.error("Init default banner sliders data ERROR");
+}
+
+react_dom_1["default"].render(react_1["default"].createElement(react_redux_1.Provider, {
+  store: dashboard_store_1["default"]
+}, react_1["default"].createElement(main_banner_slider_1["default"], null), react_1["default"].createElement(banner_slider_modal_1["default"], null), react_1["default"].createElement(confirm_dialog_1["default"], null), react_1["default"].createElement(toast_box_1["default"], null), react_1["default"].createElement(loading_spinner_1["default"], null)), document.getElementById("root-dashboard"));
 
 /***/ }),
 
@@ -45892,7 +45892,7 @@ module.exports = warning;
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("./resources/react/pages/dashboard-page.tsx");
+/******/ 	var __webpack_exports__ = __webpack_require__("./resources/react/pages/dashboard/dashboard-page.tsx");
 /******/ 	
 /******/ })()
 ;

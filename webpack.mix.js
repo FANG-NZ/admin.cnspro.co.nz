@@ -66,12 +66,14 @@ mix.webpackConfig({
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .js('resources/react/pages/new-projects-page.js', 'public/js')
     .sass('resources/sass/cnspro.scss', 'public/css')
     .postCss('resources/css/app.css', 'public/css', [
         //
     ]);
 
-mix.js('resources/react/pages/*.tsx', 'public/js')
-mix.js('resources/react/pages/*/*.tsx', 'public/js')
+//TODO
+//input page's react js file 
+mix.js('resources/react/pages/dashboard/dashboard-page.tsx', 'public/js')
+mix.js('resources/react/pages/projects/projects-page.tsx', 'public/js')
+
 
