@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit'
-import type {TProjectItem} from '../../../types/project-item.type'
+import type {TProjectItem, TProjectImage} from '../../../types/project-item.type'
 import type {RootState} from '../store/projects-store'
 import {Client} from '../../../tools/fetch-client'
 
@@ -60,6 +60,36 @@ export const deleteProject = createAsyncThunk(
     }
 )
 
+/**
+ * TODO
+ * Request for uploading project image
+ */
+export const uploadProjectImage = createAsyncThunk(
+    'Projects/uploadProjectImage',
+
+    (data:{id:number, values:Array<any>}) => {
+        const _url = process.env.REACT_APP_REQUEST_URL
+
+        const response = Client.post(`${_url}projects/image/upload/${data.id}`, data.values, true)
+        return response
+    }
+)
+
+/**
+ * TODO
+ * Request for deleting project image
+ */
+export const deleteProjectImage = createAsyncThunk(
+    'Projects/deleteProjectImage',
+
+    (data:{project_id: number, image_id:number}) => {
+        const _url = process.env.REACT_APP_REQUEST_URL
+
+        const response = Client.delete(`${_url}projects/image/delete/${data.project_id}`, {'image_id' : data.image_id})
+        return response
+    }
+)
+
 
 /**
  * TODO
@@ -115,6 +145,31 @@ const ProjectsSlice = createSlice({
             state.list = _newlist
         })
 
+        //uploadProjectImage
+        builder.addCase(uploadProjectImage.fulfilled, (state, action) => {
+            const _image = <TProjectImage>action.payload
+
+            const _index = state.list.findIndex((item) => item.id === _image.project_id)
+
+            //To append image
+            if(_index > -1)
+                state.list[_index].images.unshift(_image)
+        })
+
+        //deleteProjectImage
+        builder.addCase(deleteProjectImage.fulfilled, (state, action)=>{
+            const _image = <TProjectImage>action.payload
+
+            //Find project index
+            const _index = state.list.findIndex((item) => item.id === _image.project_id)
+            //If index not found, nothing to do
+            if(_index < 0) return
+
+            const _newimages:TProjectImage[] = state.list[_index].images.filter((item) => item.id !== _image.id)
+            //To reset new image list
+            state.list[_index].images = _newimages
+        })
+
     }
 })
 
@@ -124,6 +179,5 @@ export default ProjectsSlice.reducer
 
 //Helper to get all NEW projects
 export const getNewProjects = (state:RootState) => state.Projects.list.filter((item) => item.is_new == true)
-//export const getNewProjects = (state:RootState) => state.Projects.list
 //Helper to get not new projects
 export const getNotNewProjects = (state:RootState) => state.Projects.list.filter((item) => item.is_new == false)

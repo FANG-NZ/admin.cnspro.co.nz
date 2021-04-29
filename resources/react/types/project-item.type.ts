@@ -1,3 +1,17 @@
+/**
+ * define the TYPE od project image
+ */
+ export type TProjectImage = {
+    id: number,
+    name: string,
+    project_id: number,
+    url: string
+}
+
+
+/**
+ * define the TYPE of project item
+ */
 export type TProjectItem = {
     id: number,
     title: string,
@@ -19,10 +33,5 @@ export type TProjectItem = {
     completed_on: string
     created_at:string
 
-    images: Array<{
-                id: number, 
-                name: string, 
-                parent_id:number, 
-                url: string
-            }>
+    images: Array<TProjectImage>
 }

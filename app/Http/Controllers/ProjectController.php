@@ -63,7 +63,7 @@ class ProjectController extends Controller
     public function doDelete(Request $request, $id){
         $project = Project::findOrFail($id);
 
-        //$project->delete();
+        $project->delete();
 
         return response($project->toJson(), 200);
     }
@@ -96,7 +96,6 @@ class ProjectController extends Controller
             'image_id'     =>  'required|numeric'
         ]);
 
-        
         $projectImage = $project->deleteImage($request->input('image_id'));
 
         if(!$projectImage){

@@ -2966,22 +2966,6 @@ var ProjectEmptyItem = function ProjectEmptyItem() {
   }, "There is ", react_1["default"].createElement("strong", null, "NO"), " any ", react_1["default"].createElement("strong", null, "PROJECTS"), " found")));
 };
 /**
- * Function is to handle delete item
- * @param id
- */
-
-
-var handleDleteItem = function handleDleteItem(id, dispatch) {
-  dispatch(projects_slice_1.deleteProject(id)).then(toolkit_1.unwrapResult).then(function () {
-    //Trigger ToastBox
-    pubsub_js_1["default"].publish(toast_box_1.EVENT_TOAST_BOX, {
-      'title': "Project removed",
-      'message': "The project has been removed successfully",
-      'state': toast_box_1.ToastState.SUCCESS
-    });
-  });
-};
-/**
  * TODO
  * define the project item
  */
@@ -2991,6 +2975,22 @@ var ProjectItem = function ProjectItem(_a) {
   var item = _a.item;
 
   var _dispatch = store_hook_1.useAppDispatch();
+  /**
+   * Function is to handle delete item
+   * @param id
+   */
+
+
+  var onHandleDelete = function onHandleDelete(id) {
+    _dispatch(projects_slice_1.deleteProject(id)).then(toolkit_1.unwrapResult).then(function () {
+      //Trigger ToastBox
+      pubsub_js_1["default"].publish(toast_box_1.EVENT_TOAST_BOX, {
+        'title': "Project removed",
+        'message': "The project has been removed successfully",
+        'state': toast_box_1.ToastState.SUCCESS
+      });
+    });
+  };
 
   return react_1["default"].createElement("tr", null, react_1["default"].createElement("td", {
     className: "td-address"
@@ -3074,7 +3074,7 @@ var ProjectItem = function ProjectItem(_a) {
         title: "Are you sure to REMOVE?",
         confirm_btn_text: "Yes, remove it",
         confirm_callback: function confirm_callback() {
-          handleDleteItem(item.id, _dispatch);
+          onHandleDelete(item.id);
         }
       });
     }
@@ -3180,6 +3180,40 @@ var __assign = this && this.__assign || function () {
   return __assign.apply(this, arguments);
 };
 
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
 var __importDefault = this && this.__importDefault || function (mod) {
   return mod && mod.__esModule ? mod : {
     "default": mod
@@ -3190,9 +3224,17 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
 var react_images_uploading_1 = __importDefault(__webpack_require__(/*! react-images-uploading */ "./node_modules/react-images-uploading/dist/index.js"));
+
+var projects_slice_1 = __webpack_require__(/*! ../slice/projects-slice */ "./resources/react/pages/projects/slice/projects-slice.ts");
+
+var store_hook_1 = __webpack_require__(/*! ../store/store-hook */ "./resources/react/pages/projects/store/store-hook.ts");
+
+var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+
+var toast_box_1 = __webpack_require__(/*! ../../../tools/toast-box/toast-box */ "./resources/react/tools/toast-box/toast-box.tsx");
 /**
  * TODO
  * define the image item
@@ -3202,7 +3244,8 @@ var react_images_uploading_1 = __importDefault(__webpack_require__(/*! react-ima
 
 
 var ProjectImageItem = function ProjectImageItem(_a) {
-  var image = _a.image;
+  var image = _a.image,
+      onHandleRemove = _a.onHandleRemove;
   return react_1["default"].createElement("div", {
     className: "col-4"
   }, react_1["default"].createElement("div", {
@@ -3212,7 +3255,7 @@ var ProjectImageItem = function ProjectImageItem(_a) {
   }), react_1["default"].createElement("button", {
     className: "btn btn-icon btn-danger",
     onClick: function onClick() {
-      alert("Image remove clicked");
+      onHandleRemove(image);
     }
   }, react_1["default"].createElement("i", {
     className: "mdi mdi-delete-forever"
@@ -3228,13 +3271,72 @@ var ProjectImageItem = function ProjectImageItem(_a) {
 
 var ProjectImageField = function ProjectImageField(_a) {
   var project = _a.project;
+
+  var _b = react_1.useState([]),
+      images = _b[0],
+      setImages = _b[1];
+
+  var _dispatch = store_hook_1.useAppDispatch(); //To init images in state
+
+
+  react_1.useEffect(function () {
+    setImages(project.images);
+  }, []);
+  /**
+   * Function is to handle add image into state
+   * @param image
+   */
+
+  var addImage = function addImage(image) {
+    //Append image at the beginning of list
+    var newlist = [image].concat(images); // list.unshift(image)
+
+    setImages(newlist);
+  };
+  /**
+   * Function is to handle remove image
+   * @param image
+   */
+
+
+  var removeImage = function removeImage(image) {
+    _dispatch(projects_slice_1.deleteProjectImage({
+      project_id: image.project_id,
+      image_id: image.id
+    })).then(toolkit_1.unwrapResult).then(function () {
+      //To update images state
+      var newlist = images.filter(function (item) {
+        return item.id !== image.id;
+      });
+      setImages(newlist);
+      PubSub.publish(toast_box_1.EVENT_TOAST_BOX, {
+        'title': "Image removed",
+        'message': 'The image has been removed successfully',
+        'state': toast_box_1.ToastState.SUCCESS
+      });
+    });
+  };
   /**
    * Function is to handle image selected
    * @param images
    */
 
+
   var onHandleChange = function onHandleChange(images) {
-    alert('handle image uploaded');
+    var data = {};
+    if (images[0]['file']) data['image'] = images[0]['file'];
+
+    _dispatch(projects_slice_1.uploadProjectImage({
+      id: project.id,
+      values: data
+    })).then(toolkit_1.unwrapResult).then(function (result) {
+      addImage(result);
+      PubSub.publish(toast_box_1.EVENT_TOAST_BOX, {
+        'title': "Image uploaded",
+        'message': 'The image has been uploaded successfully',
+        'state': toast_box_1.ToastState.SUCCESS
+      });
+    });
   };
 
   return react_1["default"].createElement("div", {
@@ -3267,12 +3369,13 @@ var ProjectImageField = function ProjectImageField(_a) {
     className: "images-list"
   }, react_1["default"].createElement("div", {
     className: "row"
-  }, project.images.length === 0 ? react_1["default"].createElement("div", {
+  }, images.length === 0 ? react_1["default"].createElement("div", {
     className: "alert alert-warning col-12"
-  }, "There is ", react_1["default"].createElement("strong", null, "NO IMAGE"), " found!") : project.images.map(function (image) {
+  }, "There is ", react_1["default"].createElement("strong", null, "NO IMAGE"), " found!") : images.map(function (image) {
     return react_1["default"].createElement(ProjectImageItem, {
       key: "project_image_" + image.id,
-      image: image
+      image: image,
+      onHandleRemove: removeImage
     });
   }))));
 };
@@ -4006,7 +4109,7 @@ exports.default = ProjectModalSlice.reducer;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.getNotNewProjects = exports.getNewProjects = exports.setProjects = exports.deleteProject = exports.updateProject = exports.addNewProject = void 0;
+exports.getNotNewProjects = exports.getNewProjects = exports.setProjects = exports.deleteProjectImage = exports.uploadProjectImage = exports.deleteProject = exports.updateProject = exports.addNewProject = void 0;
 
 var toolkit_1 = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 
@@ -4047,6 +4150,28 @@ exports.updateProject = toolkit_1.createAsyncThunk('Projects/updateProject', fun
 exports.deleteProject = toolkit_1.createAsyncThunk('Projects/deleteProject', function (id) {
   var _url = "http://localhost/";
   var response = fetch_client_1.Client["delete"](_url + "projects/delete/" + id);
+  return response;
+});
+/**
+ * TODO
+ * Request for uploading project image
+ */
+
+exports.uploadProjectImage = toolkit_1.createAsyncThunk('Projects/uploadProjectImage', function (data) {
+  var _url = "http://localhost/";
+  var response = fetch_client_1.Client.post(_url + "projects/image/upload/" + data.id, data.values, true);
+  return response;
+});
+/**
+ * TODO
+ * Request for deleting project image
+ */
+
+exports.deleteProjectImage = toolkit_1.createAsyncThunk('Projects/deleteProjectImage', function (data) {
+  var _url = "http://localhost/";
+  var response = fetch_client_1.Client["delete"](_url + "projects/image/delete/" + data.project_id, {
+    'image_id': data.image_id
+  });
   return response;
 });
 /**
@@ -4101,6 +4226,35 @@ var ProjectsSlice = toolkit_1.createSlice({
       });
 
       state.list = _newlist;
+    }); //uploadProjectImage
+
+    builder.addCase(exports.uploadProjectImage.fulfilled, function (state, action) {
+      var _image = action.payload;
+
+      var _index = state.list.findIndex(function (item) {
+        return item.id === _image.project_id;
+      }); //To append image
+
+
+      if (_index > -1) state.list[_index].images.unshift(_image);
+    }); //deleteProjectImage
+
+    builder.addCase(exports.deleteProjectImage.fulfilled, function (state, action) {
+      var _image = action.payload; //Find project index
+
+      var _index = state.list.findIndex(function (item) {
+        return item.id === _image.project_id;
+      }); //If index not found, nothing to do
+
+
+      if (_index < 0) return;
+
+      var _newimages = state.list[_index].images.filter(function (item) {
+        return item.id !== _image.id;
+      }); //To reset new image list
+
+
+      state.list[_index].images = _newimages;
     });
   }
 });
@@ -4113,8 +4267,7 @@ var getNewProjects = function getNewProjects(state) {
   });
 };
 
-exports.getNewProjects = getNewProjects; //export const getNewProjects = (state:RootState) => state.Projects.list
-//Helper to get not new projects
+exports.getNewProjects = getNewProjects; //Helper to get not new projects
 
 var getNotNewProjects = function getNotNewProjects(state) {
   return state.Projects.list.filter(function (item) {

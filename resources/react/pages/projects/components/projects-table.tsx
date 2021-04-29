@@ -6,7 +6,7 @@ import {show} from '../slice/project-modal-slice'
 import PubSub from 'pubsub-js'
 import {EVENT_OPEN_CONFIRM_DIALOG} from '../../../tools/confirm-dialog/confirm-dialog'
 import {deleteProject} from '../slice/projects-slice'
-import { unwrapResult } from '@reduxjs/toolkit'
+import { AnyAction, ThunkDispatch, unwrapResult } from '@reduxjs/toolkit'
 import {ToastState, EVENT_TOAST_BOX} from '../../../tools/toast-box/toast-box'
 
 /**
@@ -28,30 +28,30 @@ const ProjectEmptyItem = ():JSX.Element => {
 
 
 /**
- * Function is to handle delete item
- * @param id 
- */
-const handleDleteItem = (id:number, dispatch:any ):void => {
-
-    dispatch(deleteProject(id))
-        .then(unwrapResult)
-        .then(() => {
-            //Trigger ToastBox
-            PubSub.publish(EVENT_TOAST_BOX, {
-                'title' : "Project removed",
-                'message' : "The project has been removed successfully",
-                'state' : ToastState.SUCCESS
-            })
-        })
-
-}
-
-/**
  * TODO
  * define the project item
  */
 const ProjectItem:React.FC<{item:TProjectItem}> = ({item}):JSX.Element => {
     const _dispatch = useAppDispatch()
+
+
+    /**
+     * Function is to handle delete item
+     * @param id 
+     */
+    const onHandleDelete = (id:number):void => {
+
+        _dispatch(deleteProject(id))
+            .then(unwrapResult)
+            .then(() => {
+                //Trigger ToastBox
+                PubSub.publish(EVENT_TOAST_BOX, {
+                    'title' : "Project removed",
+                    'message' : "The project has been removed successfully",
+                    'state' : ToastState.SUCCESS
+                })
+            })
+    }
 
     return(
         <tr>
@@ -152,7 +152,7 @@ const ProjectItem:React.FC<{item:TProjectItem}> = ({item}):JSX.Element => {
                                 title: "Are you sure to REMOVE?",
                                 confirm_btn_text : "Yes, remove it",
                                 confirm_callback: () => {
-                                    handleDleteItem(item.id, _dispatch)
+                                    onHandleDelete(item.id)
                                 }
                             }
                         )

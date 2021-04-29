@@ -1,6 +1,10 @@
-import React from 'react'
-import type {TProjectItem} from '../../../types/project-item.type'
+import React, {useState, useEffect} from 'react'
+import type {TProjectItem, TProjectImage} from '../../../types/project-item.type'
 import ImageUploading, { ImageListType, ImageType } from 'react-images-uploading'
+import {uploadProjectImage, deleteProjectImage} from '../slice/projects-slice'
+import {useAppDispatch} from '../store/store-hook'
+import { unwrapResult } from '@reduxjs/toolkit'
+import {ToastState, EVENT_TOAST_BOX} from '../../../tools/toast-box/toast-box'
 
 
 /**
@@ -9,8 +13,8 @@ import ImageUploading, { ImageListType, ImageType } from 'react-images-uploading
  * @param param0 
  * @returns 
  */
-const ProjectImageItem:React.FC<{image:{id:number, name:string, parent_id:number, url:string}}> 
-    = ({image}):JSX.Element => {
+const ProjectImageItem:React.FC<{image:TProjectImage, onHandleRemove:(image:TProjectImage)=>void}> 
+    = ({image, onHandleRemove}):JSX.Element => {
 
     return(
         <div className="col-4">
@@ -20,7 +24,7 @@ const ProjectImageItem:React.FC<{image:{id:number, name:string, parent_id:number
 
                 <button className="btn btn-icon btn-danger"
                     onClick={() => {
-                        alert("Image remove clicked")
+                        onHandleRemove(image)
                     }}
                 >
                     <i className="mdi mdi-delete-forever"></i>
@@ -45,12 +49,76 @@ const ProjectImageItem:React.FC<{image:{id:number, name:string, parent_id:number
  */
 const ProjectImageField:React.FC<{project:TProjectItem}> = ({project}):JSX.Element => {
 
+    const [images, setImages] = useState<TProjectImage[]>([])
+    const _dispatch = useAppDispatch()
+
+    //To init images in state
+    useEffect(() => {
+        setImages(project.images)
+    },[])
+
+
+    /**
+     * Function is to handle add image into state
+     * @param image 
+     */
+    const addImage = (image:TProjectImage):void => {
+
+        //Append image at the beginning of list
+        const newlist:TProjectImage[] = [image].concat(images)
+        // list.unshift(image)
+        setImages(newlist)
+    }
+
+
+    /**
+     * Function is to handle remove image
+     * @param image 
+     */
+    const removeImage = (image:TProjectImage):void => {
+
+        _dispatch(deleteProjectImage({project_id:image.project_id, image_id:image.id}))
+            .then(unwrapResult)
+            .then(() => {
+
+                //To update images state
+                const newlist:TProjectImage[] = images.filter((item) => item.id !== image.id)
+                setImages(newlist)
+
+                PubSub.publish(EVENT_TOAST_BOX, {
+                    'title' : "Image removed",
+                    'message' : 'The image has been removed successfully',
+                    'state' : ToastState.SUCCESS
+                })
+
+            })
+
+    }
+
+
     /**
      * Function is to handle image selected
      * @param images 
      */
     const onHandleChange = (images:ImageListType):void => {
-        alert('handle image uploaded')
+        
+        const data:{[key:string]: File} = {}
+        if(images[0]['file'])
+            data['image'] = images[0]['file']
+
+        _dispatch(uploadProjectImage({id:project.id, values:data as any}))
+            .then(unwrapResult)
+            .then(result => {
+
+                addImage(result as TProjectImage)
+
+                PubSub.publish(EVENT_TOAST_BOX, {
+                    'title' : "Image uploaded",
+                    'message' : 'The image has been uploaded successfully',
+                    'state' : ToastState.SUCCESS
+                })
+
+            })
     }
 
 
@@ -61,7 +129,7 @@ const ProjectImageField:React.FC<{project:TProjectItem}> = ({project}):JSX.Eleme
                     value={[]}
                     onChange={onHandleChange}
                     dataURLKey="data_url"
-                    maxFileSize={3145728}
+                    maxFileSize={3145728} //3M size of file
                 >     
                     {({  
                         onImageUpload,
@@ -95,12 +163,16 @@ const ProjectImageField:React.FC<{project:TProjectItem}> = ({project}):JSX.Eleme
             {/* START images list */}
             <div className="images-list">
                 <div className="row">
-                    {project.images.length === 0 
+                    {images.length === 0 
                         ? <div className="alert alert-warning col-12">
                             There is <strong>NO IMAGE</strong> found!
                         </div>
-                        : project.images.map((image) => {
-                            return <ProjectImageItem key={`project_image_${image.id}`} image={image} />
+                        : images.map((image) => {
+                            return <ProjectImageItem 
+                                        key={`project_image_${image.id}`} 
+                                        image={image} 
+                                        onHandleRemove={removeImage}
+                                />
                         })
                     }
                 </div>
