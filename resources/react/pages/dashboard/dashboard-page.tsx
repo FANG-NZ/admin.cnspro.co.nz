@@ -30,7 +30,6 @@ try{
 }
 
 
-
 ReactDOM.render(
     <Provider store={store}>
         <MainBannerSlider/>

@@ -18,6 +18,10 @@ export async function Client<T>(
     
     let headers;
 
+    const _csrf = document.getElementsByName('csrf-token')[0].getAttribute('content')
+    config.body['_token'] = _csrf
+    
+
     //If attached file, we just need to update Content-Type
     if(attached_file){
         //headers = { 'Content-Type': 'multipart/form-data' }
@@ -78,6 +82,7 @@ export async function Client<T>(
     }
 
 }
+
 
 /**
  * define the GET method
@@ -143,5 +148,6 @@ Client.put = (
     customConfig:RequestInit = {},
     show_loading:boolean = true
 ) => {
+
     return Client(endpoint, {...customConfig, method: "DELETE", body:body}, false, show_loading)
 }

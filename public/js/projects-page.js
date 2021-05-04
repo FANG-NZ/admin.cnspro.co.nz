@@ -4717,12 +4717,14 @@ attached_file, show_loading) {
   }
 
   return __awaiter(this, void 0, void 0, function () {
-    var headers, _formdata, _i, _a, _b, key, value, _config, data, response, error_1;
+    var headers, _csrf, _formdata, _i, _a, _b, key, value, _config, data, response, error_1;
 
     return __generator(this, function (_c) {
       switch (_c.label) {
         case 0:
-          //If attached file, we just need to update Content-Type
+          _csrf = document.getElementsByName('csrf-token')[0].getAttribute('content');
+          config.body['_token'] = _csrf; //If attached file, we just need to update Content-Type
+
           if (attached_file) {
             //headers = { 'Content-Type': 'multipart/form-data' }
             //headers = {'Content-Type': "application/x-www-form-urlencoded"}
