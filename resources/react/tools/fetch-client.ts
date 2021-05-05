@@ -19,6 +19,7 @@ export async function Client<T>(
     let headers;
 
     const _csrf = document.getElementsByName('csrf-token')[0].getAttribute('content')
+    // @ts-ignore
     config.body['_token'] = _csrf
     
 
