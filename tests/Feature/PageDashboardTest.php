@@ -191,8 +191,6 @@ class PageDashboardTest extends TestCase
                                 )
                             );
 
-        var_dump($response->getContent());
-
         $response->assertSuccessful();
     }
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\APISettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+/**
+ * Group route with json response
+ */
+Route::middleware(['json.response'])->group(function(){
+
+    Route::get(
+        '/settings/load', 
+        [APISettingsController::class, 'load']
+    );
+
 });
